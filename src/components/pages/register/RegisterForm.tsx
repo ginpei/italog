@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PlaceItem } from "./PlaceItem";
 import { PlaceResult } from "./queryPlaceApi";
 import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
@@ -42,24 +43,29 @@ export function RegisterForm(): JSX.Element {
     );
   };
 
+  const onPlaceClick = (place: PlaceResult) => {
+    console.log("Place clicked", place);
+    alert(place.displayName);
+  };
+
   return (
-    <div className="RegisterForm">
+    <div className="RegisterForm flex flex-col gap-4">
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
       <button
-        className="size-16 border border-stone-400 bg-stone-50"
+        className="border border-stone-400 bg-stone-50 p-4"
         onClick={onFindClick}
       >
-        Find
+        Find by location
       </button>
       <p>
         Location:
         {latLong ? `${latLong.lat},${latLong.long}` : ""}
       </p>
-      <ul className="list-disc">
+      <div className="flex flex-col gap-1">
         {places.map((place) => (
-          <li key={place.id}>{place.displayName}</li>
+          <PlaceItem key={place.id} onClick={onPlaceClick} place={place} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

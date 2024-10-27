@@ -1,5 +1,6 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
+import { H1 } from "@/components/lib/style/Hn";
 import { RegisterForm } from "@/components/pages/register/RegisterForm";
 
 export default async function RegisterPage(): Promise<JSX.Element> {
@@ -15,7 +16,7 @@ export default async function RegisterPage(): Promise<JSX.Element> {
 
   return (
     <StraightPageLayout session={session}>
-      <h1>Hello</h1>
+      <H1>Register</H1>
       <RegisterForm />
     </StraightPageLayout>
   );
