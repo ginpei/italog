@@ -1,13 +1,19 @@
+import { Session } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import { ComponentProps } from "react";
 import { Content } from "./Content";
 
 export interface NavBarProps {
+  session: Session | null | undefined;
   title: string;
   titleLink?: string;
 }
 
-export function NavBar({ title, titleLink = "/" }: NavBarProps): JSX.Element {
+export function NavBar({
+  session,
+  title,
+  titleLink = "/",
+}: NavBarProps): JSX.Element {
   return (
     <section className="NavBar bg-ginpei text-white">
       <Content>
@@ -15,7 +21,15 @@ export function NavBar({ title, titleLink = "/" }: NavBarProps): JSX.Element {
           <h1>
             <NavBarLink href={titleLink}>{title}</NavBarLink>
           </h1>
-          <div>Ginpei</div>
+          <div>
+            {session ? (
+              /* eslint-disable-next-line @next/next/no-html-link-for-pages */
+              <a href="/api/auth/logout">Logout</a>
+            ) : (
+              /* eslint-disable-next-line @next/next/no-html-link-for-pages */
+              <a href="/api/auth/login">Login</a>
+            )}
+          </div>
         </div>
       </Content>
     </section>
