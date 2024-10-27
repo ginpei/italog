@@ -43,11 +43,6 @@ export function RegisterForm(): JSX.Element {
     );
   };
 
-  const onPlaceClick = (place: PlaceResult) => {
-    console.log("Place clicked", place);
-    alert(place.displayName);
-  };
-
   return (
     <div className="RegisterForm flex flex-col gap-4">
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
@@ -63,7 +58,7 @@ export function RegisterForm(): JSX.Element {
       </p>
       <div className="flex flex-col gap-1">
         {places.map((place) => (
-          <PlaceItem key={place.id} onClick={onPlaceClick} place={place} />
+          <PlaceItem key={place.id} place={place} />
         ))}
       </div>
     </div>

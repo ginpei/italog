@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { toError } from "@/components/lib/error/errorUtil";
+import { savePlaces } from "@/components/lib/place/db";
 import {
   PlaceResult,
   queryPlaceApi,
@@ -28,6 +29,7 @@ export async function GET(request: NextRequest) {
     }
 
     const places = await queryPlaceApi(lat, long);
+    savePlaces(places);
 
     const jsonData: FindNearbyResponse = { places, ok: true };
     return Response.json(jsonData);

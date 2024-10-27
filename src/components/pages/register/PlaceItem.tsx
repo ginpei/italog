@@ -1,16 +1,16 @@
 import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
+import Link from "next/link";
 import { PlaceResult } from "./queryPlaceApi";
 
 export interface PlaceItemProps {
-  onClick: (place: PlaceResult) => void;
   place: PlaceResult;
 }
 
-export function PlaceItem({ onClick, place }: PlaceItemProps): JSX.Element {
+export function PlaceItem({ place }: PlaceItemProps): JSX.Element {
   return (
-    <button
+    <Link
       className="PlaceItem flex w-full items-center justify-between gap-4 border border-stone-300 p-2 text-start hover:bg-stone-50 active:bg-stone-200"
-      onClick={() => onClick(place)}
+      href={`/place/${place.id}`}
     >
       <div className="flex flex-col">
         <span>{place.displayName}</span>
@@ -22,6 +22,6 @@ export function PlaceItem({ onClick, place }: PlaceItemProps): JSX.Element {
       <span>
         <ChevronDoubleRightIcon className="size-6 text-stone-500" />
       </span>
-    </button>
+    </Link>
   );
 }
