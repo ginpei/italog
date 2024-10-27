@@ -1,6 +1,9 @@
 import { NextRequest } from "next/server";
-import { toError } from "@/components/error/errorUtil";
-import { PlaceResult, queryPlaceApi } from "@/pages/register/queryPlaceApi";
+import { toError } from "@/components/lib/error/errorUtil";
+import {
+  PlaceResult,
+  queryPlaceApi,
+} from "@/components/pages/register/queryPlaceApi";
 
 export type FindNearbyResponse =
   | {

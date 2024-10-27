@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PlaceResult } from "./queryPlaceApi";
 import { FindNearbyResponse } from "@/app/api/findNearby/route";
-import { toError } from "@/components/error/errorUtil";
+import { toError } from "@/components/lib/error/errorUtil";
 
 export function RegisterForm(): JSX.Element {
   const [error, setError] = useState<Error | GeolocationPositionError | null>(

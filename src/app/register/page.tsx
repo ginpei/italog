@@ -1,6 +1,6 @@
 import { getSession } from "@auth0/nextjs-auth0";
-import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
-import { RegisterForm } from "@/pages/register/RegisterForm";
+import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
+import { RegisterForm } from "@/components/pages/register/RegisterForm";
 
 export default async function RegisterPage(): Promise<JSX.Element> {
   const session = await getSession();

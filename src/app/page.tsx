@@ -1,6 +1,6 @@
 import { getSession } from "@auth0/nextjs-auth0";
-import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
-import { Link } from "@/components/style/Link";
+import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
+import { Link } from "@/components/lib/style/Link";
 
 export default async function Home() {
   const session = await getSession();
