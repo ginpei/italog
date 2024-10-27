@@ -1,10 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { PlaceResult } from "./queryPlaceApi";
+import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/error/errorUtil";
 
 export function RegisterForm(): JSX.Element {
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
+    null,
+  );
+  const [places, setPlaces] = useState<PlaceResult[]>([]);
+  const [latLong, setLatLong] = useState<{ lat: number; long: number } | null>(
     null,
   );
 
@@ -13,12 +19,16 @@ export function RegisterForm(): JSX.Element {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        setLatLong({
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
+        });
         findNearby(position.coords.latitude, position.coords.longitude)
           .then((data) => {
             if (!data.ok) {
-              throw new Error(data.message);
+              throw new Error(data.message ?? "Unknown error on fetch");
             }
-            console.log("# data", data);
+            setPlaces(data.places);
           })
           .catch((error) => {
             console.error(error);
@@ -41,14 +51,27 @@ export function RegisterForm(): JSX.Element {
       >
         Find
       </button>
+      <p>
+        Location:
+        {latLong ? `${latLong.lat},${latLong.long}` : ""}
+      </p>
+      <ul className="list-disc">
+        {places.map((place) => (
+          <li key={place.id}>{place.displayName}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-async function findNearby(lat: number, long: number) {
+async function findNearby(
+  lat: number,
+  long: number,
+): Promise<FindNearbyResponse> {
   const endpoint = "/api/findNearby";
   const params = new URLSearchParams({
-    location: `${lat},${long}`,
+    lat: String(lat),
+    long: String(long),
   });
   const url = `${endpoint}?${params}`;
   const response = await fetch(url);
