@@ -1,3 +1,4 @@
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -15,7 +16,9 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="/icon-512.png" type="image/png" />
       </head>
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased`}>
+        <UserProvider>{children}</UserProvider>
+      </body>
     </html>
   );
 }
