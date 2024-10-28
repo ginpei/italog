@@ -10,9 +10,13 @@ export function RegisterForm(): JSX.Element {
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
   );
-  const [places, setPlaces] = useState<PlaceResult[]>([]);
+
+  const formContext = loadContext();
+  const [places, setPlaces] = useState<PlaceResult[]>(
+    formContext?.places ?? [],
+  );
   const [latLong, setLatLong] = useState<{ lat: number; long: number } | null>(
-    null,
+    formContext?.location ?? null,
   );
 
   const onFindClick = () => {
@@ -29,6 +33,13 @@ export function RegisterForm(): JSX.Element {
             if (!data.ok) {
               throw new Error(data.message ?? "Unknown error on fetch");
             }
+            saveContext({
+              location: {
+                lat: position.coords.latitude,
+                long: position.coords.longitude,
+              },
+              places: data.places,
+            });
             setPlaces(data.places);
           })
           .catch((error) => {
@@ -78,4 +89,26 @@ async function findNearby(
   const response = await fetch(url);
   const data = await response.json();
   return data;
+}
+
+interface RegisterFormContext {
+  location: { lat: number; long: number };
+  places: PlaceResult[];
+}
+
+function saveContext(context: RegisterFormContext): void {
+  const key = "places";
+  window.localStorage.setItem(key, JSON.stringify(context));
+}
+
+function loadContext(): RegisterFormContext | null {
+  // TODO solve error on SSR
+  // ReferenceError: window is not defined
+
+  const key = "places";
+  const data = window.localStorage.getItem(key);
+  if (!data) {
+    return null;
+  }
+  return JSON.parse(data);
 }
