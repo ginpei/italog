@@ -1,16 +1,16 @@
-import { Session } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import { ComponentProps } from "react";
+import { Profile } from "../user/Profile";
 import { Content } from "./Content";
 
 export interface NavBarProps {
-  session: Session | null | undefined;
+  profile: Profile | null;
   title: string;
   titleLink?: string;
 }
 
 export function NavBar({
-  session,
+  profile,
   title,
   titleLink = "/",
 }: NavBarProps): JSX.Element {
@@ -22,7 +22,7 @@ export function NavBar({
             <NavBarLink href={titleLink}>{title}</NavBarLink>
           </h1>
           <div>
-            {session ? (
+            {profile ? (
               /* eslint-disable-next-line @next/next/no-html-link-for-pages */
               <a href="/api/auth/logout">Logout</a>
             ) : (

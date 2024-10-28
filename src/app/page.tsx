@@ -1,16 +1,15 @@
-import { getSession } from "@auth0/nextjs-auth0";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
 import { Link } from "@/components/lib/style/Link";
+import { getSessionProfile } from "@/components/lib/user/profileSession";
 
 export default async function Home() {
-  const session = await getSession();
-  const user = session?.user;
+  const profile = await getSessionProfile();
 
   return (
-    <StraightPageLayout session={session}>
+    <StraightPageLayout profile={profile}>
       <h1 className="text-5xl font-bold">Italog</h1>
       <div>
-        <p>User name: {user ? user.name : "no login"}</p>
+        <p>User name: {profile ? profile.displayName : "no login"}</p>
       </div>
       <p>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}

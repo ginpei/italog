@@ -1,7 +1,7 @@
-import { getSession } from "@auth0/nextjs-auth0";
 import { notFound } from "next/navigation";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
 import { getPlace } from "@/components/lib/place/db";
+import { getSessionProfile } from "@/components/lib/user/profileSession";
 import { PlacePageContent } from "@/components/pages/place/PlacePageContent";
 
 export default async function PlacePage({
@@ -9,8 +9,8 @@ export default async function PlacePage({
 }: {
   params: { placeId: string };
 }): Promise<JSX.Element> {
-  const [session, place] = await Promise.all([
-    getSession(),
+  const [profile, place] = await Promise.all([
+    getSessionProfile(),
     getPlace(params.placeId),
   ]);
 
@@ -25,7 +25,7 @@ export default async function PlacePage({
   }
 
   return (
-    <StraightPageLayout session={session}>
+    <StraightPageLayout profile={profile}>
       <PlacePageContent place={place} />
     </StraightPageLayout>
   );

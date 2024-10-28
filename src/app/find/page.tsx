@@ -1,20 +1,20 @@
-import { getSession } from "@auth0/nextjs-auth0";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
+import { getSessionProfile } from "@/components/lib/user/profileSession";
 import { FindPageContent } from "@/components/pages/register/FindPageContent";
 
 export default async function RegisterPage(): Promise<JSX.Element> {
-  const session = await getSession();
+  const profile = await getSessionProfile();
 
-  if (!session) {
+  if (!profile) {
     return (
-      <StraightPageLayout session={session}>
+      <StraightPageLayout profile={profile}>
         <h1>Please login first</h1>
       </StraightPageLayout>
     );
   }
 
   return (
-    <StraightPageLayout session={session}>
+    <StraightPageLayout profile={profile}>
       <FindPageContent />
     </StraightPageLayout>
   );
