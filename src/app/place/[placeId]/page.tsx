@@ -11,7 +11,7 @@ export default async function PlacePage({
 }): Promise<JSX.Element> {
   const session = await getSession();
 
-  const place = getPlace(params.placeId);
+  const place = await getPlace(params.placeId);
   if (!place) {
     // TODO find how to return specific 404 page for this route
     // return (
@@ -24,7 +24,7 @@ export default async function PlacePage({
 
   return (
     <StraightPageLayout session={session}>
-      <H1>{place.displayName}</H1>
+      <H1>{place.displayName || "(No name)"}</H1>
       <div>{params.placeId}</div>
       <p>
         <button className="border">Register</button>
