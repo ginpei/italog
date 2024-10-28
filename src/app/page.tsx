@@ -20,7 +20,7 @@ export default async function Home() {
         <a href="/api/auth/logout">Logout</a>
       </p>
       <p>
-        <Link href="/register">Register</Link>
+        <Link href="/find">Find places</Link>
       </p>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque ad

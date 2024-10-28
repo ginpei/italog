@@ -5,8 +5,9 @@ import { PlaceItem } from "./PlaceItem";
 import { PlaceResult } from "./queryPlaceApi";
 import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
+import { H1 } from "@/components/lib/style/Hn";
 
-export function RegisterForm(): JSX.Element {
+export function FindPageContent(): JSX.Element {
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
   );
@@ -55,7 +56,8 @@ export function RegisterForm(): JSX.Element {
   };
 
   return (
-    <div className="RegisterForm flex flex-col gap-4">
+    <>
+      <H1>Find</H1>
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
       <button
         className="border border-stone-400 bg-stone-50 p-4"
@@ -72,7 +74,7 @@ export function RegisterForm(): JSX.Element {
           <PlaceItem key={place.id} place={place} />
         ))}
       </div>
-    </div>
+    </>
   );
 }
 
