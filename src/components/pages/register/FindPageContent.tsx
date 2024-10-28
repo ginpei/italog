@@ -5,6 +5,7 @@ import { PlaceItem } from "./PlaceItem";
 import { PlaceResult } from "./queryPlaceApi";
 import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
+import { Button } from "@/components/lib/style/Button";
 import { H1 } from "@/components/lib/style/Hn";
 
 export function FindPageContent(): JSX.Element {
@@ -59,12 +60,7 @@ export function FindPageContent(): JSX.Element {
     <>
       <H1>Find</H1>
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
-      <button
-        className="border border-stone-400 bg-stone-50 p-4"
-        onClick={onFindClick}
-      >
-        Find by location
-      </button>
+      <Button onClick={onFindClick}>Find by location</Button>
       <p>
         Location:
         {latLong ? `${latLong.lat},${latLong.long}` : ""}

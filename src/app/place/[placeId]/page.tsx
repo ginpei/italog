@@ -2,16 +2,18 @@ import { getSession } from "@auth0/nextjs-auth0";
 import { notFound } from "next/navigation";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
 import { getPlace } from "@/components/lib/place/db";
-import { H1 } from "@/components/lib/style/Hn";
+import { PlacePageContent } from "@/components/pages/place/PlacePageContent";
 
 export default async function PlacePage({
   params,
 }: {
   params: { placeId: string };
 }): Promise<JSX.Element> {
-  const session = await getSession();
+  const [session, place] = await Promise.all([
+    getSession(),
+    getPlace(params.placeId),
+  ]);
 
-  const place = await getPlace(params.placeId);
   if (!place) {
     // TODO find how to return specific 404 page for this route
     // return (
@@ -24,11 +26,7 @@ export default async function PlacePage({
 
   return (
     <StraightPageLayout session={session}>
-      <H1>{place.displayName || "(No name)"}</H1>
-      <div>{params.placeId}</div>
-      <p>
-        <button className="border">Register</button>
-      </p>
+      <PlacePageContent place={place} />
     </StraightPageLayout>
   );
 }
