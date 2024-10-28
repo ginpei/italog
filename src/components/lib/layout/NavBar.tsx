@@ -24,7 +24,7 @@ export function NavBar({
           <div>
             {profile ? (
               /* eslint-disable-next-line @next/next/no-html-link-for-pages */
-              <a href="/api/auth/logout">Logout</a>
+              <a href="/my">{profile.displayName}</a>
             ) : (
               /* eslint-disable-next-line @next/next/no-html-link-for-pages */
               <a href="/api/auth/login">Login</a>
