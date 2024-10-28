@@ -21,7 +21,7 @@ const afterCallback: AfterCallbackAppRoute = async (req, session) => {
     });
   }
 
-  return Response.redirect("http://localhost:3000");
+  return session;
 };
 
 export const GET = handleAuth({
