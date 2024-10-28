@@ -2,23 +2,30 @@
 
 import { GlobeAltIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { PlaceResult } from "../register/queryPlaceApi";
 import { RegisterVisitForm } from "./RegisterVisitForm";
+import { requestRegisterVisit } from "@/components/lib/place/registerVisitRequest";
+import { H2 } from "@/components/lib/style/Hn";
 import { Link } from "@/components/lib/style/Link";
 import { Visit } from "@/components/lib/visit/Visit";
 
 export interface PlacePageContentProps {
   place: PlaceResult;
+  userVisits: Visit[];
 }
 
 export function PlacePageContent({
   place,
+  userVisits,
 }: PlacePageContentProps): JSX.Element {
+  const [formWorking, setFormWorking] = useState(false);
   const siteHostName = useHostNameOf(place.webUrl);
 
-  const onRegisterVisitSubmit = (visit: Visit) => {
-    console.log("# visit", visit);
+  const onRegisterVisitSubmit = async (visit: Visit) => {
+    setFormWorking(true);
+    await requestRegisterVisit(visit);
+    setFormWorking(false);
   };
 
   return (
@@ -45,7 +52,23 @@ export function PlacePageContent({
         </Link>
       )}
       <hr />
-      <RegisterVisitForm onSubmit={onRegisterVisitSubmit} placeId={place.id} />
+      <RegisterVisitForm
+        disabled={formWorking}
+        onSubmit={onRegisterVisitSubmit}
+        placeId={place.id}
+      />
+      <hr />
+      <H2>Your visits</H2>
+      <ul className="ms-4 list-disc">
+        {userVisits.map((visit) => (
+          <li key={visit.id}>
+            {new Date(visit.createdAt).toLocaleDateString()}{" "}
+            {visit.starred && "⭐ "}
+            {visit.comment}
+          </li>
+        ))}
+        {userVisits.length < 1 && <li>No visits yet</li>}
+      </ul>
     </>
   );
 }

@@ -4,11 +4,13 @@ import { H2 } from "@/components/lib/style/Hn";
 import { Visit } from "@/components/lib/visit/Visit";
 
 export interface RegisterVisitFormProps {
-  onSubmit: (visit: Visit) => void;
+  disabled: boolean;
+  onSubmit: (visit: Visit) => Promise<void>;
   placeId: string;
 }
 
 export function RegisterVisitForm({
+  disabled,
   onSubmit,
   placeId,
 }: RegisterVisitFormProps): JSX.Element {
@@ -23,7 +25,17 @@ export function RegisterVisitForm({
 
   const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit(visit);
+    const p = onSubmit(visit);
+    p.then(() =>
+      setVisit({
+        comment: "",
+        createdAt: 0,
+        id: "",
+        placeId,
+        starred: false,
+        userId: "",
+      }),
+    );
   };
 
   const onInputChange = (
@@ -44,7 +56,7 @@ export function RegisterVisitForm({
 
   return (
     <form className="RegisterVisitForm" onSubmit={onFormSubmit}>
-      <fieldset className="flex flex-col gap-4">
+      <fieldset className="flex flex-col gap-4" disabled={disabled}>
         <H2>Register visit</H2>
         <label>
           <input

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
 import { getPlace } from "@/components/lib/place/db";
 import { getSessionProfile } from "@/components/lib/user/profileSession";
+import { getUserVisitRecords } from "@/components/lib/visit/visitDb";
 import { PlacePageContent } from "@/components/pages/place/PlacePageContent";
 
 export default async function PlacePage({
@@ -13,6 +14,9 @@ export default async function PlacePage({
     getSessionProfile(),
     getPlace(params.placeId),
   ]);
+  const userVisits = profile
+    ? await getUserVisitRecords(profile.id, params.placeId)
+    : [];
 
   if (!place) {
     // TODO find how to return specific 404 page for this route
@@ -26,7 +30,7 @@ export default async function PlacePage({
 
   return (
     <StraightPageLayout profile={profile}>
-      <PlacePageContent place={place} />
+      <PlacePageContent place={place} userVisits={userVisits} />
     </StraightPageLayout>
   );
 }
