@@ -13,18 +13,20 @@ import { Visit } from "@/components/lib/visit/Visit";
 export interface PlacePageContentProps {
   place: PlaceResult;
   userVisits: Visit[];
+  visited: boolean;
 }
 
 export function PlacePageContent({
   place,
   userVisits,
+  visited,
 }: PlacePageContentProps): JSX.Element {
   const [formWorking, setFormWorking] = useState(false);
   const siteHostName = useHostNameOf(place.webUrl);
 
   const onRegisterVisitSubmit = async (visit: Visit) => {
     setFormWorking(true);
-    await requestRegisterVisit(visit);
+    await requestRegisterVisit({ visit, visited });
     setFormWorking(false);
   };
 
@@ -56,6 +58,7 @@ export function PlacePageContent({
         disabled={formWorking}
         onSubmit={onRegisterVisitSubmit}
         placeId={place.id}
+        visited={visited}
       />
       <hr />
       <H2>Your visits</H2>

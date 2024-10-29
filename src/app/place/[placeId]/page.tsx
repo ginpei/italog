@@ -18,6 +18,11 @@ export default async function PlacePage({
     ? await getUserVisitRecords(profile.id, params.placeId)
     : [];
 
+  const visited =
+    userVisits[0] &&
+    new Date(userVisits[0].createdAt).toLocaleDateString() ===
+      new Date().toLocaleDateString();
+
   if (!place) {
     // TODO find how to return specific 404 page for this route
     // return (
@@ -30,7 +35,11 @@ export default async function PlacePage({
 
   return (
     <StraightPageLayout profile={profile}>
-      <PlacePageContent place={place} userVisits={userVisits} />
+      <PlacePageContent
+        place={place}
+        userVisits={userVisits}
+        visited={visited}
+      />
     </StraightPageLayout>
   );
 }

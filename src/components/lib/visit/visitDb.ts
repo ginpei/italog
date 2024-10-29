@@ -8,6 +8,15 @@ export async function createVisitRecord(visit: Visit): Promise<void> {
   `;
 }
 
+export async function updateVisitRecord(visit: Visit): Promise<void> {
+  await sql`
+    UPDATE visit
+    SET comment = ${visit.comment},
+        starred = ${visit.starred}
+    WHERE place_id = ${visit.placeId} AND user_id = ${visit.userId} AND date = ${visit.date}
+  `;
+}
+
 export async function getUserVisitRecords(
   userId: string,
   placeId: string,

@@ -2,10 +2,14 @@ import { getSession } from "@auth0/nextjs-auth0";
 import { NextApiResponse } from "next";
 import { NextRequest } from "next/server";
 import { Visit } from "@/components/lib/visit/Visit";
-import { createVisitRecord } from "@/components/lib/visit/visitDb";
+import {
+  createVisitRecord,
+  updateVisitRecord,
+} from "@/components/lib/visit/visitDb";
 
 export interface RegisterVisitPayload {
   visit: Visit;
+  visited: boolean;
 }
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
@@ -31,7 +35,11 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       userId,
     };
 
-    await createVisitRecord(data);
+    if (body.visited) {
+      await updateVisitRecord(data);
+    } else {
+      await createVisitRecord(data);
+    }
 
     return Response.json({ ok: true });
   } catch (error) {

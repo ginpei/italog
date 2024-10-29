@@ -7,12 +7,14 @@ export interface RegisterVisitFormProps {
   disabled: boolean;
   onSubmit: (visit: Visit) => Promise<void>;
   placeId: string;
+  visited: boolean;
 }
 
 export function RegisterVisitForm({
   disabled,
   onSubmit,
   placeId,
+  visited,
 }: RegisterVisitFormProps): JSX.Element {
   const [visit, setVisit] = useState<Visit>({
     comment: "",
@@ -78,7 +80,7 @@ export function RegisterVisitForm({
             value={visit.comment}
           />
         </label>
-        <Button>Register</Button>
+        <Button>{visited ? "Update" : "Register"}</Button>
       </fieldset>
     </form>
   );
