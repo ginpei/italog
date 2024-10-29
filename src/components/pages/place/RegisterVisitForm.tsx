@@ -17,6 +17,7 @@ export function RegisterVisitForm({
   const [visit, setVisit] = useState<Visit>({
     comment: "",
     createdAt: 0,
+    date: "",
     id: "",
     placeId,
     starred: false,
@@ -30,6 +31,7 @@ export function RegisterVisitForm({
       setVisit({
         comment: "",
         createdAt: 0,
+        date: "",
         id: "",
         placeId,
         starred: false,
