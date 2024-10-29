@@ -5,10 +5,10 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import { useMemo, useState } from "react";
 import { RegisterVisitForm } from "./RegisterVisitForm";
 import { Place } from "@/components/lib/place/Place";
-import { requestRegisterVisit } from "@/components/lib/place/registerVisitRequest";
 import { H2 } from "@/components/lib/style/Hn";
 import { Link } from "@/components/lib/style/Link";
 import { Visit } from "@/components/lib/visit/Visit";
+import { requestRegisterVisit } from "@/components/lib/visit/registerVisitRequest";
 
 export interface PlacePageContentProps {
   place: Place;
