@@ -29,7 +29,15 @@ export async function GET(request: NextRequest) {
     }
 
     const places = await queryPlaceApi(lat, long);
-    savePlaces(places);
+
+    const t = Date.now();
+    const pSavePlace = savePlaces(places);
+    pSavePlace.then(() =>
+      console.log(`Saved ${places.length} places in`, Date.now() - t, "ms"),
+    );
+    pSavePlace.catch((error) => {
+      console.error("Error saving places:", error);
+    });
 
     const jsonData: FindNearbyResponse = { places, ok: true };
     return Response.json(jsonData);

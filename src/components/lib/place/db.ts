@@ -2,23 +2,39 @@ import { sql } from "@vercel/postgres";
 import { PlaceResult } from "@/components/pages/register/queryPlaceApi";
 
 export async function savePlaces(places: PlaceResult[]): Promise<void> {
-  // TODO make only one query
-  for (const place of places) {
-    await sql`
-      INSERT INTO place (
-        id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
-      ) VALUES (
-        ${place.id},
-        ${place.address},
-        ${place.displayName},
-        ${place.latitude},
-        ${place.longitude},
-        ${place.mapUrl},
-        ${place.typeDisplayName || null},
-        ${place.webUrl || null}
-      )
-    `;
-  }
+  await Promise.all(
+    places.map(async (place) => {
+      const getResult = await sql`SELECT * FROM place WHERE id = ${place.id}`;
+      if (!getResult.rows[0]) {
+        return sql`
+          INSERT INTO place (
+            id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
+          ) VALUES (
+            ${place.id},
+            ${place.address},
+            ${place.displayName},
+            ${place.latitude},
+            ${place.longitude},
+            ${place.mapUrl},
+            ${place.typeDisplayName || null},
+            ${place.webUrl || null}
+          )
+        `;
+      }
+      return sql`
+        UPDATE place
+        SET
+          address = ${place.address},
+          display_name = ${place.displayName},
+          latitude = ${place.latitude},
+          longitude = ${place.longitude},
+          map_url = ${place.mapUrl},
+          type_display_name = ${place.typeDisplayName || null},
+          web_url = ${place.webUrl || null}
+        WHERE id = ${place.id}
+      `;
+    }),
+  );
 }
 
 export async function getPlace(id: string): Promise<PlaceResult | undefined> {
