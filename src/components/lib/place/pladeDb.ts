@@ -1,7 +1,7 @@
 import { sql } from "@vercel/postgres";
-import { PlaceResult } from "@/components/pages/register/queryPlaceApi";
+import { Place } from "./Place";
 
-export async function savePlaces(places: PlaceResult[]): Promise<void> {
+export async function savePlaces(places: Place[]): Promise<void> {
   await Promise.all(
     places.map(async (place) => {
       const getResult = await sql`SELECT * FROM place WHERE id = ${place.id}`;
@@ -37,7 +37,7 @@ export async function savePlaces(places: PlaceResult[]): Promise<void> {
   );
 }
 
-export async function getPlace(id: string): Promise<PlaceResult | undefined> {
+export async function getPlace(id: string): Promise<Place | undefined> {
   const result = await sql`
     SELECT * FROM place WHERE id = ${id}
   `;
@@ -46,7 +46,7 @@ export async function getPlace(id: string): Promise<PlaceResult | undefined> {
     return undefined;
   }
 
-  const place: PlaceResult = {
+  const place: Place = {
     address: row.address,
     displayName: row.display_name,
     id: row.id,

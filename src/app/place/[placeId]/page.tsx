@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
-import { getPlace } from "@/components/lib/place/db";
+import { getPlace } from "@/components/lib/place/pladeDb";
 import { getSessionProfile } from "@/components/lib/user/profileSession";
 import { getUserVisitRecords } from "@/components/lib/visit/visitDb";
 import { PlacePageContent } from "@/components/pages/place/PlacePageContent";

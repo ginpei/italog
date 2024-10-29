@@ -1,13 +1,4 @@
-export interface PlaceResult {
-  address: string;
-  displayName: string;
-  id: string;
-  latitude: number;
-  longitude: number;
-  mapUrl: string;
-  typeDisplayName?: string;
-  webUrl?: string;
-}
+import { Place } from "@/components/lib/place/Place";
 
 // TODO find official types
 interface PlaceApiResponse {
@@ -32,7 +23,7 @@ interface PlaceApiResponse {
 export async function queryPlaceApi(
   lat: number,
   long: number,
-): Promise<PlaceResult[]> {
+): Promise<Place[]> {
   const endpoint = "https://places.googleapis.com/v1/places:searchNearby";
 
   const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
@@ -76,7 +67,7 @@ export async function queryPlaceApi(
   return places;
 }
 
-function toPlaceResult(data: PlaceApiResponse["places"][number]): PlaceResult {
+function toPlaceResult(data: PlaceApiResponse["places"][number]): Place {
   return {
     address: data.formattedAddress,
     displayName: data.displayName.text,

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { PlaceItem } from "./PlaceItem";
-import { PlaceResult } from "./queryPlaceApi";
 import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
+import { Place } from "@/components/lib/place/Place";
 import { Button } from "@/components/lib/style/Button";
 import { H1 } from "@/components/lib/style/Hn";
 
@@ -14,9 +14,7 @@ export function FindPageContent(): JSX.Element {
   );
 
   const formContext = loadContext();
-  const [places, setPlaces] = useState<PlaceResult[]>(
-    formContext?.places ?? [],
-  );
+  const [places, setPlaces] = useState<Place[]>(formContext?.places ?? []);
   const [latLong, setLatLong] = useState<{ lat: number; long: number } | null>(
     formContext?.location ?? null,
   );
@@ -91,7 +89,7 @@ async function findNearby(
 
 interface RegisterFormContext {
   location: { lat: number; long: number };
-  places: PlaceResult[];
+  places: Place[];
 }
 
 function saveContext(context: RegisterFormContext): void {

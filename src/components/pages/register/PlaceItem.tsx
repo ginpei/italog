@@ -1,9 +1,9 @@
 import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
-import { PlaceResult } from "./queryPlaceApi";
+import { Place } from "@/components/lib/place/Place";
 
 export interface PlaceItemProps {
-  place: PlaceResult;
+  place: Place;
 }
 
 export function PlaceItem({ place }: PlaceItemProps): JSX.Element {
