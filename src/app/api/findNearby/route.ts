@@ -30,12 +30,17 @@ export async function GET(request: NextRequest) {
 
     const t = Date.now();
     const pSavePlace = savePlaces(places);
-    pSavePlace.then(() =>
-      console.log(`Saved ${places.length} places in`, Date.now() - t, "ms"),
-    );
-    pSavePlace.catch((error) => {
-      console.error("Error saving places:", error);
-    });
+    pSavePlace
+      .catch((error) => {
+        console.error("Error saving places:", error);
+      })
+      .finally(() => {
+        console.log(
+          `Tried to save ${places.length} places in`,
+          Date.now() - t,
+          "ms",
+        );
+      });
 
     const jsonData: FindNearbyResponse = { places, ok: true };
     return Response.json(jsonData);
