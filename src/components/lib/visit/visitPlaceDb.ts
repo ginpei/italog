@@ -19,7 +19,6 @@ export async function getUserVisitPlace(
       comment: row.comment,
       createdAt: Number(row.created_at),
       date: row.date,
-      id: row.id,
       placeId: row.place_id,
       placeName: row.place_name,
       starred: row.starred,
