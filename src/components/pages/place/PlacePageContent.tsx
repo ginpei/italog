@@ -2,11 +2,11 @@
 
 import { GlobeAltIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
-import { useMemo, useState } from "react";
+import Link from "next/link";
+import { ReactNode, useMemo, useState } from "react";
 import { RegisterVisitForm } from "./RegisterVisitForm";
 import { Place } from "@/components/lib/place/Place";
 import { H2 } from "@/components/lib/style/Hn";
-import { Link } from "@/components/lib/style/Link";
 import { Visit } from "@/components/lib/visit/Visit";
 import { requestRegisterVisit } from "@/components/lib/visit/registerVisitRequest";
 
@@ -33,26 +33,16 @@ export function PlacePageContent({
   return (
     <>
       <h1 className="text-2xl font-bold">{place.displayName || "(No name)"}</h1>
-      <Link href={place.mapUrl} target="_blank">
-        <span className="flex gap-2">
-          <MapPinIcon className="inline size-8 shrink-0" />
-          <span>
-            {place.address}
-            <ArrowTopRightOnSquareIcon className="inline size-4" />
-          </span>
-        </span>
-      </Link>
-      {place.webUrl && (
-        <Link href={place.webUrl} target="_blank">
-          <span className="flex gap-2">
-            <GlobeAltIcon className="inline size-8 shrink-0" />
-            <span>
-              {siteHostName}{" "}
-              <ArrowTopRightOnSquareIcon className="inline size-4" />
-            </span>
-          </span>
-        </Link>
-      )}
+      <div className="flex flex-col">
+        <PlaceInfoLink href={place.mapUrl} Icon={MapPinIcon}>
+          {place.address}
+        </PlaceInfoLink>
+        {place.webUrl && (
+          <PlaceInfoLink href={place.webUrl} Icon={GlobeAltIcon}>
+            {siteHostName}{" "}
+          </PlaceInfoLink>
+        )}
+      </div>
       <hr />
       <RegisterVisitForm
         disabled={formWorking}
@@ -73,6 +63,35 @@ export function PlacePageContent({
         {userVisits.length < 1 && <li>No visits yet</li>}
       </ul>
     </>
+  );
+}
+
+function PlaceInfoLink({
+  children,
+  href,
+  Icon,
+}: {
+  children: ReactNode;
+  href: string;
+  Icon: React.ForwardRefExoticComponent<
+    React.PropsWithoutRef<React.SVGProps<SVGSVGElement>> & {
+      title?: string;
+      titleId?: string;
+    } & React.RefAttributes<SVGSVGElement>
+  >;
+}): JSX.Element {
+  return (
+    <Link
+      className="flex items-center gap-2 py-2 hover:bg-gray-50 active:bg-gray-100"
+      href={href}
+      target="_blank"
+    >
+      <Icon className="size-8 shrink-0 text-blue-700" />
+      <span>
+        {children}
+        <ArrowTopRightOnSquareIcon className="inline size-4" />
+      </span>
+    </Link>
   );
 }
 
