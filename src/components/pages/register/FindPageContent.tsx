@@ -21,6 +21,8 @@ export function FindPageContent(): JSX.Element {
 
   const onFindClick = () => {
     setError(null);
+    setLatLong(null);
+    setPlaces([]);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
