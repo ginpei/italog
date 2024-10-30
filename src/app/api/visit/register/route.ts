@@ -29,7 +29,6 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       comment: visit.comment,
       createdAt: now.getTime(),
       date: now.toISOString().slice(0, 10), // TODO consider user timezone
-      id: crypto.randomUUID(),
       placeId: visit.placeId,
       starred: visit.starred,
       userId,

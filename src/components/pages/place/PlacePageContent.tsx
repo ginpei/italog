@@ -54,7 +54,7 @@ export function PlacePageContent({
       <H2>Your visits</H2>
       <ul className="ms-4 list-disc">
         {userVisits.map((visit) => (
-          <li key={visit.id}>
+          <li key={`${visit.placeId}-${visit.userId}-${visit.date}`}>
             {new Date(visit.createdAt).toLocaleDateString()}{" "}
             {visit.starred && "⭐ "}
             {visit.comment}

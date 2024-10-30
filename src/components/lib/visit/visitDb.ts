@@ -3,8 +3,8 @@ import { Visit } from "./Visit";
 
 export async function createVisitRecord(visit: Visit): Promise<void> {
   await sql`
-    INSERT INTO visit (comment, created_at, date, id, place_id, starred, user_id)
-    VALUES (${visit.comment}, ${visit.createdAt}, ${visit.date}, ${visit.id}, ${visit.placeId}, ${visit.starred}, ${visit.userId})
+    INSERT INTO visit (comment, created_at, date, place_id, starred, user_id)
+    VALUES (${visit.comment}, ${visit.createdAt}, ${visit.date}, ${visit.placeId}, ${visit.starred}, ${visit.userId})
   `;
 }
 
@@ -34,7 +34,6 @@ export async function getUserVisitRecords(
       comment: row.comment,
       createdAt: Number(row.created_at),
       date: row.date,
-      id: row.id,
       placeId: row.place_id,
       starred: row.starred,
       userId: row.user_id,

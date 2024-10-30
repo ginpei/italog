@@ -7,7 +7,6 @@ export interface Visit {
    */
   date: string;
 
-  id: string;
   placeId: string;
   starred: boolean;
   userId: string;
