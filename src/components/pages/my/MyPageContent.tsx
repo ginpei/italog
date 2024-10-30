@@ -35,7 +35,7 @@ export function MyPageContent({
         <H2>Recent visits</H2>
         <ul className="ms-8 list-disc">
           {visits.map((visit) => (
-            <li key={visit.id}>
+            <li key={`${visit.placeId}-${visit.userId}-${visit.date}`}>
               <Link href={`/place/${visit.placeId}`}>
                 {new Date(visit.createdAt).toLocaleDateString()}:{" "}
                 {visit.placeName}
