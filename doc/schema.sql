@@ -20,7 +20,7 @@ CREATE TABLE profile (
 CREATE TABLE visit (
   place_id VARCHAR(255) NOT NULL,
   user_id VARCHAR(255) NOT NULL,
-  date DATE NOT NULL,
+  date VARCHAR(255) NOT NULL,
   comment TEXT NOT NULL,
   created_at BIGINT NOT NULL,
   starred BOOLEAN NOT NULL,
