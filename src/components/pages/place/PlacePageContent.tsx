@@ -26,7 +26,8 @@ export function PlacePageContent({
 
   const onRegisterVisitSubmit = async (visit: Visit) => {
     setFormWorking(true);
-    await requestRegisterVisit({ visit, visited });
+    const timezoneOffset = new Date().getTimezoneOffset();
+    await requestRegisterVisit({ timezoneOffset, visit, visited });
     setFormWorking(false);
   };
 
