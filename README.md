@@ -1,7 +1,7 @@
 # Italog
 
 ```console
-$ npx vercel env pull .env.development.local
+$ # npx vercel env pull .env.local
 $ cp .env.local.example .env.local
 $ code .env.local
 ```
