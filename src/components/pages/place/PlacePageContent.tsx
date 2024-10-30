@@ -21,14 +21,42 @@ export function PlacePageContent({
   userVisits,
   visited,
 }: PlacePageContentProps): JSX.Element {
+  const todaysVisit = findTodaysVisit(userVisits);
+  const [editingVisit, setEditingVisit] = useState<Visit>(
+    todaysVisit || {
+      comment: "",
+      createdAt: 0,
+      date: "",
+      placeId: place.id,
+      starred: false,
+      userId: "",
+    },
+  );
+  const [liveUserVisits, setLiveUserVisits] = useState(userVisits);
   const [formWorking, setFormWorking] = useState(false);
   const siteHostName = useHostNameOf(place.webUrl);
 
+  const onRegisterVisitChange = async (visit: Visit) => {
+    setEditingVisit(visit);
+  };
+
   const onRegisterVisitSubmit = async (visit: Visit) => {
-    setFormWorking(true);
-    const timezoneOffset = new Date().getTimezoneOffset();
-    await requestRegisterVisit({ timezoneOffset, visit, visited });
-    setFormWorking(false);
+    try {
+      setFormWorking(true);
+      const timezoneOffset = new Date().getTimezoneOffset();
+      await requestRegisterVisit({ timezoneOffset, visit, visited });
+      setLiveUserVisits((prevVisits) => {
+        const newVisits = prevVisits.filter(
+          (v) => v.date !== visit.date || v.placeId !== visit.placeId,
+        );
+        return [...newVisits, visit];
+      });
+    } catch (error) {
+      console.error("Failed to register visit", error);
+      alert("Failed to register visit"); // TODO
+    } finally {
+      setFormWorking(false);
+    }
   };
 
   return (
@@ -47,21 +75,22 @@ export function PlacePageContent({
       <hr />
       <RegisterVisitForm
         disabled={formWorking}
+        onChange={onRegisterVisitChange}
         onSubmit={onRegisterVisitSubmit}
-        placeId={place.id}
+        visit={editingVisit}
         visited={visited}
       />
       <hr />
       <H2>Your visits</H2>
       <ul className="ms-4 list-disc">
-        {userVisits.map((visit) => (
+        {liveUserVisits.map((visit) => (
           <li key={`${visit.placeId}-${visit.userId}-${visit.date}`}>
             {new Date(visit.createdAt).toLocaleDateString()}{" "}
             {visit.starred && "⭐ "}
             {visit.comment}
           </li>
         ))}
-        {userVisits.length < 1 && <li>No visits yet</li>}
+        {liveUserVisits.length < 1 && <li>No visits yet</li>}
       </ul>
     </>
   );
@@ -105,4 +134,9 @@ function useHostNameOf(url: string | undefined): string | undefined {
     const urlObj = new URL(url);
     return urlObj.hostname;
   }, [url]);
+}
+
+function findTodaysVisit(visits: Visit[]): Visit | undefined {
+  const today = new Date().toISOString().slice(0, 10);
+  return visits.find((visit) => visit.date === today);
 }

@@ -1,45 +1,25 @@
-import { useState } from "react";
 import { Button } from "@/components/lib/style/Button";
 import { H2 } from "@/components/lib/style/Hn";
 import { Visit } from "@/components/lib/visit/Visit";
 
 export interface RegisterVisitFormProps {
   disabled: boolean;
-  onSubmit: (visit: Visit) => Promise<void>;
-  placeId: string;
+  onChange: (visit: Visit) => void;
+  onSubmit: (visit: Visit) => void;
+  visit: Visit;
   visited: boolean;
 }
 
 export function RegisterVisitForm({
   disabled,
+  onChange,
   onSubmit,
-  placeId,
+  visit,
   visited,
 }: RegisterVisitFormProps): JSX.Element {
-  const [visit, setVisit] = useState<Visit>({
-    comment: "",
-    createdAt: 0,
-    date: "",
-    id: "",
-    placeId,
-    starred: false,
-    userId: "",
-  });
-
   const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const p = onSubmit(visit);
-    p.then(() =>
-      setVisit({
-        comment: "",
-        createdAt: 0,
-        date: "",
-        id: "",
-        placeId,
-        starred: false,
-        userId: "",
-      }),
-    );
+    onSubmit(visit);
   };
 
   const onInputChange = (
@@ -47,14 +27,14 @@ export function RegisterVisitForm({
   ) => {
     const { name, value } = event.target;
     if (name === "comment") {
-      setVisit((prev) => ({ ...prev, comment: value }));
+      onChange({ ...visit, comment: value });
     }
   };
 
   const onCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
     if (name === "star") {
-      setVisit((prev) => ({ ...prev, starred: checked }));
+      onChange({ ...visit, starred: checked });
     }
   };
 
