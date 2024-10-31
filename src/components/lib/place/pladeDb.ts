@@ -9,6 +9,7 @@ export async function savePlaces(places: Place[]): Promise<void> {
       const exists = getResult.rows[0].count > 0;
 
       if (!exists) {
+        console.log(`savePlaces: creating place`, place.id, place.displayName);
         return sql`
           INSERT INTO place (
             id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
@@ -24,6 +25,8 @@ export async function savePlaces(places: Place[]): Promise<void> {
           )
         `;
       }
+
+      console.log(`savePlaces: updating place`, place.id, place.displayName);
       return sql`
         UPDATE place
         SET
