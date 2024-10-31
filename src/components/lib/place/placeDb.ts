@@ -48,7 +48,7 @@ export async function getPlaceRecord(id: string): Promise<Place | undefined> {
   `;
   const row = result.rows[0];
   if (!row) {
-    console.log("No place found", id);
+    console.log("No place found", id, result);
     return undefined;
   }
 
