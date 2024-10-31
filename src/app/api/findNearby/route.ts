@@ -1,8 +1,11 @@
 import { NextRequest } from "next/server";
 import { toError } from "@/components/lib/error/errorUtil";
 import { Place } from "@/components/lib/place/Place";
-import { savePlaces } from "@/components/lib/place/placeDb";
-import { queryPlaceApi } from "@/components/pages/register/queryPlaceApi";
+import { getPlaces, savePlace } from "@/components/lib/place/placeDb";
+import {
+  queryNearbySearch,
+  queryPlaceDetails,
+} from "@/components/pages/register/queryPlaceApi";
 
 export type FindNearbyResponse =
   | {
@@ -26,22 +29,23 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const places = await queryPlaceApi(lat, long);
-
-    const t = Date.now();
-    const pSavePlace = savePlaces(places);
-    await pSavePlace
-      .catch((error) => {
-        console.info("savePlaces()", places);
-        console.error("Error saving places:", error);
-      })
-      .finally(() => {
-        console.log(
-          `Tried to save ${places.length} places in`,
-          Date.now() - t,
-          "ms",
-        );
-      });
+    const ids = await queryNearbySearch(lat, long);
+    const existingPlaces = await getPlaces(ids);
+    const newPlaceIds = ids.filter(
+      (id) => !existingPlaces.find((p) => p.id === id),
+    );
+    const newPlaces = await Promise.all(
+      newPlaceIds.map(async (id) => {
+        const place = await queryPlaceDetails(id);
+        await savePlace(place);
+        return place;
+      }),
+    );
+    const places = ids.map(
+      (id) =>
+        existingPlaces.find((p) => p.id === id) ||
+        newPlaces.find((p) => p.id === id)!,
+    );
 
     const jsonData: FindNearbyResponse = { places, ok: true };
     return Response.json(jsonData);
