@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlaceItem } from "./PlaceItem";
 import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
@@ -12,12 +12,16 @@ export function FindPageContent(): JSX.Element {
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
   );
-
-  const formContext = loadContext();
-  const [places, setPlaces] = useState<Place[]>(formContext?.places ?? []);
+  const [places, setPlaces] = useState<Place[]>([]);
   const [latLong, setLatLong] = useState<{ lat: number; long: number } | null>(
-    formContext?.location ?? null,
+    null,
   );
+
+  useEffect(() => {
+    const formContext = loadContext(window);
+    setPlaces(formContext?.places ?? []);
+    setLatLong(formContext?.location ?? null);
+  }, []);
 
   const onFindClick = () => {
     setError(null);
@@ -35,7 +39,7 @@ export function FindPageContent(): JSX.Element {
             if (!data.ok) {
               throw new Error(data.message ?? "Unknown error on fetch");
             }
-            saveContext({
+            saveContext(window, {
               location: {
                 lat: position.coords.latitude,
                 long: position.coords.longitude,
@@ -94,17 +98,14 @@ interface RegisterFormContext {
   places: Place[];
 }
 
-function saveContext(context: RegisterFormContext): void {
+function saveContext(w: Window, context: RegisterFormContext): void {
   const key = "places";
-  window.localStorage.setItem(key, JSON.stringify(context));
+  w.localStorage.setItem(key, JSON.stringify(context));
 }
 
-function loadContext(): RegisterFormContext | null {
-  // TODO solve error on SSR
-  // ReferenceError: window is not defined
-
+function loadContext(w: Window): RegisterFormContext | null {
   const key = "places";
-  const data = window.localStorage.getItem(key);
+  const data = w.localStorage.getItem(key);
   if (!data) {
     return null;
   }
