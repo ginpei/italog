@@ -1,3 +1,5 @@
+-- DBMS: PostgreSQL
+
 -- create place table
 CREATE TABLE place (
   id VARCHAR(255) PRIMARY KEY,
