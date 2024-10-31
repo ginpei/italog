@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ProfileForm } from "./ProfileForm";
+import { VStack } from "@/components/lib/layout/VStack";
 import { H1, H2 } from "@/components/lib/style/Hn";
 import { Link } from "@/components/lib/style/Link";
 import { Profile } from "@/components/lib/user/Profile";
@@ -29,9 +30,9 @@ export function MyPageContent({
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <VStack gap="gap-8">
       <H1>My page</H1>
-      <div className="flex flex-col gap-4">
+      <VStack>
         <H2>Recent visits</H2>
         <ul className="ms-8 list-disc">
           {visits.map((visit) => (
@@ -44,14 +45,14 @@ export function MyPageContent({
           ))}
           {visits.length === 0 && <li>No visits yet</li>}
         </ul>
-      </div>
+      </VStack>
       <ProfileForm
         disabled={false}
         onChange={onProfileChange}
         onSubmit={onProfileSubmit}
         profile={editingProfile}
       />
-      <div className="flex flex-col gap-4">
+      <VStack>
         <H2>Logout</H2>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a
@@ -60,7 +61,7 @@ export function MyPageContent({
         >
           Log out
         </a>
-      </div>
-    </div>
+      </VStack>
+    </VStack>
   );
 }

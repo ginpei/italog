@@ -5,6 +5,7 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { ReactNode, useMemo, useState } from "react";
 import { RegisterVisitForm } from "./RegisterVisitForm";
+import { VStack } from "@/components/lib/layout/VStack";
 import { Place } from "@/components/lib/place/Place";
 import { H2 } from "@/components/lib/style/Hn";
 import { Visit } from "@/components/lib/visit/Visit";
@@ -60,7 +61,7 @@ export function PlacePageContent({
   };
 
   return (
-    <>
+    <VStack>
       <h1 className="text-2xl font-bold">{place.displayName || "(No name)"}</h1>
       <div className="flex flex-col">
         <PlaceInfoLink href={place.mapUrl} Icon={MapPinIcon}>
@@ -92,7 +93,7 @@ export function PlacePageContent({
         ))}
         {liveUserVisits.length < 1 && <li>No visits yet</li>}
       </ul>
-    </>
+    </VStack>
   );
 }
 

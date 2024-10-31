@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { PlaceItem } from "./PlaceItem";
 import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
+import { VStack } from "@/components/lib/layout/VStack";
 import { Place } from "@/components/lib/place/Place";
 import { Button } from "@/components/lib/style/Button";
 import { H1 } from "@/components/lib/style/Hn";
@@ -61,7 +62,7 @@ export function FindPageContent(): JSX.Element {
   };
 
   return (
-    <>
+    <VStack>
       <H1>Find</H1>
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
       <Button onClick={onFindClick}>Find by location</Button>
@@ -74,7 +75,7 @@ export function FindPageContent(): JSX.Element {
           <PlaceItem key={place.id} place={place} />
         ))}
       </div>
-    </>
+    </VStack>
   );
 }
 

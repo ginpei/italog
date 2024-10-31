@@ -2,6 +2,7 @@ import { Profile } from "../user/Profile";
 import { Content } from "./Content";
 import { NavBar } from "./NavBar";
 import { Footer } from "./NavBlock";
+import { VStack } from "./VStack";
 
 export interface StraightPageLayoutProps {
   children: React.ReactNode;
@@ -15,14 +16,12 @@ export function StraightPageLayout({
   profile,
 }: StraightPageLayoutProps): JSX.Element {
   return (
-    <div className="StraightPageLayout flex flex-col gap-4">
+    <VStack className="StraightPageLayout">
       <NavBar profile={profile} title={navBarTitle} />
       <div className="min-h-[60vh]">
-        <Content>
-          <div className="flex flex-col gap-4">{children}</div>
-        </Content>
+        <Content>{children}</Content>
       </div>
       <Footer />
-    </div>
+    </VStack>
   );
 }
