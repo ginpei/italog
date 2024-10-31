@@ -43,12 +43,26 @@ export async function savePlaceRecord(place: Place): Promise<void> {
 }
 
 export async function getPlaceRecord(id: string): Promise<Place | undefined> {
+  const countResult = await sql`
+    SELECT COUNT(*) FROM place WHERE id = ${id}
+  `;
+  console.log(
+    "countResult",
+    countResult,
+    `SELECT COUNT(*) FROM place WHERE id = ${id}`,
+  );
+
   const result = await sql`
     SELECT * FROM place WHERE id = ${id}
   `;
   const row = result.rows[0];
   if (!row) {
-    console.log("No place found", id, result);
+    console.log(
+      "No place found",
+      id,
+      `SELECT * FROM place WHERE id = ${id}`,
+      result,
+    );
     return undefined;
   }
 
