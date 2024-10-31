@@ -4,8 +4,11 @@ import { Place } from "./Place";
 export async function savePlaces(places: Place[]): Promise<void> {
   await Promise.all(
     places.map(async (place) => {
-      const getResult = await sql`SELECT * FROM place WHERE id = ${place.id}`;
-      if (!getResult.rows[0]) {
+      const getResult =
+        await sql`SELECT COUNT(*) FROM place WHERE id = ${place.id}`;
+      const exists = getResult.rows[0].count > 0;
+
+      if (!exists) {
         return sql`
           INSERT INTO place (
             id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
