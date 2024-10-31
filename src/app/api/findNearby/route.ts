@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
     const pSavePlace = savePlaces(places);
     pSavePlace
       .catch((error) => {
+        console.info("savePlaces()", places);
         console.error("Error saving places:", error);
       })
       .finally(() => {
