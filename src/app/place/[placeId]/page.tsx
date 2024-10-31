@@ -24,6 +24,7 @@ export default async function PlacePage({
       new Date().toLocaleDateString();
 
   if (!place) {
+    console.log(`No place found (2)`);
     // TODO find how to return specific 404 page for this route
     // return (
     //   <StraightPageLayout session={session}>
