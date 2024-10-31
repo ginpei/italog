@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
     const t = Date.now();
     const pSavePlace = savePlaces(places);
-    pSavePlace
+    await pSavePlace
       .catch((error) => {
         console.info("savePlaces()", places);
         console.error("Error saving places:", error);
