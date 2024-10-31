@@ -1,5 +1,8 @@
 -- DBMS: PostgreSQL
 
+-- Enable the uuid-ossp extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- create place table
 CREATE TABLE place (
   id VARCHAR(255) PRIMARY KEY,
@@ -14,14 +17,23 @@ CREATE TABLE place (
 
 -- create profile table
 CREATE TABLE profile (
-  id VARCHAR(255) PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   display_name VARCHAR(255) NOT NULL
+);
+
+-- create auth-profile table
+CREATE TABLE auth_profile (
+  auth_type VARCHAR(255) NOT NULL,
+  auth_id VARCHAR(255) NOT NULL,
+  user_id UUID NOT NULL,
+  PRIMARY KEY (auth_type, auth_id),
+  FOREIGN KEY (user_id) REFERENCES profile(id)
 );
 
 -- create visit table
 CREATE TABLE visit (
   place_id VARCHAR(255) NOT NULL,
-  user_id VARCHAR(255) NOT NULL,
+  user_id UUID NOT NULL,
   date VARCHAR(255) NOT NULL,
   comment TEXT NOT NULL,
   created_at BIGINT NOT NULL,

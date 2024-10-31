@@ -1,7 +1,7 @@
-import { getSession } from "@auth0/nextjs-auth0";
 import { NextApiResponse } from "next";
 import { NextRequest } from "next/server";
 import { UserError } from "@/components/lib/error/UserError";
+import { getSessionProfile } from "@/components/lib/user/profileSession";
 import { Visit } from "@/components/lib/visit/Visit";
 import {
   createVisitRecord,
@@ -16,9 +16,8 @@ export interface RegisterVisitPayload {
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
   try {
-    const session = await getSession();
-    const userId = session?.user.sub;
-    if (!userId) {
+    const profile = await getSessionProfile();
+    if (!profile) {
       // TODO handle
       throw new Error("User not authenticated");
     }
@@ -33,7 +32,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       date: getDateInUserTimeZone(now, body.timezoneOffset),
       placeId: visit.placeId,
       starred: visit.starred,
-      userId,
+      userId: profile.id,
     };
 
     if (body.visited) {

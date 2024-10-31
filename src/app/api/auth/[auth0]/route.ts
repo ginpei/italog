@@ -7,16 +7,15 @@ import {
 } from "@auth0/nextjs-auth0";
 import { NextRequest } from "next/server";
 import {
-  createProfileRecord,
-  getProfileRecord,
+  createProfileRecordSet,
+  getProfileRecordByAuth,
 } from "@/components/lib/user/profileDb";
 
 const afterCallback: AfterCallbackAppRoute = async (req, session) => {
   const userId = session.user.sub;
-  const profile = await getProfileRecord(userId);
+  const profile = await getProfileRecordByAuth("auth0", userId);
   if (!profile) {
-    await createProfileRecord({
-      id: userId,
+    await createProfileRecordSet("auth0", userId, {
       displayName: session.user.nickname,
     });
   }

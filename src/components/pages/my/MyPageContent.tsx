@@ -32,6 +32,9 @@ export function MyPageContent({
   return (
     <VStack gap="gap-8">
       <H1>My page</H1>
+      <p>
+        <Link href={`/user/${profile.id}`}>Public profile</Link>
+      </p>
       <VStack>
         <H2>Recent visits</H2>
         <ul className="ms-8 list-disc">
