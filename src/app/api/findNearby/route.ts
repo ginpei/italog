@@ -1,7 +1,10 @@
 import { NextRequest } from "next/server";
 import { toError } from "@/components/lib/error/errorUtil";
 import { Place } from "@/components/lib/place/Place";
-import { getPlaceRecords, savePlaceRecord } from "@/components/lib/place/placeDb";
+import {
+  getPlaceRecords,
+  savePlaceRecord,
+} from "@/components/lib/place/placeDb";
 import {
   queryNearbySearch,
   queryPlaceDetails,
