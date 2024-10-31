@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
-import { getPlace } from "@/components/lib/place/placeDb";
+import { getPlaceRecord } from "@/components/lib/place/placeDb";
 import { getSessionProfile } from "@/components/lib/user/profileSession";
 import { getUserVisitRecords } from "@/components/lib/visit/visitDb";
 import { PlacePageContent } from "@/components/pages/place/PlacePageContent";
@@ -12,7 +12,7 @@ export default async function PlacePage({
 }): Promise<JSX.Element> {
   const [profile, place] = await Promise.all([
     getSessionProfile(),
-    getPlace(params.placeId),
+    getPlaceRecord(params.placeId),
   ]);
   const userVisits = profile
     ? await getUserVisitRecords(profile.id, params.placeId)

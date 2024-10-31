@@ -1,7 +1,7 @@
 import { QueryResultRow, sql } from "@vercel/postgres";
 import { Place } from "./Place";
 
-export async function savePlace(place: Place): Promise<void> {
+export async function savePlaceRecord(place: Place): Promise<void> {
   const getResult =
     await sql`SELECT COUNT(*) FROM place WHERE id = ${place.id}`;
   const exists = getResult.rows[0].count > 0;
@@ -42,7 +42,7 @@ export async function savePlace(place: Place): Promise<void> {
   // `;
 }
 
-export async function getPlace(id: string): Promise<Place | undefined> {
+export async function getPlaceRecord(id: string): Promise<Place | undefined> {
   const result = await sql`
     SELECT * FROM place WHERE id = ${id}
   `;
@@ -55,7 +55,7 @@ export async function getPlace(id: string): Promise<Place | undefined> {
   return place;
 }
 
-export async function getPlaces(ids: string[]): Promise<Place[]> {
+export async function getPlaceRecords(ids: string[]): Promise<Place[]> {
   const result = await sql`
     SELECT * FROM place WHERE id = ANY(ARRAY[${ids.map((v) => `"${v}"`).join(",")}])
   `;

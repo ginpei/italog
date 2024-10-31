@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { toError } from "@/components/lib/error/errorUtil";
 import { Place } from "@/components/lib/place/Place";
-import { getPlaces, savePlace } from "@/components/lib/place/placeDb";
+import { getPlaceRecords, savePlaceRecord } from "@/components/lib/place/placeDb";
 import {
   queryNearbySearch,
   queryPlaceDetails,
@@ -30,14 +30,14 @@ export async function GET(request: NextRequest) {
     }
 
     const ids = await queryNearbySearch(lat, long);
-    const existingPlaces = await getPlaces(ids);
+    const existingPlaces = await getPlaceRecords(ids);
     const newPlaceIds = ids.filter(
       (id) => !existingPlaces.find((p) => p.id === id),
     );
     const newPlaces = await Promise.all(
       newPlaceIds.map(async (id) => {
         const place = await queryPlaceDetails(id);
-        await savePlace(place);
+        await savePlaceRecord(place);
         return place;
       }),
     );
