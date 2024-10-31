@@ -26,41 +26,38 @@ export function FindPageContent(): JSX.Element {
     }
   }, []);
 
-  const onFindClick = () => {
+  const onFindClick = async () => {
     setError(null);
     setLatLong(null);
     setPlaces([]);
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLatLong({
+    try {
+      const position = await getLocation();
+      setLatLong({
+        lat: position.coords.latitude,
+        long: position.coords.longitude,
+      });
+
+      const data = await findNearby(
+        position.coords.latitude,
+        position.coords.longitude,
+      );
+      if (!data.ok) {
+        throw new Error(data.message ?? "Unknown error on fetch");
+      }
+
+      setPlaces(data.places);
+      saveContext(window, {
+        location: {
           lat: position.coords.latitude,
           long: position.coords.longitude,
-        });
-        findNearby(position.coords.latitude, position.coords.longitude)
-          .then((data) => {
-            if (!data.ok) {
-              throw new Error(data.message ?? "Unknown error on fetch");
-            }
-            saveContext(window, {
-              location: {
-                lat: position.coords.latitude,
-                long: position.coords.longitude,
-              },
-              places: data.places,
-            });
-            setPlaces(data.places);
-          })
-          .catch((error) => {
-            console.error(error);
-            setError(toError(error));
-          });
-      },
-      (error) => {
-        console.error(error);
-        setError(error);
-      },
-    );
+        },
+        places: data.places,
+      });
+    } catch (error) {
+      console.error(error);
+      setError(toError(error));
+    }
   };
 
   return (
@@ -113,4 +110,10 @@ function loadContext(w: Window): RegisterFormContext | null {
     return null;
   }
   return JSON.parse(data);
+}
+
+function getLocation(): Promise<GeolocationPosition> {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
 }
