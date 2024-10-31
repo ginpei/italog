@@ -20,8 +20,10 @@ export function FindPageContent(): JSX.Element {
 
   useEffect(() => {
     const formContext = loadContext(window);
-    setPlaces(formContext?.places ?? []);
-    setLatLong(formContext?.location ?? null);
+    if (formContext) {
+      setPlaces(formContext.places);
+      setLatLong(formContext.location);
+    }
   }, []);
 
   const onFindClick = () => {
