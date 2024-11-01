@@ -2,19 +2,23 @@
 
 import { FriendshipSection } from "./FriendshipSection";
 import { VStack } from "@/components/lib/layout/VStack";
-import { H1 } from "@/components/lib/style/Hn";
+import { H1, H2 } from "@/components/lib/style/Hn";
+import { Link } from "@/components/lib/style/Link";
 import { Profile } from "@/components/lib/user/Profile";
+import { VisitPlace } from "@/components/lib/visit/VisitPlace";
 
 export interface UserPageContentProps {
   currentUser: Profile;
   isFriend: boolean;
   profile: Profile;
+  visits: VisitPlace[];
 }
 
 export function UserPageContent({
   currentUser,
   isFriend,
   profile,
+  visits,
 }: UserPageContentProps): JSX.Element {
   return (
     <VStack gap="gap-8">
@@ -24,6 +28,25 @@ export function UserPageContent({
         isFriend={isFriend}
         profile={profile}
       />
+      {(isFriend || currentUser.id === profile.id) && (
+        <>
+          <hr />
+          <VStack>
+            <H2>Recent visits</H2>
+            <ul className="ms-8 list-disc">
+              {visits.map((visit) => (
+                <li key={`${visit.placeId}-${visit.userId}-${visit.date}`}>
+                  <Link href={`/place/${visit.placeId}`}>
+                    {new Date(visit.createdAt).toLocaleDateString()}:{" "}
+                    {visit.placeName}
+                  </Link>
+                </li>
+              ))}
+              {visits.length === 0 && <li>No visits yet</li>}
+            </ul>
+          </VStack>
+        </>
+      )}
     </VStack>
   );
 }
