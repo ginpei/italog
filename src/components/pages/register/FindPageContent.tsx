@@ -7,6 +7,11 @@ import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
 import { VStack } from "@/components/lib/layout/VStack";
 import { Place } from "@/components/lib/place/Place";
+import {
+  isPlaceTypeCategory,
+  PlaceTypeCategory,
+  popularPlaceTypes,
+} from "@/components/lib/place/placeTypes";
 import { Button } from "@/components/lib/style/Button";
 import { H1 } from "@/components/lib/style/Hn";
 
@@ -14,6 +19,7 @@ export function FindPageContent(): JSX.Element {
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
   );
+  const [category, setCategory] = useState<PlaceTypeCategory>("food_and_drink");
   const [places, setPlaces] = useState<Place[]>([]);
   const [latLong, setLatLong] = useState<{ lat: number; long: number } | null>(
     null,
@@ -26,6 +32,14 @@ export function FindPageContent(): JSX.Element {
       setLatLong(formContext.location);
     }
   }, []);
+
+  const onCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const category = event.target.value;
+    if (!isPlaceTypeCategory(category)) {
+      return;
+    }
+    setCategory(category);
+  };
 
   const onFindClick = async () => {
     setError(null);
@@ -65,7 +79,35 @@ export function FindPageContent(): JSX.Element {
     <VStack>
       <H1>Find</H1>
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
-      <Button onClick={onFindClick}>Find by location</Button>
+      <form>
+        <VStack as="fieldset">
+          <label className="flex flex-col">
+            Category:
+            <select
+              className="border p-2"
+              name="category"
+              onChange={onCategoryChange}
+              value={category}
+            >
+              {popularPlaceTypes.map(({ categoryKey, displayName, emoji }) => (
+                <option key={categoryKey} value={categoryKey}>
+                  {emoji} {displayName}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="flex flex-col">
+            Text (optional):
+            <input
+              className="border p-2"
+              name="q"
+              placeholder="McDonald's"
+              type="text"
+            />
+          </label>
+          <Button onClick={onFindClick}>Find by location</Button>
+        </VStack>
+      </form>
       <p>
         Location:
         {latLong ? `${latLong.lat},${latLong.long}` : ""}
