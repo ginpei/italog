@@ -3,23 +3,27 @@
 import { useEffect, useState } from "react";
 import { EmbeddedMap } from "./Map";
 import { PlaceItem } from "./PlaceItem";
-import { FindNearbyResponse } from "@/app/api/findNearby/route";
+import { SearchNearbyForm } from "./SearchNearbyForm";
+import {
+  FindNearbyParams,
+  FindNearbyResponse,
+} from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
 import { VStack } from "@/components/lib/layout/VStack";
 import { Place } from "@/components/lib/place/Place";
-import {
-  isPlaceTypeCategory,
-  PlaceTypeCategory,
-  popularPlaceTypes,
-} from "@/components/lib/place/placeTypes";
-import { Button } from "@/components/lib/style/Button";
+import { PlaceTypeCategory } from "@/components/lib/place/placeTypes";
 import { H1 } from "@/components/lib/style/Hn";
 
 export function FindPageContent(): JSX.Element {
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
   );
-  const [category, setCategory] = useState<PlaceTypeCategory>("food_and_drink");
+  const [params, setParams] = useState<FindNearbyParams>({
+    category: "food_and_drink",
+    lat: NaN,
+    long: NaN,
+    q: "",
+  });
   const [places, setPlaces] = useState<Place[]>([]);
   const [latLong, setLatLong] = useState<{ lat: number; long: number } | null>(
     null,
@@ -33,15 +37,7 @@ export function FindPageContent(): JSX.Element {
     }
   }, []);
 
-  const onCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const category = event.target.value;
-    if (!isPlaceTypeCategory(category)) {
-      return;
-    }
-    setCategory(category);
-  };
-
-  const onFindClick = async () => {
+  const onSubmit = async (params: FindNearbyParams) => {
     setError(null);
     setLatLong(null);
     setPlaces([]);
@@ -52,8 +48,8 @@ export function FindPageContent(): JSX.Element {
         lat: position.coords.latitude,
         long: position.coords.longitude,
       });
-
       const data = await findNearby(
+        params.category,
         position.coords.latitude,
         position.coords.longitude,
       );
@@ -79,35 +75,12 @@ export function FindPageContent(): JSX.Element {
     <VStack>
       <H1>Find</H1>
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
-      <form>
-        <VStack as="fieldset">
-          <label className="flex flex-col">
-            Category:
-            <select
-              className="border p-2"
-              name="category"
-              onChange={onCategoryChange}
-              value={category}
-            >
-              {popularPlaceTypes.map(({ categoryKey, displayName, emoji }) => (
-                <option key={categoryKey} value={categoryKey}>
-                  {emoji} {displayName}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex flex-col">
-            Text (optional):
-            <input
-              className="border p-2"
-              name="q"
-              placeholder="McDonald's"
-              type="text"
-            />
-          </label>
-          <Button onClick={onFindClick}>Find by location</Button>
-        </VStack>
-      </form>
+      <SearchNearbyForm
+        disabled={false}
+        onChange={setParams}
+        onSubmit={onSubmit}
+        params={params}
+      />
       <p>
         Location:
         {latLong ? `${latLong.lat},${latLong.long}` : ""}
@@ -131,15 +104,18 @@ export function FindPageContent(): JSX.Element {
 }
 
 async function findNearby(
+  category: PlaceTypeCategory,
   lat: number,
   long: number,
 ): Promise<FindNearbyResponse> {
   const endpoint = "/api/findNearby";
-  const params = new URLSearchParams({
+
+  const searchParams = new URLSearchParams({
+    category,
     lat: String(lat),
     long: String(long),
   });
-  const url = `${endpoint}?${params}`;
+  const url = `${endpoint}?${searchParams}`;
   const response = await fetch(url);
   const data = await response.json();
   return data;

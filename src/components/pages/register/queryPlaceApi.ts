@@ -1,8 +1,12 @@
 import { Place } from "@/components/lib/place/Place";
+import { PlaceType } from "@/components/lib/place/placeTypes";
 
 // TODO find official types
 interface NearbySearchApiResponse {
-  places: Array<{
+  /**
+   * If no places are found, this field is omitted from the response.
+   */
+  places?: Array<{
     id: string;
   }>;
 }
@@ -26,9 +30,10 @@ interface PlaceDetailsApiResponse {
 
 /**
  * @returns Place IDs
- * @see https://developers.google.com/maps/documentation/places/web-service/place-details
+ * @see https://developers.google.com/maps/documentation/places/web-service/nearby-search
  */
 export async function queryNearbySearch(
+  includedTypes: PlaceType[],
   lat: number,
   long: number,
 ): Promise<string[]> {
@@ -43,6 +48,7 @@ export async function queryNearbySearch(
 
   const res = await fetch(url, {
     body: JSON.stringify({
+      includedTypes: includedTypes,
       maxResultCount: 10,
       rankPreference: "DISTANCE",
       locationRestriction: {
@@ -68,8 +74,7 @@ export async function queryNearbySearch(
     console.log("Response data:", data);
     throw new Error(data.error?.message ?? "Unknown error on fetch");
   }
-
-  const ids = (data as NearbySearchApiResponse).places.map((v) => v.id);
+  const ids = (data as NearbySearchApiResponse).places?.map((v) => v.id) ?? [];
   return ids;
 }
 
