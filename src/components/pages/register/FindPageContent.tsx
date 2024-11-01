@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { EmbeddedMap } from "./Map";
 import { PlaceItem } from "./PlaceItem";
 import { FindNearbyResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/lib/error/errorUtil";
@@ -69,6 +70,15 @@ export function FindPageContent(): JSX.Element {
         Location:
         {latLong ? `${latLong.lat},${latLong.long}` : ""}
       </p>
+      <div className="sticky top-0 h-[40vh] bg-white py-1">
+        {latLong && (
+          <EmbeddedMap
+            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+            lat={latLong.lat}
+            long={latLong.long}
+          />
+        )}
+      </div>
       <div className="flex flex-col gap-1">
         {places.map((place) => (
           <PlaceItem key={place.id} place={place} />
