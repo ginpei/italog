@@ -15,11 +15,19 @@ CREATE TABLE place (
   web_url VARCHAR(255)
 );
 
+-- create sample place
+INSERT INTO place (id, address, display_name, latitude, longitude, map_url, type_display_name, web_url)
+VALUES ('ChIJX89RH452hlQRQbd33YyMzk0', '3451 Kingsway, Vancouver, BC V5R 5L3, Canada', 'Tim Hortons', 49.2322652, -123.0311881, 'https://maps.google.com/?cid=5606573122761766721', 'Coffee Shop', 'https://locations.timhortons.ca/en/bc/vancouver/3451-kingsway/');
+
 -- create profile table
 CREATE TABLE profile (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   display_name VARCHAR(255) NOT NULL
 );
+
+-- create sample profile
+INSERT INTO profile (id, display_name)
+VALUES ('4111179e-3bfa-4b8a-9588-dfe4a49f90bc','DEMO');
 
 -- create auth-profile table
 CREATE TABLE auth_profile (
@@ -42,6 +50,10 @@ CREATE TABLE visit (
   FOREIGN KEY (place_id) REFERENCES place(id),
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );
+
+-- create sample visit
+INSERT INTO visit (comment, created_at, date, place_id, starred, user_id)
+VALUES ('Love it!', 946684800000, '2000-01-01', 'ChIJX89RH452hlQRQbd33YyMzk0', true, '4111179e-3bfa-4b8a-9588-dfe4a49f90bc' );
 
 -- create user relation table
 CREATE TABLE user_user (
