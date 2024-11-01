@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server";
 import { toError } from "@/components/lib/error/errorUtil";
 import { Place } from "@/components/lib/place/Place";
 import {
@@ -6,9 +5,21 @@ import {
   savePlaceRecord,
 } from "@/components/lib/place/placeDb";
 import {
+  isPlaceTypeCategory,
+  PlaceTypeCategory,
+  placeTypes,
+} from "@/components/lib/place/placeTypes";
+import {
   queryNearbySearch,
   queryPlaceDetails,
 } from "@/components/pages/register/queryPlaceApi";
+
+export interface FindNearbyParams {
+  category: PlaceTypeCategory;
+  lat: number;
+  long: number;
+  q?: string;
+}
 
 export type FindNearbyResponse =
   | {
@@ -20,9 +31,22 @@ export type FindNearbyResponse =
       ok: false;
     };
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const reqParams = new URL(request.url).searchParams;
+
+    const typeCategory = reqParams.get("category");
+    if (!typeCategory || !isPlaceTypeCategory(typeCategory)) {
+      return new Response(
+        JSON.stringify({ message: "Invalid category", ok: false }),
+        { status: 400 },
+      );
+    }
+
+    const includedTypes = placeTypes
+      .filter((v) => v.category === typeCategory)
+      .map((v) => v.typeKey);
+
     const lat = Number(reqParams.get("lat"));
     const long = Number(reqParams.get("long"));
     if (Number.isNaN(lat) || Number.isNaN(long)) {
@@ -32,7 +56,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const ids = await queryNearbySearch(lat, long);
+    const ids = await queryNearbySearch(includedTypes, lat, long);
     const existingPlaces = await getPlaceRecords(ids);
     const newPlaceIds = ids.filter(
       (id) => !existingPlaces.find((p) => p.id === id),
