@@ -42,3 +42,13 @@ CREATE TABLE visit (
   FOREIGN KEY (place_id) REFERENCES place(id),
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );
+
+-- create user relation table
+CREATE TABLE user_user (
+  user_id UUID NOT NULL,
+  friend_id UUID NOT NULL,
+  created_at BIGINT NOT NULL,
+  PRIMARY KEY (user_id, friend_id),
+  FOREIGN KEY (user_id) REFERENCES profile(id),
+  FOREIGN KEY (friend_id) REFERENCES profile(id)
+);
