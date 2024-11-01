@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { VStack } from "@/components/lib/layout/VStack";
-import { Link } from "@/components/lib/style/Link";
+import { H1 } from "@/components/lib/style/Hn";
 import { Profile } from "@/components/lib/user/Profile";
 
 export interface HomePageContentProps {
@@ -13,26 +14,27 @@ export function HomePageContent({
 }: HomePageContentProps): JSX.Element {
   return (
     <VStack className="HomePageContent">
-      <h1 className="text-5xl font-bold">Italog</h1>
-      <div>
-        <p>User name: {profile ? profile.displayName : "no login"}</p>
-      </div>
-      <p>
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/api/auth/login">Login</a>
-        {" | "}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/api/auth/logout">Logout</a>
-      </p>
-      <p>
-        <Link href="/find">Find places</Link>
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque ad
-        perferendis cumque fugit, eos doloremque architecto ullam placeat iste
-        aut esse reiciendis molestias praesentium impedit repellat suscipit,
-        nemo minus porro.
-      </p>
+      <H1>Italog</H1>
+      {profile ? (
+        <p className="mx-auto my-16">
+          <Link
+            className="border border-gray-400 bg-gray-50 p-8 hover:bg-gray-100 active:bg-gray-200"
+            href="/find"
+          >
+            Find
+          </Link>
+        </p>
+      ) : (
+        <p className="mx-auto my-16">
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a
+            className="border border-gray-400 bg-gray-50 p-8 hover:bg-gray-100 active:bg-gray-200"
+            href="/api/auth/login"
+          >
+            Login
+          </a>
+        </p>
+      )}
     </VStack>
   );
 }
