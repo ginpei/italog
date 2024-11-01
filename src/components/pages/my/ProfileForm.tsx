@@ -1,5 +1,4 @@
 import { Button } from "@/components/lib/style/Button";
-import { H2 } from "@/components/lib/style/Hn";
 import { TextInput } from "@/components/lib/style/TextInput";
 import { Profile } from "@/components/lib/user/Profile";
 
@@ -31,7 +30,6 @@ export function ProfileForm({
   return (
     <form className="ProfileForm" onSubmit={onFormSubmit}>
       <fieldset className="flex flex-col gap-4" disabled={disabled}>
-        <H2>Profile</H2>
         <label className="flex flex-col">
           Display name:
           <TextInput

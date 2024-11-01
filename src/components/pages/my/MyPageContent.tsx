@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { ProfileForm } from "./ProfileForm";
+import { ProfileSection } from "./ProfileSection";
 import { VStack } from "@/components/lib/layout/VStack";
 import { H1, H2 } from "@/components/lib/style/Hn";
 import { Link } from "@/components/lib/style/Link";
@@ -17,16 +16,9 @@ export function MyPageContent({
   profile,
   visits,
 }: MyPageContentProps): JSX.Element {
-  const [editingProfile, setEditingProfile] = useState(profile);
-
-  const onProfileChange = (profile: Profile) => {
-    setEditingProfile(profile);
-  };
-
-  const onProfileSubmit = (profile: Profile) => {
-    // TODO
-    console.log("# profile", profile);
-    alert("TODO Profile");
+  const onProfileUpdated = () => {
+    // Reload the page to update the profile
+    window.location.reload();
   };
 
   return (
@@ -49,12 +41,7 @@ export function MyPageContent({
           {visits.length === 0 && <li>No visits yet</li>}
         </ul>
       </VStack>
-      <ProfileForm
-        disabled={false}
-        onChange={onProfileChange}
-        onSubmit={onProfileSubmit}
-        profile={editingProfile}
-      />
+      <ProfileSection profile={profile} onUpdated={onProfileUpdated} />
       <VStack>
         <H2>Logout</H2>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}

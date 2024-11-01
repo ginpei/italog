@@ -67,3 +67,9 @@ export async function createProfileRecordSet(
     );
   });
 }
+
+export async function updateProfileRecord(profile: Profile): Promise<void> {
+  await sql`
+    UPDATE profile SET display_name = ${profile.displayName} WHERE id = ${profile.id}
+  `;
+}
