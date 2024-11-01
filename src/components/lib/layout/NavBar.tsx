@@ -17,7 +17,7 @@ export function NavBar({
   return (
     <section className="NavBar bg-ginpei text-white">
       <Content>
-        <div className="flex flex-row justify-between">
+        <div className="flex h-8 flex-row items-stretch justify-between leading-8">
           <h1>
             <NavBarLink href={titleLink}>{title}</NavBarLink>
           </h1>
