@@ -1,9 +1,10 @@
 "use client";
 
+import { MapPinIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { TimelineSection } from "./TimelineSection";
 import { VStack } from "@/components/layout/VStack";
-import { H1 } from "@/components/style/Hn";
+import { H1, H2 } from "@/components/style/Hn";
 import { Profile } from "@/components/user/Profile";
 import { VisitPlace } from "@/components/visit/VisitPlace";
 
@@ -17,18 +18,24 @@ export function HomePageContent({
   visits,
 }: HomePageContentProps): JSX.Element {
   return (
-    <VStack className="HomePageContent">
+    <VStack className="HomePageContent" gap="gap-8">
       <H1>Italog</H1>
       {profile ? (
         <>
-          <p className="mx-auto my-16">
-            <Link
-              className="border border-gray-400 bg-gray-50 p-8 hover:bg-gray-100 active:bg-gray-200"
-              href="/search/places"
-            >
-              Find
-            </Link>
-          </p>
+          <VStack>
+            <H2>Find</H2>
+            <p className="mx-auto">
+              <Link
+                className="grid size-36 items-center justify-center border border-gray-400 bg-gray-50 hover:bg-gray-100 active:bg-gray-200"
+                href="/search/places"
+              >
+                <span>
+                  <MapPinIcon className="mx-auto size-8" />
+                  Place
+                </span>
+              </Link>
+            </p>
+          </VStack>
           <TimelineSection visits={visits} />
         </>
       ) : (
