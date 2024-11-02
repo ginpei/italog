@@ -49,7 +49,7 @@ export async function queryNearbySearch(
   const res = await fetch(url, {
     body: JSON.stringify({
       includedTypes: includedTypes,
-      maxResultCount: 10,
+      maxResultCount: 20,
       rankPreference: "DISTANCE",
       locationRestriction: {
         circle: {
