@@ -1,6 +1,6 @@
 import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
-import { Place } from "@/components/lib/place/Place";
+import { Place } from "@/components/place/Place";
 
 export interface PlaceItemProps {
   place: Place;

@@ -1,6 +1,6 @@
-import { Button } from "@/components/lib/style/Button";
-import { TextInput } from "@/components/lib/style/TextInput";
-import { Profile } from "@/components/lib/user/Profile";
+import { Button } from "@/components/style/Button";
+import { TextInput } from "@/components/style/TextInput";
+import { Profile } from "@/components/user/Profile";
 
 export interface ProfileFormProps {
   disabled: boolean;

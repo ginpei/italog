@@ -1,6 +1,6 @@
-import { Button } from "@/components/lib/style/Button";
-import { H2 } from "@/components/lib/style/Hn";
-import { Visit } from "@/components/lib/visit/Visit";
+import { Button } from "@/components/style/Button";
+import { H2 } from "@/components/style/Hn";
+import { Visit } from "@/components/visit/Visit";
 
 export interface RegisterVisitFormProps {
   disabled: boolean;

@@ -2,9 +2,9 @@ import { FindNearbyParams } from "@/app/api/findNearby/route";
 import {
   isPlaceTypeCategory,
   popularPlaceTypes,
-} from "@/components/lib/place/placeTypes";
-import { Button } from "@/components/lib/style/Button";
-import { Select } from "@/components/lib/style/Select";
+} from "@/components/place/placeTypes";
+import { Button } from "@/components/style/Button";
+import { Select } from "@/components/style/Select";
 
 export interface SearchNearbyFormProps {
   disabled: boolean;

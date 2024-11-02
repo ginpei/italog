@@ -1,5 +1,5 @@
-import { Place } from "@/components/lib/place/Place";
-import { PlaceType } from "@/components/lib/place/placeTypes";
+import { Place } from "@/components/place/Place";
+import { PlaceType } from "@/components/place/placeTypes";
 
 // TODO find official types
 interface NearbySearchApiResponse {

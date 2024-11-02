@@ -9,7 +9,7 @@ import { NextRequest } from "next/server";
 import {
   createProfileRecordSet,
   getProfileRecordByAuth,
-} from "@/components/lib/user/profileDb";
+} from "@/components/user/profileDb";
 
 const afterCallback: AfterCallbackAppRoute = async (req, session) => {
   const userId = session.user.sub;

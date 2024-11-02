@@ -1,12 +1,12 @@
 import { NextApiResponse } from "next";
 import { NextRequest } from "next/server";
-import { UserError } from "@/components/lib/error/UserError";
-import { getSessionProfile } from "@/components/lib/user/profileSession";
-import { Visit } from "@/components/lib/visit/Visit";
+import { UserError } from "@/components/error/UserError";
+import { getSessionProfile } from "@/components/user/profileSession";
+import { Visit } from "@/components/visit/Visit";
 import {
   createVisitRecord,
   updateVisitRecord,
-} from "@/components/lib/visit/visitDb";
+} from "@/components/visit/visitDb";
 
 export interface RegisterVisitPayload {
   timezoneOffset: number;

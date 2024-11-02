@@ -2,17 +2,14 @@ import {
   queryNearbySearch,
   queryPlaceDetails,
 } from "@/app/api/findNearby/queryPlaceApi";
-import { toError } from "@/components/lib/error/errorUtil";
-import { Place } from "@/components/lib/place/Place";
-import {
-  getPlaceRecords,
-  savePlaceRecord,
-} from "@/components/lib/place/placeDb";
+import { toError } from "@/components/error/errorUtil";
+import { Place } from "@/components/place/Place";
+import { getPlaceRecords, savePlaceRecord } from "@/components/place/placeDb";
 import {
   isPlaceTypeCategory,
   PlaceTypeCategory,
   placeTypes,
-} from "@/components/lib/place/placeTypes";
+} from "@/components/place/placeTypes";
 
 export interface FindNearbyParams {
   category: PlaceTypeCategory;
