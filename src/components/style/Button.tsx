@@ -9,7 +9,7 @@ export function Button({
     <button
       className={`
         ${className} Button
-        border border-gray-400 bg-gray-50 p-2
+        min-h-10 border border-gray-400 bg-gray-50 p-2
         hover:border-gray-500
         active:bg-gray-200
         disabled:bg-gray-300 disabled:text-gray-500
