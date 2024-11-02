@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { APIProvider, Map } from "@vis.gl/react-google-maps";
 
 export interface EmbeddedMapProps {
   apiKey: string;
@@ -14,23 +14,9 @@ export function EmbeddedMap({
   lat,
   long,
 }: EmbeddedMapProps): JSX.Element {
-  const endpoint = "https://www.google.com/maps/embed/v1/view";
-  const params = useMemo(() => {
-    return new URLSearchParams([
-      ["center", `${lat},${long}`],
-      ["key", apiKey],
-      ["zoom", "15"],
-    ]);
-  }, [apiKey, lat, long]);
-  const src = `${endpoint}?${params.toString()}`;
-
   return (
-    <iframe
-      allowFullScreen
-      className="EmbeddedMap size-full bg-gray-100"
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-      src={src}
-    ></iframe>
+    <APIProvider apiKey={apiKey}>
+      <Map defaultCenter={{ lat, lng: long }} defaultZoom={15}></Map>
+    </APIProvider>
   );
 }
