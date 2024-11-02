@@ -16,7 +16,7 @@ import { PlaceTypeCategory } from "@/components/lib/place/placeTypes";
 import { H1 } from "@/components/lib/style/Hn";
 import { sleep } from "@/components/lib/time/timer";
 
-export function FindPageContent(): JSX.Element {
+export function SearchPlacesPageContent(): JSX.Element {
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
@@ -92,7 +92,7 @@ export function FindPageContent(): JSX.Element {
 
   return (
     <VStack>
-      <H1>Find</H1>
+      <H1>Search places</H1>
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
       <SearchNearbyForm
         disabled={searching}

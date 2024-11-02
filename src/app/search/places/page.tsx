@@ -1,6 +1,6 @@
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
 import { getSessionProfile } from "@/components/lib/user/profileSession";
-import { FindPageContent } from "@/components/pages/register/FindPageContent";
+import { SearchPlacesPageContent } from "@/components/pages/searchPlace/SearchPlacesPageContent";
 
 export default async function RegisterPage(): Promise<JSX.Element> {
   const profile = await getSessionProfile();
@@ -15,7 +15,7 @@ export default async function RegisterPage(): Promise<JSX.Element> {
 
   return (
     <StraightPageLayout profile={profile}>
-      <FindPageContent />
+      <SearchPlacesPageContent />
     </StraightPageLayout>
   );
 }

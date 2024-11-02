@@ -12,7 +12,7 @@ import {
 import {
   queryNearbySearch,
   queryPlaceDetails,
-} from "@/components/pages/register/queryPlaceApi";
+} from "@/components/pages/searchPlace/queryPlaceApi";
 
 export interface FindNearbyParams {
   category: PlaceTypeCategory;
