@@ -5,14 +5,10 @@ import { EmbeddedMap } from "./Map";
 import { PlaceItem } from "./PlaceItem";
 import { PlaceItemSkeleton } from "./PlaceItemSkeleton";
 import { SearchNearbyForm } from "./SearchNearbyForm";
-import {
-  FindNearbyParams,
-  FindNearbyResponse,
-} from "@/app/api/findNearby/route";
+import { FindPlaceParams, FindPlaceResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
-import { PlaceTypeCategory } from "@/components/place/placeTypes";
 import { H1 } from "@/components/style/Hn";
 import { sleep } from "@/components/time/timer";
 
@@ -21,13 +17,13 @@ export function SearchPlacesPageContent(): JSX.Element {
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
   );
-  const [params, setParams] = useState<FindNearbyParams>({
+  const [params, setParams] = useState<FindPlaceParams>({
     category: "food_and_drink",
     lat: NaN,
     long: NaN,
-    q: "",
+    textQuery: "",
   });
-  const [lastParams, setLastParams] = useState<FindNearbyParams>(params);
+  const [lastParams, setLastParams] = useState<FindPlaceParams>(params);
   const [places, setPlaces] = useState<Place[]>([]);
 
   const latLong = useMemo(
@@ -45,7 +41,7 @@ export function SearchPlacesPageContent(): JSX.Element {
   }, []);
 
   const onSubmit = useCallback(
-    async (params: FindNearbyParams) => {
+    async (params: FindPlaceParams) => {
       const lastPlaces = places;
       setWorking(true);
       setError(null);
@@ -64,6 +60,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         };
         const sameConditions =
           lastParams.category === newParams.category &&
+          lastParams.textQuery === newParams.textQuery &&
           lastParams.lat === newParams.lat &&
           lastParams.long === newParams.long;
 
@@ -74,11 +71,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         }
         setLastParams(newParams);
 
-        const data = await findNearby(
-          params.category,
-          position.coords.latitude,
-          position.coords.longitude,
-        );
+        const data = await findNearby(params);
         if (!data.ok) {
           throw new Error(data.message ?? "Unknown error on fetch");
         }
@@ -95,7 +88,13 @@ export function SearchPlacesPageContent(): JSX.Element {
         setWorking(false);
       }
     },
-    [lastParams.category, lastParams.lat, lastParams.long, places],
+    [
+      lastParams.category,
+      lastParams.lat,
+      lastParams.long,
+      lastParams.textQuery,
+      places,
+    ],
   );
 
   return (
@@ -139,18 +138,10 @@ export function SearchPlacesPageContent(): JSX.Element {
   );
 }
 
-async function findNearby(
-  category: PlaceTypeCategory,
-  lat: number,
-  long: number,
-): Promise<FindNearbyResponse> {
+async function findNearby(params: FindPlaceParams): Promise<FindPlaceResponse> {
   const endpoint = "/api/findNearby";
 
-  const searchParams = new URLSearchParams({
-    category,
-    lat: String(lat),
-    long: String(long),
-  });
+  const searchParams = new URLSearchParams(Object.entries(params));
   const url = `${endpoint}?${searchParams}`;
   const response = await fetch(url);
   const data = await response.json();
@@ -158,7 +149,7 @@ async function findNearby(
 }
 
 interface RegisterFormContext {
-  params: FindNearbyParams;
+  params: FindPlaceParams;
   places: Place[];
 }
 
