@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { EmbeddedMap } from "./Map";
 import { PlaceItem } from "./PlaceItem";
 import { PlaceItemSkeleton } from "./PlaceItemSkeleton";
@@ -17,7 +17,7 @@ import { H1 } from "@/components/style/Hn";
 import { sleep } from "@/components/time/timer";
 
 export function SearchPlacesPageContent(): JSX.Element {
-  const [searching, setSearching] = useState(false);
+  const [working, setWorking] = useState(true);
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
   );
@@ -29,25 +29,26 @@ export function SearchPlacesPageContent(): JSX.Element {
   });
   const [lastParams, setLastParams] = useState<FindNearbyParams>(params);
   const [places, setPlaces] = useState<Place[]>([]);
-  const [latLong, setLatLong] = useState<{ lat: number; long: number } | null>(
-    null,
+
+  const latLong = useMemo(
+    () => ({ lat: params.lat, long: params.long }),
+    [params.lat, params.long],
   );
 
   useEffect(() => {
     const formContext = loadContext(window);
     if (formContext) {
+      setParams(formContext.params);
       setPlaces(formContext.places);
-      setLatLong(formContext.location);
     }
+    setWorking(false);
   }, []);
 
   const onSubmit = useCallback(
     async (params: FindNearbyParams) => {
-      const lastLatLong = latLong;
       const lastPlaces = places;
-      setSearching(true);
+      setWorking(true);
       setError(null);
-      setLatLong(null);
       setPlaces([]);
 
       try {
@@ -68,13 +69,11 @@ export function SearchPlacesPageContent(): JSX.Element {
 
         if (sameConditions) {
           await sleep(500);
-          setLatLong(lastLatLong);
           setPlaces(lastPlaces);
           return;
         }
         setLastParams(newParams);
 
-        setLatLong(newLatLong);
         const data = await findNearby(
           params.category,
           position.coords.latitude,
@@ -86,20 +85,17 @@ export function SearchPlacesPageContent(): JSX.Element {
 
         setPlaces(data.places);
         saveContext(window, {
-          location: {
-            lat: position.coords.latitude,
-            long: position.coords.longitude,
-          },
+          params: newParams,
           places: data.places,
         });
       } catch (error) {
         console.error(error);
         setError(toError(error));
       } finally {
-        setSearching(false);
+        setWorking(false);
       }
     },
-    [lastParams.category, lastParams.lat, lastParams.long, latLong, places],
+    [lastParams.category, lastParams.lat, lastParams.long, places],
   );
 
   return (
@@ -107,17 +103,17 @@ export function SearchPlacesPageContent(): JSX.Element {
       <H1>Search places</H1>
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
       <SearchNearbyForm
-        disabled={searching}
+        disabled={working}
         onChange={setParams}
         onSubmit={onSubmit}
         params={params}
       />
       <p>
         Location:
-        {latLong ? `${latLong.lat},${latLong.long}` : ""}
+        {!Number.isNaN(latLong.lat) ? `${params.lat},${params.long}` : ""}
       </p>
       <div className="sticky top-0 h-[30vh] bg-white py-1">
-        {latLong && !searching ? (
+        {!Number.isNaN(latLong.lat) && !working ? (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
             lat={latLong.lat}
@@ -128,7 +124,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         )}
       </div>
       <div className="flex flex-col gap-1">
-        {searching && (
+        {working && (
           <>
             <PlaceItemSkeleton />
             <PlaceItemSkeleton />
@@ -162,17 +158,17 @@ async function findNearby(
 }
 
 interface RegisterFormContext {
-  location: { lat: number; long: number };
+  params: FindNearbyParams;
   places: Place[];
 }
 
 function saveContext(w: Window, context: RegisterFormContext): void {
-  const key = "places";
+  const key = "/search/places#context";
   w.localStorage.setItem(key, JSON.stringify(context));
 }
 
 function loadContext(w: Window): RegisterFormContext | null {
-  const key = "places";
+  const key = "/search/places#context";
   const data = w.localStorage.getItem(key);
   if (!data) {
     return null;
