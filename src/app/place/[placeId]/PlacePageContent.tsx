@@ -5,11 +5,11 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { ReactNode, useMemo, useState } from "react";
 import { RegisterVisitForm } from "./RegisterVisitForm";
-import { VStack } from "@/components/lib/layout/VStack";
-import { Place } from "@/components/lib/place/Place";
-import { H2 } from "@/components/lib/style/Hn";
-import { Visit } from "@/components/lib/visit/Visit";
-import { requestRegisterVisit } from "@/components/lib/visit/registerVisitRequest";
+import { VStack } from "@/components/layout/VStack";
+import { Place } from "@/components/place/Place";
+import { H2 } from "@/components/style/Hn";
+import { Visit } from "@/components/visit/Visit";
+import { requestRegisterVisit } from "@/components/visit/registerVisitRequest";
 
 export interface PlacePageContentProps {
   place: Place;

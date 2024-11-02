@@ -3,8 +3,8 @@ import { ResultOrError } from "@/components/api/apiTypes";
 import {
   createFriendshipRecord,
   deleteFriendshipRecord,
-} from "@/components/lib/user/friendshipDb";
-import { getSessionProfile } from "@/components/lib/user/profileSession";
+} from "@/components/user/friendshipDb";
+import { getSessionProfile } from "@/components/user/profileSession";
 
 export interface PostFriendshipPayload {
   targetUserId: string;

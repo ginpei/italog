@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { ProfileForm } from "./ProfileForm";
 import { PostProfilePayload } from "@/app/api/profile/route";
-import { VStack } from "@/components/lib/layout/VStack";
-import { H2 } from "@/components/lib/style/Hn";
-import { Profile } from "@/components/lib/user/Profile";
+import { VStack } from "@/components/layout/VStack";
+import { H2 } from "@/components/style/Hn";
+import { Profile } from "@/components/user/Profile";
 
 export interface ProfileSectionProps {
   profile: Profile;

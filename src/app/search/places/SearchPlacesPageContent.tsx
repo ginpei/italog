@@ -9,12 +9,12 @@ import {
   FindNearbyParams,
   FindNearbyResponse,
 } from "@/app/api/findNearby/route";
-import { toError } from "@/components/lib/error/errorUtil";
-import { VStack } from "@/components/lib/layout/VStack";
-import { Place } from "@/components/lib/place/Place";
-import { PlaceTypeCategory } from "@/components/lib/place/placeTypes";
-import { H1 } from "@/components/lib/style/Hn";
-import { sleep } from "@/components/lib/time/timer";
+import { toError } from "@/components/error/errorUtil";
+import { VStack } from "@/components/layout/VStack";
+import { Place } from "@/components/place/Place";
+import { PlaceTypeCategory } from "@/components/place/placeTypes";
+import { H1 } from "@/components/style/Hn";
+import { sleep } from "@/components/time/timer";
 
 export function SearchPlacesPageContent(): JSX.Element {
   const [searching, setSearching] = useState(false);

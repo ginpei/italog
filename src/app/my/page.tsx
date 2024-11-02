@@ -1,7 +1,7 @@
 import { MyPageContent } from "./MyPageContent";
-import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
-import { getSessionProfile } from "@/components/lib/user/profileSession";
-import { getUserVisitPlace } from "@/components/lib/visit/visitPlaceDb";
+import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
+import { getSessionProfile } from "@/components/user/profileSession";
+import { getUserVisitPlace } from "@/components/visit/visitPlaceDb";
 
 export default async function Home() {
   const profile = await getSessionProfile();

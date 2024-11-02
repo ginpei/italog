@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button, ButtonLink } from "@/components/lib/style/Button";
-import { Profile } from "@/components/lib/user/Profile";
+import { Button, ButtonLink } from "@/components/style/Button";
+import { Profile } from "@/components/user/Profile";
 import {
   createFriendship,
   deleteFriendship,
-} from "@/components/lib/user/friendshipApi";
+} from "@/components/user/friendshipApi";
 
 export interface FriendshipSectionProps {
   currentUser: Profile;

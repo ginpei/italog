@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { PlacePageContent } from "./PlacePageContent";
-import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
-import { getPlaceRecord } from "@/components/lib/place/placeDb";
-import { getSessionProfile } from "@/components/lib/user/profileSession";
-import { getUserVisitRecords } from "@/components/lib/visit/visitDb";
+import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
+import { getPlaceRecord } from "@/components/place/placeDb";
+import { getSessionProfile } from "@/components/user/profileSession";
+import { getUserVisitRecords } from "@/components/visit/visitDb";
 
 export default async function PlacePage({
   params,

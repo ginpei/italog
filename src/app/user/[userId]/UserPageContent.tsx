@@ -1,11 +1,11 @@
 "use client";
 
 import { FriendshipSection } from "./FriendshipSection";
-import { VStack } from "@/components/lib/layout/VStack";
-import { H1, H2 } from "@/components/lib/style/Hn";
-import { Link } from "@/components/lib/style/Link";
-import { Profile } from "@/components/lib/user/Profile";
-import { VisitPlace } from "@/components/lib/visit/VisitPlace";
+import { VStack } from "@/components/layout/VStack";
+import { H1, H2 } from "@/components/style/Hn";
+import { Link } from "@/components/style/Link";
+import { Profile } from "@/components/user/Profile";
+import { VisitPlace } from "@/components/visit/VisitPlace";
 
 export interface UserPageContentProps {
   currentUser: Profile;
