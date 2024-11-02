@@ -8,7 +8,7 @@ export function Link(
   return (
     <NextLink
       className={`
-        ${className} text-blue-700 underline
+        ${className} Link text-blue-700 underline
         hover:text-red-700 focus:text-red-700
       `}
       {...otherProps}
