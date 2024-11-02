@@ -27,6 +27,7 @@ export function SearchPlacesPageContent(): JSX.Element {
     long: NaN,
     q: "",
   });
+  const [lastParams, setLastParams] = useState<FindNearbyParams>(params);
   const [places, setPlaces] = useState<Place[]>([]);
   const [latLong, setLatLong] = useState<{ lat: number; long: number } | null>(
     null,
@@ -55,15 +56,23 @@ export function SearchPlacesPageContent(): JSX.Element {
           lat: position.coords.latitude,
           long: position.coords.longitude,
         };
-        if (
-          lastLatLong?.lat === newLatLong.lat ||
-          lastLatLong?.long === newLatLong.long
-        ) {
+        const newParams = {
+          ...params,
+          lat: newLatLong.lat,
+          long: newLatLong.long,
+        };
+        const sameConditions =
+          lastParams.category === newParams.category &&
+          lastParams.lat === newParams.lat &&
+          lastParams.long === newParams.long;
+
+        if (sameConditions) {
           await sleep(500);
           setLatLong(lastLatLong);
           setPlaces(lastPlaces);
           return;
         }
+        setLastParams(newParams);
 
         setLatLong(newLatLong);
         const data = await findNearby(
@@ -90,7 +99,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         setSearching(false);
       }
     },
-    [latLong, places],
+    [lastParams.category, lastParams.lat, lastParams.long, latLong, places],
   );
 
   return (
