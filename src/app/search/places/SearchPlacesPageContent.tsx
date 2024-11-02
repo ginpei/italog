@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { EmbeddedMap } from "./Map";
+import { EmbeddedMap } from "./EmbeddedMap";
 import { PlaceItem } from "./PlaceItem";
 import { PlaceItemSkeleton } from "./PlaceItemSkeleton";
 import { SearchNearbyForm } from "./SearchNearbyForm";
