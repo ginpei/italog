@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { QueryResultRow, sql } from "@vercel/postgres";
 import { runTransaction } from "../db/transaction";
 import { Profile } from "./Profile";
 
@@ -17,6 +17,20 @@ export async function getProfileRecord(id: string): Promise<Profile | null> {
     id: row.id,
   };
   return profile;
+}
+
+export async function getFriendProfileRecords(
+  userId: string,
+): Promise<Profile[]> {
+  const result = await sql`
+    SELECT p.id, p.display_name
+    FROM profile p
+    JOIN user_user uu ON p.id = uu.friend_id
+    WHERE uu.user_id = ${userId}
+  `;
+
+  const profiles = result.rows.map((v) => rowToProfile(v));
+  return profiles;
 }
 
 export async function getProfileRecordByAuth(
@@ -72,4 +86,11 @@ export async function updateProfileRecord(profile: Profile): Promise<void> {
   await sql`
     UPDATE profile SET display_name = ${profile.displayName} WHERE id = ${profile.id}
   `;
+}
+
+function rowToProfile(row: QueryResultRow): Profile {
+  return {
+    displayName: row.display_name,
+    id: row.id,
+  };
 }

@@ -12,11 +12,13 @@ import { Profile } from "@/components/user/Profile";
 import { VisitPlace } from "@/components/visit/VisitPlace";
 
 export interface MyPageContentProps {
+  friends: Profile[];
   profile: Profile;
   visits: VisitPlace[];
 }
 
 export function MyPageContent({
+  friends,
   profile,
   visits,
 }: MyPageContentProps): JSX.Element {
@@ -71,6 +73,17 @@ export function MyPageContent({
         </ul>
       </VStack>
       <ProfileSection profile={profile} onUpdated={onProfileUpdated} />
+      <VStack>
+        <H2>Friends</H2>
+        <ul className="ms-8 list-disc">
+          {friends.map((friend) => (
+            <li key={friend.id}>
+              <Link href={`/user/${friend.id}`}>{friend.displayName}</Link>
+            </li>
+          ))}
+          {friends.length === 0 && <li>No friends yet</li>}
+        </ul>
+      </VStack>
       <VStack>
         <H2>QR code</H2>
         <div className="grid justify-center">
