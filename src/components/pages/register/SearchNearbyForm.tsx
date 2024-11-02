@@ -4,6 +4,7 @@ import {
   popularPlaceTypes,
 } from "@/components/lib/place/placeTypes";
 import { Button } from "@/components/lib/style/Button";
+import { Select } from "@/components/lib/style/Select";
 
 export interface SearchNearbyFormProps {
   disabled: boolean;
@@ -38,7 +39,7 @@ export function SearchNearbyForm({
       <fieldset className="flex flex-col gap-4" disabled={disabled}>
         <label className="flex flex-col">
           Category:
-          <select
+          <Select
             className="border p-2"
             name="category"
             onChange={onInputChange}
@@ -49,7 +50,7 @@ export function SearchNearbyForm({
                 {emoji} {displayName}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
         {/* <label className="flex flex-col">
           Text (optional):
