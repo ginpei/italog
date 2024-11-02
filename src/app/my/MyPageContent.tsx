@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { GetMyQrCodeResult } from "../api/my/qrCode/route";
+import { GetQrCodeResult } from "../api/qrCode/route";
 import { ProfileSection } from "./ProfileSection";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
@@ -38,9 +38,9 @@ export function MyPageContent({
     setQrCodeWorking(true);
     try {
       const res = await fetch(
-        `/api/my/qrCode?url=${encodeURIComponent(myPageUrl)}`,
+        `/api/qrCode?url=${encodeURIComponent(myPageUrl)}`,
       );
-      const data: GetMyQrCodeResult = await res.json();
+      const data: GetQrCodeResult = await res.json();
       setQrCodeUrl(data.qrCode);
     } catch (error) {
       console.error(error);
