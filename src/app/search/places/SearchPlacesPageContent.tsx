@@ -126,16 +126,17 @@ export function SearchPlacesPageContent(): JSX.Element {
         )}
       </div>
       <div className="flex flex-col gap-1">
-        {working && (
+        {working ? (
           <>
             <PlaceItemSkeleton />
             <PlaceItemSkeleton />
             <PlaceItemSkeleton />
           </>
+        ) : places.length === 0 ? (
+          <div className="h-[30vh] text-gray-500">Nothing found around</div>
+        ) : (
+          places.map((place) => <PlaceItem key={place.id} place={place} />)
         )}
-        {places.map((place) => (
-          <PlaceItem key={place.id} place={place} />
-        ))}
       </div>
     </VStack>
   );
