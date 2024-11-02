@@ -9,18 +9,18 @@ export interface PlaceItemProps {
 export function PlaceItem({ place }: PlaceItemProps): JSX.Element {
   return (
     <Link
-      className="PlaceItem flex w-full items-center justify-between gap-4 border border-stone-300 p-2 text-start hover:bg-stone-50 active:bg-stone-200"
+      className="PlaceItem flex w-full items-center justify-between gap-4 border border-gray-300 p-2 text-start hover:bg-gray-50 active:bg-gray-200"
       href={`/place/${place.id}`}
     >
       <div className="flex flex-col">
         <span>{place.displayName}</span>
-        <span className="text-sm text-stone-400">
+        <span className="text-sm text-gray-400">
           {place.typeDisplayName ?? "(Other)"}
         </span>
-        <span className="text-sm text-stone-400">{place.address}</span>
+        <span className="text-sm text-gray-400">{place.address}</span>
       </div>
       <span>
-        <ChevronDoubleRightIcon className="size-6 text-stone-500" />
+        <ChevronDoubleRightIcon className="size-6 text-gray-500" />
       </span>
     </Link>
   );
