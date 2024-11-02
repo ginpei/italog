@@ -15,6 +15,7 @@ import { PlaceTypeCategory } from "@/components/lib/place/placeTypes";
 import { H1 } from "@/components/lib/style/Hn";
 
 export function FindPageContent(): JSX.Element {
+  const [searching, setSearching] = useState(false);
   const [error, setError] = useState<Error | GeolocationPositionError | null>(
     null,
   );
@@ -38,6 +39,7 @@ export function FindPageContent(): JSX.Element {
   }, []);
 
   const onSubmit = async (params: FindNearbyParams) => {
+    setSearching(true);
     setError(null);
     setLatLong(null);
     setPlaces([]);
@@ -68,6 +70,8 @@ export function FindPageContent(): JSX.Element {
     } catch (error) {
       console.error(error);
       setError(toError(error));
+    } finally {
+      setSearching(false);
     }
   };
 
@@ -76,7 +80,7 @@ export function FindPageContent(): JSX.Element {
       <H1>Find</H1>
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
       <SearchNearbyForm
-        disabled={false}
+        disabled={searching}
         onChange={setParams}
         onSubmit={onSubmit}
         params={params}
