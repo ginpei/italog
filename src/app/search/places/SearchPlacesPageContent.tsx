@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { EmbeddedMap } from "./Map";
 import { PlaceItem } from "./PlaceItem";
 import { PlaceItemSkeleton } from "./PlaceItemSkeleton";
@@ -40,55 +40,58 @@ export function SearchPlacesPageContent(): JSX.Element {
     }
   }, []);
 
-  const onSubmit = async (params: FindNearbyParams) => {
-    const lastLatLong = latLong;
-    const lastPlaces = places;
-    setSearching(true);
-    setError(null);
-    setLatLong(null);
-    setPlaces([]);
+  const onSubmit = useCallback(
+    async (params: FindNearbyParams) => {
+      const lastLatLong = latLong;
+      const lastPlaces = places;
+      setSearching(true);
+      setError(null);
+      setLatLong(null);
+      setPlaces([]);
 
-    try {
-      const position = await getLocation();
-      const newLatLong = {
-        lat: position.coords.latitude,
-        long: position.coords.longitude,
-      };
-      if (
-        lastLatLong?.lat === newLatLong.lat ||
-        lastLatLong?.long === newLatLong.long
-      ) {
-        await sleep(500);
-        setLatLong(lastLatLong);
-        setPlaces(lastPlaces);
-        return;
-      }
-
-      setLatLong(newLatLong);
-      const data = await findNearby(
-        params.category,
-        position.coords.latitude,
-        position.coords.longitude,
-      );
-      if (!data.ok) {
-        throw new Error(data.message ?? "Unknown error on fetch");
-      }
-
-      setPlaces(data.places);
-      saveContext(window, {
-        location: {
+      try {
+        const position = await getLocation();
+        const newLatLong = {
           lat: position.coords.latitude,
           long: position.coords.longitude,
-        },
-        places: data.places,
-      });
-    } catch (error) {
-      console.error(error);
-      setError(toError(error));
-    } finally {
-      setSearching(false);
-    }
-  };
+        };
+        if (
+          lastLatLong?.lat === newLatLong.lat ||
+          lastLatLong?.long === newLatLong.long
+        ) {
+          await sleep(500);
+          setLatLong(lastLatLong);
+          setPlaces(lastPlaces);
+          return;
+        }
+
+        setLatLong(newLatLong);
+        const data = await findNearby(
+          params.category,
+          position.coords.latitude,
+          position.coords.longitude,
+        );
+        if (!data.ok) {
+          throw new Error(data.message ?? "Unknown error on fetch");
+        }
+
+        setPlaces(data.places);
+        saveContext(window, {
+          location: {
+            lat: position.coords.latitude,
+            long: position.coords.longitude,
+          },
+          places: data.places,
+        });
+      } catch (error) {
+        console.error(error);
+        setError(toError(error));
+      } finally {
+        setSearching(false);
+      }
+    },
+    [latLong, places],
+  );
 
   return (
     <VStack>
