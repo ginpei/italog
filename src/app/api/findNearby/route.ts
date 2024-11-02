@@ -1,6 +1,7 @@
 import {
   queryNearbySearch,
   queryPlaceDetails,
+  queryTextSearch,
 } from "@/app/api/findNearby/queryPlaceApi";
 import { toError } from "@/components/error/errorUtil";
 import { Place } from "@/components/place/Place";
@@ -11,14 +12,14 @@ import {
   placeTypes,
 } from "@/components/place/placeTypes";
 
-export interface FindNearbyParams {
+export interface FindPlaceParams {
   category: PlaceTypeCategory;
   lat: number;
   long: number;
-  q?: string;
+  textQuery: string;
 }
 
-export type FindNearbyResponse =
+export type FindPlaceResponse =
   | {
       places: Place[];
       ok: true;
@@ -30,11 +31,13 @@ export type FindNearbyResponse =
 
 export async function GET(request: Request) {
   // avoid DynamicServerError on next-build
-  const reqParams = new URL(request.url).searchParams;
+  const url = request.url;
 
   try {
-    const typeCategory = reqParams.get("category");
-    if (!typeCategory || !isPlaceTypeCategory(typeCategory)) {
+    const reqParams = Object.fromEntries(new URL(url).searchParams.entries());
+
+    const category = reqParams.category;
+    if (!category || !isPlaceTypeCategory(category)) {
       return new Response(
         JSON.stringify({ message: "Invalid category", ok: false }),
         { status: 400 },
@@ -42,11 +45,13 @@ export async function GET(request: Request) {
     }
 
     const includedTypes = placeTypes
-      .filter((v) => v.category === typeCategory)
+      .filter((v) => v.category === category)
       .map((v) => v.typeKey);
 
-    const lat = Number(reqParams.get("lat"));
-    const long = Number(reqParams.get("long"));
+    const textQuery = reqParams.q;
+
+    const lat = Number(reqParams.lat);
+    const long = Number(reqParams.long);
     if (Number.isNaN(lat) || Number.isNaN(long)) {
       return new Response(
         JSON.stringify({ message: "Location is required", ok: false }),
@@ -54,7 +59,9 @@ export async function GET(request: Request) {
       );
     }
 
-    const ids = await queryNearbySearch(includedTypes, lat, long);
+    const ids = textQuery
+      ? await queryTextSearch(textQuery, category, lat, long)
+      : await queryNearbySearch(includedTypes, lat, long);
     const existingPlaces = await getPlaceRecords(ids);
     const newPlaceIds = ids.filter(
       (id) => !existingPlaces.find((p) => p.id === id),
@@ -72,7 +79,7 @@ export async function GET(request: Request) {
         newPlaces.find((p) => p.id === id)!,
     );
 
-    const jsonData: FindNearbyResponse = { places, ok: true };
+    const jsonData: FindPlaceResponse = { places, ok: true };
     return Response.json(jsonData);
   } catch (errorish) {
     const error = toError(errorish);
