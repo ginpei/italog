@@ -29,9 +29,10 @@ export type FindNearbyResponse =
     };
 
 export async function GET(request: Request) {
-  try {
-    const reqParams = new URL(request.url).searchParams;
+  // avoid DynamicServerError on next-build
+  const reqParams = new URL(request.url).searchParams;
 
+  try {
     const typeCategory = reqParams.get("category");
     if (!typeCategory || !isPlaceTypeCategory(typeCategory)) {
       return new Response(
