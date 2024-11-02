@@ -70,6 +70,7 @@ export function SearchPlacesPageContent(): JSX.Element {
           return;
         }
         setLastParams(newParams);
+        setParams(newParams);
 
         const data = await findNearby(newParams);
         if (!data.ok) {
