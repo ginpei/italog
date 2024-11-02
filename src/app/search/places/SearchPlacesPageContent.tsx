@@ -113,14 +113,16 @@ export function SearchPlacesPageContent(): JSX.Element {
         {!Number.isNaN(latLong.lat) ? `${params.lat},${params.long}` : ""}
       </p>
       <div className="sticky top-0 h-[30vh] bg-white py-1">
-        {!Number.isNaN(latLong.lat) && !working ? (
+        {working ? (
+          <div className="size-full animate-pulse bg-gray-300" />
+        ) : Number.isNaN(latLong.lat) ? (
+          <div className="size-full bg-gray-100" />
+        ) : (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
             lat={latLong.lat}
             long={latLong.long}
           />
-        ) : (
-          <div className="size-full animate-pulse bg-gray-300" />
         )}
       </div>
       <div className="flex flex-col gap-1">
