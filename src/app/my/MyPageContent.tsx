@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GetQrCodeResult } from "../api/qrCode/route";
 import { ProfileSection } from "./ProfileSection";
 import { toError } from "@/components/error/errorUtil";
@@ -22,14 +22,23 @@ export function MyPageContent({
   profile,
   visits,
 }: MyPageContentProps): JSX.Element {
+  const [pageUrl, setPageUrl] = useState<string | null>(null);
   const [qrCodeWorking, setQrCodeWorking] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
   const myPageUrl = useMemo(() => {
-    const url = new URL(location.href);
+    if (!pageUrl) {
+      return null;
+    }
+
+    const url = new URL(pageUrl);
     url.pathname = `/user/${profile.id}`;
     return url.toString();
-  }, [profile.id]);
+  }, [pageUrl, profile.id]);
+
+  useEffect(() => {
+    setPageUrl(location.href);
+  }, []);
 
   const onProfileUpdated = () => {
     // Reload the page to update the profile
@@ -37,6 +46,10 @@ export function MyPageContent({
   };
 
   const onShowQrCodeClick = async () => {
+    if (!myPageUrl) {
+      return;
+    }
+
     setQrCodeWorking(true);
     try {
       const res = await fetch(
@@ -87,7 +100,7 @@ export function MyPageContent({
       <VStack>
         <H2>QR code</H2>
         <div className="grid justify-center">
-          {qrCodeUrl ? (
+          {myPageUrl && qrCodeUrl ? (
             <Link href={myPageUrl}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img alt="" src={qrCodeUrl} />
