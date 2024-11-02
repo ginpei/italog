@@ -27,7 +27,7 @@ export function EmbeddedMap({
   return (
     <iframe
       allowFullScreen
-      className="EmbeddedMap size-full"
+      className="EmbeddedMap size-full bg-gray-100"
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
       src={src}

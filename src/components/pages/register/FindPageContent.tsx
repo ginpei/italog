@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { EmbeddedMap } from "./Map";
 import { PlaceItem } from "./PlaceItem";
+import { PlaceItemSkeleton } from "./PlaceItemSkeleton";
 import { SearchNearbyForm } from "./SearchNearbyForm";
 import {
   FindNearbyParams,
@@ -90,15 +91,24 @@ export function FindPageContent(): JSX.Element {
         {latLong ? `${latLong.lat},${latLong.long}` : ""}
       </p>
       <div className="sticky top-0 h-[40vh] bg-white py-1">
-        {latLong && (
+        {latLong && !searching ? (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
             lat={latLong.lat}
             long={latLong.long}
           />
+        ) : (
+          <div className="size-full animate-pulse bg-gray-300" />
         )}
       </div>
       <div className="flex flex-col gap-1">
+        {searching && (
+          <>
+            <PlaceItemSkeleton />
+            <PlaceItemSkeleton />
+            <PlaceItemSkeleton />
+          </>
+        )}
         {places.map((place) => (
           <PlaceItem key={place.id} place={place} />
         ))}
