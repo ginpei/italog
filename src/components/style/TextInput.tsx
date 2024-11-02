@@ -10,7 +10,6 @@ export function TextInput({
         ${className} TextInput
         border border-gray-400 p-2
         hover:border-gray-500
-        active:bg-gray-200
         disabled:bg-gray-300 disabled:text-gray-500
       `}
       type="text"
