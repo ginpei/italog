@@ -1,9 +1,14 @@
 import { ComponentPropsWithoutRef } from "react";
 
+export interface TextInputProps
+  extends Omit<ComponentPropsWithoutRef<"input">, "type"> {
+  type?: "text" | "password" | "email" | "search" | "url" | "tel";
+}
+
 export function TextInput({
   className,
   ...props
-}: Omit<ComponentPropsWithoutRef<"input">, "type">): React.JSX.Element {
+}: TextInputProps): React.JSX.Element {
   return (
     <input
       className={`

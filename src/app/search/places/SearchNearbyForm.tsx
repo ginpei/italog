@@ -65,6 +65,7 @@ export function SearchNearbyForm({
             name="q"
             onChange={onInputChange}
             placeholder="McDonald's"
+            type="search"
             value={params.textQuery}
           />
         </label>
