@@ -71,7 +71,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         }
         setLastParams(newParams);
 
-        const data = await findNearby(params);
+        const data = await findNearby(newParams);
         if (!data.ok) {
           throw new Error(data.message ?? "Unknown error on fetch");
         }
