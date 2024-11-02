@@ -48,7 +48,7 @@ export async function GET(request: Request) {
       .filter((v) => v.category === category)
       .map((v) => v.typeKey);
 
-    const textQuery = reqParams.q;
+    const textQuery = reqParams.textQuery;
 
     const lat = Number(reqParams.lat);
     const long = Number(reqParams.long);
