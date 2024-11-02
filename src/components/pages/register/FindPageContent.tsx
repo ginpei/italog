@@ -14,6 +14,7 @@ import { VStack } from "@/components/lib/layout/VStack";
 import { Place } from "@/components/lib/place/Place";
 import { PlaceTypeCategory } from "@/components/lib/place/placeTypes";
 import { H1 } from "@/components/lib/style/Hn";
+import { sleep } from "@/components/lib/time/timer";
 
 export function FindPageContent(): JSX.Element {
   const [searching, setSearching] = useState(false);
@@ -40,6 +41,8 @@ export function FindPageContent(): JSX.Element {
   }, []);
 
   const onSubmit = async (params: FindNearbyParams) => {
+    const lastLatLong = latLong;
+    const lastPlaces = places;
     setSearching(true);
     setError(null);
     setLatLong(null);
@@ -47,10 +50,21 @@ export function FindPageContent(): JSX.Element {
 
     try {
       const position = await getLocation();
-      setLatLong({
+      const newLatLong = {
         lat: position.coords.latitude,
         long: position.coords.longitude,
-      });
+      };
+      if (
+        lastLatLong?.lat === newLatLong.lat ||
+        lastLatLong?.long === newLatLong.long
+      ) {
+        await sleep(500);
+        setLatLong(lastLatLong);
+        setPlaces(lastPlaces);
+        return;
+      }
+
+      setLatLong(newLatLong);
       const data = await findNearby(
         params.category,
         position.coords.latitude,
