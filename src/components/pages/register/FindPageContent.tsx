@@ -90,7 +90,7 @@ export function FindPageContent(): JSX.Element {
         Location:
         {latLong ? `${latLong.lat},${latLong.long}` : ""}
       </p>
-      <div className="sticky top-0 h-[40vh] bg-white py-1">
+      <div className="sticky top-0 h-[30vh] bg-white py-1">
         {latLong && !searching ? (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
