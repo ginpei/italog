@@ -8,6 +8,7 @@ import { SearchNearbyForm } from "./SearchNearbyForm";
 import { FindPlaceParams, FindPlaceResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
+import { LatLong } from "@/components/place/LatLong";
 import { Place } from "@/components/place/Place";
 import { H1 } from "@/components/style/Hn";
 import { sleep } from "@/components/time/timer";
@@ -25,6 +26,7 @@ export function SearchPlacesPageContent(): JSX.Element {
   });
   const [lastParams, setLastParams] = useState<FindPlaceParams>(params);
   const [places, setPlaces] = useState<Place[]>([]);
+  const [placePosition, setPlacePosition] = useState<LatLong | null>(null);
 
   const latLong = useMemo(
     () => ({ lat: params.lat, long: params.long }),
@@ -120,8 +122,8 @@ export function SearchPlacesPageContent(): JSX.Element {
         ) : (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-            lat={latLong.lat}
-            long={latLong.long}
+            placePosition={placePosition}
+            userPosition={params}
           />
         )}
       </div>
@@ -135,7 +137,16 @@ export function SearchPlacesPageContent(): JSX.Element {
         ) : places.length === 0 ? (
           <div className="h-[30vh] text-gray-500">Nothing found around</div>
         ) : (
-          places.map((place) => <PlaceItem key={place.id} place={place} />)
+          places.map((place) => (
+            <PlaceItem
+              key={place.id}
+              place={place}
+              onPointerEnter={(v) =>
+                setPlacePosition({ lat: v.latitude, long: v.longitude })
+              }
+              onPointerLeaveOrCancel={() => setPlacePosition(null)}
+            />
+          ))
         )}
       </div>
     </VStack>

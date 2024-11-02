@@ -1,9 +1,10 @@
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
+import { LatLong } from "@/components/place/LatLong";
 
 export interface EmbeddedMapProps {
   apiKey: string;
-  lat: number;
-  long: number;
+  placePosition: LatLong | null;
+  userPosition: LatLong;
 }
 
 /**
@@ -11,15 +12,21 @@ export interface EmbeddedMapProps {
  */
 export function EmbeddedMap({
   apiKey,
-  lat,
-  long,
+  userPosition,
+  placePosition,
 }: EmbeddedMapProps): JSX.Element {
   const mapId = "xxx"; // TODO https://developers.google.com/maps/documentation/get-map-id
 
+  const userLatLong = { lat: userPosition.lat, lng: userPosition.long };
+  const placeLatLong = placePosition
+    ? { lat: placePosition.lat, lng: placePosition.long }
+    : null;
+
   return (
     <APIProvider apiKey={apiKey}>
-      <Map defaultCenter={{ lat, lng: long }} defaultZoom={15} mapId={mapId}>
-        <AdvancedMarker position={{ lat, lng: long }} />
+      <Map defaultCenter={userLatLong} defaultZoom={15} mapId={mapId}>
+        <AdvancedMarker position={userLatLong} />
+        {placePosition && <AdvancedMarker position={placeLatLong} />}
       </Map>
     </APIProvider>
   );
