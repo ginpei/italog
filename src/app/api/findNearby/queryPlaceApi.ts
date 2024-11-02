@@ -46,21 +46,23 @@ export async function queryNearbySearch(
 
   const url = new URL(endpoint);
 
-  const res = await fetch(url, {
-    body: JSON.stringify({
-      includedTypes: includedTypes,
-      maxResultCount: 20,
-      rankPreference: "DISTANCE",
-      locationRestriction: {
-        circle: {
-          center: {
-            latitude: lat,
-            longitude: long,
-          },
-          radius: 1000.0,
+  const body = {
+    includedTypes: includedTypes,
+    maxResultCount: 20,
+    rankPreference: "DISTANCE",
+    locationRestriction: {
+      circle: {
+        center: {
+          latitude: lat,
+          longitude: long,
         },
+        radius: 1000.0,
       },
-    }),
+    },
+  };
+
+  const res = await fetch(url, {
+    body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
       "X-Goog-Api-Key": GOOGLE_API_KEY,
@@ -97,21 +99,23 @@ export async function queryTextSearch(
 
   const url = new URL(endpoint);
 
-  const res = await fetch(url, {
-    body: JSON.stringify({
-      textQuery: `${category} ${textQuery}`,
-      // textQuery,
-      maxResultCount: 20,
-      locationBias: {
-        circle: {
-          center: {
-            latitude: lat,
-            longitude: long,
-          },
-          radius: 1000.0,
+  const body = {
+    textQuery: `${category} ${textQuery}`,
+    // textQuery,
+    maxResultCount: 20,
+    locationBias: {
+      circle: {
+        center: {
+          latitude: lat,
+          longitude: long,
         },
+        radius: 1000.0,
       },
-    }),
+    },
+  };
+
+  const res = await fetch(url, {
+    body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
       "X-Goog-Api-Key": GOOGLE_API_KEY,
