@@ -9,7 +9,8 @@ export function Select({
     <select
       className={`
         ${className} Select
-        border border-gray-400 p-2
+        rounded-none border border-gray-400 bg-white
+        p-2
         hover:border-gray-500
         active:bg-gray-200
         disabled:bg-gray-300 disabled:text-gray-500
