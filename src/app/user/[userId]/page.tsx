@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
+import { UserPageContent } from "./UserPageContent";
 import { StraightPageLayout } from "@/components/lib/layout/StraightPageLayout";
 import { hasFriendshipRecord } from "@/components/lib/user/friendshipDb";
 import { getProfileRecord } from "@/components/lib/user/profileDb";
 import { getSessionProfile } from "@/components/lib/user/profileSession";
 import { getUserVisitPlace } from "@/components/lib/visit/visitPlaceDb";
-import { UserPageContent } from "@/components/pages/user/UserPageContent";
 
 interface Params {
   params: {

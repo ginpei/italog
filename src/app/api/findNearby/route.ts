@@ -1,3 +1,7 @@
+import {
+  queryNearbySearch,
+  queryPlaceDetails,
+} from "@/app/api/findNearby/queryPlaceApi";
 import { toError } from "@/components/lib/error/errorUtil";
 import { Place } from "@/components/lib/place/Place";
 import {
@@ -9,10 +13,6 @@ import {
   PlaceTypeCategory,
   placeTypes,
 } from "@/components/lib/place/placeTypes";
-import {
-  queryNearbySearch,
-  queryPlaceDetails,
-} from "@/components/pages/searchPlace/queryPlaceApi";
 
 export interface FindNearbyParams {
   category: PlaceTypeCategory;
