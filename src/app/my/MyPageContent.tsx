@@ -1,7 +1,11 @@
 "use client";
 
+import { useMemo, useState } from "react";
+import { GetMyQrCodeResult } from "../api/my/qrCode/route";
 import { ProfileSection } from "./ProfileSection";
+import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
+import { Button } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
 import { Profile } from "@/components/user/Profile";
@@ -16,9 +20,34 @@ export function MyPageContent({
   profile,
   visits,
 }: MyPageContentProps): JSX.Element {
+  const [qrCodeWorking, setQrCodeWorking] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+
+  const myPageUrl = useMemo(() => {
+    const url = new URL(location.href);
+    url.pathname = `/user/${profile.id}`;
+    return url.toString();
+  }, [profile.id]);
+
   const onProfileUpdated = () => {
     // Reload the page to update the profile
     window.location.reload();
+  };
+
+  const onShowQrCodeClick = async () => {
+    setQrCodeWorking(true);
+    try {
+      const res = await fetch(
+        `/api/my/qrCode?url=${encodeURIComponent(myPageUrl)}`,
+      );
+      const data: GetMyQrCodeResult = await res.json();
+      setQrCodeUrl(data.qrCode);
+    } catch (error) {
+      console.error(error);
+      window.alert(`Failed to show QR code: ${toError(error).message}`);
+    } finally {
+      setQrCodeWorking(false);
+    }
   };
 
   return (
@@ -42,6 +71,21 @@ export function MyPageContent({
         </ul>
       </VStack>
       <ProfileSection profile={profile} onUpdated={onProfileUpdated} />
+      <VStack>
+        <H2>QR code</H2>
+        <div className="grid justify-center">
+          {qrCodeUrl ? (
+            <Link href={myPageUrl}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img alt="" src={qrCodeUrl} />
+            </Link>
+          ) : (
+            <Button disabled={qrCodeWorking} onClick={onShowQrCodeClick}>
+              Show
+            </Button>
+          )}
+        </div>
+      </VStack>
       <VStack>
         <H2>Logout</H2>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
