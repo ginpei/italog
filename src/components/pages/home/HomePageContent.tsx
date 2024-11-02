@@ -19,7 +19,7 @@ export function HomePageContent({
         <p className="mx-auto my-16">
           <Link
             className="border border-gray-400 bg-gray-50 p-8 hover:bg-gray-100 active:bg-gray-200"
-            href="/find"
+            href="/search/places"
           >
             Find
           </Link>
