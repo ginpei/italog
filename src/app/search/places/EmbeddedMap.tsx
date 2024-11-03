@@ -24,10 +24,19 @@ export function EmbeddedMap({
 
   return (
     <APIProvider apiKey={apiKey}>
-      <Map defaultCenter={userLatLong} defaultZoom={15} mapId={mapId}>
-        <AdvancedMarker position={userLatLong} />
-        {placePosition && <AdvancedMarker position={placeLatLong} />}
-      </Map>
+      <div className="EmbeddedMap contents">
+        <Map defaultCenter={userLatLong} defaultZoom={15} mapId={mapId}>
+          <AdvancedMarker position={userLatLong}>
+            <div className="EmbeddedMap-userMarker mb-[-12px] grid size-4 items-center justify-center rounded-full border-2 border-white bg-blue-400">
+              <div
+                className="size-3 rounded-full bg-blue-400 motion-safe:animate-ping"
+                style={{ animationDuration: "2000ms" }}
+              />
+            </div>
+          </AdvancedMarker>
+          {placePosition && <AdvancedMarker position={placeLatLong} />}
+        </Map>
+      </div>
     </APIProvider>
   );
 }
