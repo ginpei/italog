@@ -16,7 +16,7 @@ VALUES ('63fc77f7-a986-48a6-ab6a-ea544eb0ca8c', 'place');
 -- create place table
 CREATE TABLE place (
   board_id UUID PRIMARY KEY,
-  map_id VARCHAR(255) NOT NULL,
+  map_id VARCHAR(255) UNIQUE NOT NULL,
   address VARCHAR(255) NOT NULL,
   display_name VARCHAR(255) NOT NULL,
   latitude DOUBLE PRECISION NOT NULL,
@@ -26,6 +26,9 @@ CREATE TABLE place (
   web_url VARCHAR(255),
   FOREIGN KEY (board_id) REFERENCES board(id)
 );
+
+-- create index for place
+CREATE INDEX idx_map_id ON place (map_id);
 
 -- create sample place
 INSERT INTO place (board_id, map_id, address, display_name, latitude, longitude, map_url, type_display_name, web_url)
