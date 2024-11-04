@@ -1,5 +1,3 @@
-// TODO rename file path
-
 import { NextApiResponse } from "next";
 import { NextRequest } from "next/server";
 import { Checkin } from "@/components/checkin/Checkin";
