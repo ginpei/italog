@@ -7,8 +7,9 @@ const pool = createPool({
 export async function runTransaction<T>(
   callback: (client: VercelPoolClient) => Promise<T>,
 ): Promise<T> {
-  const client = await pool.connect();
+  let client: VercelPoolClient | null = null;
   try {
+    client = await pool.connect();
     await client.query("BEGIN");
 
     const result = await callback(client);
@@ -17,7 +18,7 @@ export async function runTransaction<T>(
 
     return result;
   } catch (error) {
-    await client.query("ROLLBACK");
+    await client?.query("ROLLBACK");
     throw error;
   }
 }
