@@ -14,7 +14,7 @@ interface Params {
 
 export default async function Page({ params }: Params): Promise<JSX.Element> {
   const userId = decodeURI(params.userId);
-  const [currentUserProfile, pageUserProfile, visits] = await Promise.all([
+  const [currentUserProfile, pageUserProfile, checkins] = await Promise.all([
     getSessionProfile(),
     getProfileRecord(userId),
     getUserVisitPlace(userId),
@@ -33,8 +33,8 @@ export default async function Page({ params }: Params): Promise<JSX.Element> {
     currentUserProfile.id !== pageUserProfile.id &&
     (await hasFriendshipRecord(currentUserProfile.id, pageUserProfile.id));
 
-  const publicVisits =
-    isFriend || currentUserProfile.id === pageUserProfile.id ? visits : [];
+  const publicCheckins =
+    isFriend || currentUserProfile.id === pageUserProfile.id ? checkins : [];
 
   return (
     <StraightPageLayout profile={currentUserProfile}>
@@ -42,7 +42,7 @@ export default async function Page({ params }: Params): Promise<JSX.Element> {
         currentUser={currentUserProfile}
         isFriend={isFriend}
         profile={pageUserProfile}
-        checkins={publicVisits}
+        checkins={publicCheckins}
       />
     </StraightPageLayout>
   );

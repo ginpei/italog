@@ -7,11 +7,11 @@ export default async function Home() {
   const profile = await getSessionProfile();
   const userId = profile?.id;
 
-  const visits = userId ? await getVisitTimeline(userId) : [];
+  const checkins = userId ? await getVisitTimeline(userId) : [];
 
   return (
     <StraightPageLayout profile={profile}>
-      <HomePageContent profile={profile} visits={visits} />
+      <HomePageContent profile={profile} checkins={checkins} />
     </StraightPageLayout>
   );
 }

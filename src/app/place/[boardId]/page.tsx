@@ -14,13 +14,13 @@ export default async function PlacePage({
     getSessionProfile(),
     getPlaceRecord(params.boardId),
   ]);
-  const userVisits = profile
+  const userCheckins = profile
     ? await getUserCheckinRecords(profile.id, params.boardId)
     : [];
 
   const visited =
-    userVisits[0] &&
-    new Date(userVisits[0].createdAt).toLocaleDateString() ===
+    userCheckins[0] &&
+    new Date(userCheckins[0].createdAt).toLocaleDateString() ===
       new Date().toLocaleDateString();
 
   if (!place) {
@@ -38,7 +38,7 @@ export default async function PlacePage({
     <StraightPageLayout profile={profile}>
       <PlacePageContent
         place={place}
-        userCheckins={userVisits}
+        userCheckins={userCheckins}
         checkedIn={visited}
       />
     </StraightPageLayout>

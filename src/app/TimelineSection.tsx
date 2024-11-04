@@ -10,8 +10,8 @@ export interface TimelineSectionProps {
 export function TimelineSection({
   checkins,
 }: TimelineSectionProps): JSX.Element {
-  // Group visits by date
-  const visitsByDate = checkins.reduce(
+  // Group checkins by date
+  const checkinsByDate = checkins.reduce(
     (acc, checkin) => {
       if (!acc[checkin.userDate]) {
         acc[checkin.userDate] = [];
@@ -26,11 +26,11 @@ export function TimelineSection({
     <VStack className="TimelineSection">
       <H2>Timeline</H2>
       <ul>
-        {Object.entries(visitsByDate).map(([date, visitsOnDate]) => (
+        {Object.entries(checkinsByDate).map(([date, checkinsOnDate]) => (
           <li key={date}>
             <strong>{date}</strong>
             <ul className="ms-8 list-disc">
-              {visitsOnDate.map((checkin) => (
+              {checkinsOnDate.map((checkin) => (
                 <li
                   key={`${checkin.userId}-${checkin.boardId}-${checkin.userDate}`}
                 >

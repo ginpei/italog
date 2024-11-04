@@ -84,7 +84,7 @@ export function MyPageContent({
               </Link>
             </li>
           ))}
-          {checkins.length === 0 && <li>No visits yet</li>}
+          {checkins.length === 0 && <li>No checkins yet</li>}
         </ul>
       </VStack>
       <ProfileSection profile={profile} onUpdated={onProfileUpdated} />

@@ -10,12 +10,12 @@ import { Profile } from "@/components/user/Profile";
 
 export interface HomePageContentProps {
   profile: Profile | null;
-  visits: PlaceCheckin[];
+  checkins: PlaceCheckin[];
 }
 
 export function HomePageContent({
   profile,
-  visits,
+  checkins,
 }: HomePageContentProps): JSX.Element {
   return (
     <VStack className="HomePageContent" gap="gap-8">
@@ -36,7 +36,7 @@ export function HomePageContent({
               </Link>
             </p>
           </VStack>
-          <TimelineSection checkins={visits} />
+          <TimelineSection checkins={checkins} />
         </>
       ) : (
         <p className="mx-auto my-16">

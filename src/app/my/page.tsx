@@ -11,14 +11,14 @@ export default async function Home() {
     return <div>Not logged in</div>;
   }
 
-  const [visits, friends] = await Promise.all([
+  const [checkins, friends] = await Promise.all([
     getUserVisitPlace(profile.id),
     getFriendProfileRecords(profile.id),
   ]);
 
   return (
     <StraightPageLayout profile={profile}>
-      <MyPageContent friends={friends} profile={profile} checkins={visits} />
+      <MyPageContent friends={friends} profile={profile} checkins={checkins} />
     </StraightPageLayout>
   );
 }

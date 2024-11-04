@@ -15,7 +15,7 @@ export async function getUserVisitPlace(
       LIMIT ${options.limit || 10} OFFSET ${options.offset || 0}
     `;
 
-  const visits = result.rows.map(
+  const placeCheckin = result.rows.map(
     (row): PlaceCheckin => ({
       boardId: row.board_id,
       comment: row.comment,
@@ -28,7 +28,7 @@ export async function getUserVisitPlace(
       userName: row.user_display_name,
     }),
   );
-  return visits;
+  return placeCheckin;
 }
 
 export async function getVisitTimeline(
@@ -44,7 +44,7 @@ export async function getVisitTimeline(
       ORDER BY checkin.created_at DESC
     `;
 
-  const visits = result.rows.map(
+  const placeCheckin = result.rows.map(
     (row): PlaceCheckin => ({
       boardId: row.board_id,
       comment: row.comment,
@@ -57,5 +57,5 @@ export async function getVisitTimeline(
       userName: row.user_display_name,
     }),
   );
-  return visits;
+  return placeCheckin;
 }
