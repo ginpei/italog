@@ -3,20 +3,21 @@ import { Place } from "./Place";
 
 export async function savePlaceRecord(place: Place): Promise<void> {
   const getResult =
-    await sql`SELECT COUNT(*) FROM place WHERE id = ${place.id}`;
+    await sql`SELECT COUNT(*) FROM place WHERE board_id = ${place.boardId}`;
   const exists = getResult.rows[0].count > 0;
 
   if (exists) {
-    console.log(`savePlaces: exists`, place.id, place.displayName);
+    console.log(`savePlaces: exists`, place.boardId, place.displayName);
     return;
   }
 
-  console.log(`savePlaces: creating place`, place.id, place.displayName);
+  console.log(`savePlaces: creating place`, place.boardId, place.displayName);
   await sql`
     INSERT INTO place (
-      id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
+      board_id, map_id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
     ) VALUES (
-      ${place.id},
+      ${place.boardId},
+      ${place.mapId},
       ${place.address},
       ${place.displayName},
       ${place.latitude},
@@ -26,41 +27,29 @@ export async function savePlaceRecord(place: Place): Promise<void> {
       ${place.webUrl || null}
     )
   `;
-
-  // console.log(`savePlaces: updating place`, place.id, place.displayName);
-  // await sql`
-  //   UPDATE place
-  //   SET
-  //     address = ${place.address},
-  //     display_name = ${place.displayName},
-  //     latitude = ${place.latitude},
-  //     longitude = ${place.longitude},
-  //     map_url = ${place.mapUrl},
-  //     type_display_name = ${place.typeDisplayName || null},
-  //     web_url = ${place.webUrl || null}
-  //   WHERE id = ${place.id}
-  // `;
 }
 
-export async function getPlaceRecord(id: string): Promise<Place | undefined> {
+export async function getPlaceRecord(
+  boardId: string,
+): Promise<Place | undefined> {
   const countResult = await sql`
-    SELECT COUNT(*) FROM place WHERE id = ${id}
+    SELECT COUNT(*) FROM place WHERE board_id = ${boardId}
   `;
   console.log(
     "countResult",
     countResult,
-    `SELECT COUNT(*) FROM place WHERE id = ${id}`,
+    `SELECT COUNT(*) FROM place WHERE board_id = ${boardId}`,
   );
 
   const result = await sql`
-    SELECT * FROM place WHERE id = ${id}
+    SELECT * FROM place WHERE board_id = ${boardId}
   `;
   const row = result.rows[0];
   if (!row) {
     console.log(
       "No place found",
-      id,
-      `SELECT * FROM place WHERE id = ${id}`,
+      boardId,
+      `SELECT * FROM place WHERE board_id = ${boardId}`,
       result,
     );
     return undefined;
@@ -70,9 +59,9 @@ export async function getPlaceRecord(id: string): Promise<Place | undefined> {
   return place;
 }
 
-export async function getPlaceRecords(ids: string[]): Promise<Place[]> {
+export async function getPlaceRecords(boardIds: string[]): Promise<Place[]> {
   const result = await sql`
-    SELECT * FROM place WHERE id = ANY(ARRAY[${ids.map((v) => `"${v}"`).join(",")}])
+    SELECT * FROM place WHERE board_id = ANY(ARRAY[${boardIds.map((v) => `"${v}"`).join(",")}])
   `;
   const places = result.rows.map((v) => rowToPlace(v));
   return places;
@@ -80,9 +69,10 @@ export async function getPlaceRecords(ids: string[]): Promise<Place[]> {
 
 function rowToPlace(row: QueryResultRow): Place {
   return {
+    boardId: row.board_id,
+    mapId: row.map_id,
     address: row.address,
     displayName: row.display_name,
-    id: row.id,
     latitude: row.latitude,
     longitude: row.longitude,
     mapUrl: row.map_url,

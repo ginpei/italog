@@ -1,7 +1,8 @@
 export interface Place {
+  boardId: string;
+  mapId: string;
   address: string;
   displayName: string;
-  id: string;
   latitude: number;
   longitude: number;
   mapUrl: string;

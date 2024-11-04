@@ -3,21 +3,43 @@
 -- Enable the uuid-ossp extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- create board table
+CREATE TABLE board (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  type VARCHAR(255) NOT NULL
+);
+
+-- creates sample board
+INSERT INTO board (id, type)
+VALUES ('63fc77f7-a986-48a6-ab6a-ea544eb0ca8c', 'place');
+
 -- create place table
 CREATE TABLE place (
-  id VARCHAR(255) PRIMARY KEY,
+  board_id UUID PRIMARY KEY,
+  map_id VARCHAR(255) NOT NULL,
   address VARCHAR(255) NOT NULL,
   display_name VARCHAR(255) NOT NULL,
   latitude DOUBLE PRECISION NOT NULL,
   longitude DOUBLE PRECISION NOT NULL,
   map_url VARCHAR(255) NOT NULL,
   type_display_name VARCHAR(255),
-  web_url VARCHAR(255)
+  web_url VARCHAR(255),
+  FOREIGN KEY (board_id) REFERENCES board(id)
 );
 
 -- create sample place
-INSERT INTO place (id, address, display_name, latitude, longitude, map_url, type_display_name, web_url)
-VALUES ('ChIJfe2sYHhxhlQR6YR9clFor1Y', '555 W Hastings St Unit 6, Vancouver, BC V6B 5K3, Canada', 'Tim Hortons', 49.2849465, -123.1119939, 'https://maps.google.com/?cid=6246325907208635625', 'Coffee Shop', 'https://locations.timhortons.ca/en/bc/vancouver/555-hastings-st-west');
+INSERT INTO place (board_id, map_id, address, display_name, latitude, longitude, map_url, type_display_name, web_url)
+VALUES (
+  '63fc77f7-a986-48a6-ab6a-ea544eb0ca8c',
+  'ChIJfe2sYHhxhlQR6YR9clFor1Y',
+  '555 W Hastings St Unit 6, Vancouver, BC V6B 5K3, Canada',
+  'Tim Hortons',
+  49.2849465,
+  -123.1119939,
+  'https://maps.google.com/?cid=6246325907208635625',
+  'Coffee Shop',
+  'https://locations.timhortons.ca/en/bc/vancouver/555-hastings-st-west'
+);
 
 -- create profile table
 CREATE TABLE profile (
@@ -38,22 +60,29 @@ CREATE TABLE auth_profile (
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );
 
--- create visit table
-CREATE TABLE visit (
-  place_id VARCHAR(255) NOT NULL,
+-- create checkin table
+CREATE TABLE checkin (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  board_id UUID NOT NULL,
   user_id UUID NOT NULL,
-  date VARCHAR(255) NOT NULL,
   comment TEXT NOT NULL,
   created_at BIGINT NOT NULL,
   starred BOOLEAN NOT NULL,
-  PRIMARY KEY (place_id, user_id, date),
-  FOREIGN KEY (place_id) REFERENCES place(id),
+  user_date VARCHAR(255) NOT NULL,
+  FOREIGN KEY (board_id) REFERENCES board(id),
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );
 
--- create sample visit
-INSERT INTO visit (comment, created_at, date, place_id, starred, user_id)
-VALUES ('Love it!', 946684800000, '2000-01-01', 'ChIJfe2sYHhxhlQR6YR9clFor1Y', true, '4111179e-3bfa-4b8a-9588-dfe4a49f90bc' );
+-- create sample checkin
+INSERT INTO checkin (board_id, user_id, comment, created_at, starred, user_date)
+VALUES (
+  '63fc77f7-a986-48a6-ab6a-ea544eb0ca8c',
+  '4111179e-3bfa-4b8a-9588-dfe4a49f90bc',
+  'Love it!',
+  946684800000,
+  true,
+  '2000-01-01'
+);
 
 -- create user relation table
 CREATE TABLE user_user (
