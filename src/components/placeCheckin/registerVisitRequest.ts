@@ -1,7 +1,7 @@
-import { RegisterVisitPayload } from "@/app/api/visit/register/route";
+import { RegisterCheckinPayload } from "@/app/api/visit/register/route";
 
 export async function requestRegisterVisit(
-  payload: RegisterVisitPayload,
+  payload: RegisterCheckinPayload,
 ): Promise<void> {
   await fetch("/api/visit/register", {
     method: "POST",

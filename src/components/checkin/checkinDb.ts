@@ -1,23 +1,23 @@
 import { sql } from "@vercel/postgres";
 import { Checkin } from "./Checkin";
 
-export async function createVisitRecord(visit: Checkin): Promise<void> {
+export async function createCheckinRecord(checkin: Checkin): Promise<void> {
   await sql`
     INSERT INTO checkin (comment, created_at, user_date, board_id, starred, user_id)
-    VALUES (${visit.comment}, ${visit.createdAt}, ${visit.userDate}, ${visit.boardId}, ${visit.starred}, ${visit.userId})
+    VALUES (${checkin.comment}, ${checkin.createdAt}, ${checkin.userDate}, ${checkin.boardId}, ${checkin.starred}, ${checkin.userId})
   `;
 }
 
-export async function updateVisitRecord(visit: Checkin): Promise<void> {
+export async function updateCheckinRecord(checkin: Checkin): Promise<void> {
   await sql`
     UPDATE checkin
-    SET comment = ${visit.comment},
-        starred = ${visit.starred}
-    WHERE board_id = ${visit.boardId} AND user_id = ${visit.userId} AND user_date = ${visit.userDate}
+    SET comment = ${checkin.comment},
+        starred = ${checkin.starred}
+    WHERE board_id = ${checkin.boardId} AND user_id = ${checkin.userId} AND user_date = ${checkin.userDate}
   `;
 }
 
-export async function getUserVisitRecords(
+export async function getUserCheckinRecords(
   userId: string,
   boardId: string,
   options: { limit?: number; offset?: number } = {},
@@ -29,7 +29,7 @@ export async function getUserVisitRecords(
     LIMIT ${options.limit || 10} OFFSET ${options.offset || 0}
   `;
 
-  const visits = result.rows.map(
+  const checkins = result.rows.map(
     (row): Checkin => ({
       id: row.id,
       comment: row.comment,
@@ -40,5 +40,5 @@ export async function getUserVisitRecords(
       userId: row.user_id,
     }),
   );
-  return visits;
+  return checkins;
 }

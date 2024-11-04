@@ -1,8 +1,8 @@
 import { MyPageContent } from "./MyPageContent";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
+import { getUserVisitPlace } from "@/components/placeCheckin/visitPlaceDb";
 import { getFriendProfileRecords } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
-import { getUserVisitPlace } from "@/components/visit/visitPlaceDb";
 
 export default async function Home() {
   const profile = await getSessionProfile();
@@ -18,7 +18,7 @@ export default async function Home() {
 
   return (
     <StraightPageLayout profile={profile}>
-      <MyPageContent friends={friends} profile={profile} visits={visits} />
+      <MyPageContent friends={friends} profile={profile} checkins={visits} />
     </StraightPageLayout>
   );
 }

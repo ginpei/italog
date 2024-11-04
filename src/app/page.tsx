@@ -1,7 +1,7 @@
 import { HomePageContent } from "./HomePageContent";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getSessionProfile } from "@/components/user/profileSession";
-import { getVisitTimeline } from "@/components/visit/visitPlaceDb";
+import { getVisitTimeline } from "@/components/placeCheckin/visitPlaceDb";
 
 export default async function Home() {
   const profile = await getSessionProfile();

@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { PlacePageContent } from "./PlacePageContent";
+import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getPlaceRecord } from "@/components/place/placeDb";
 import { getSessionProfile } from "@/components/user/profileSession";
-import { getUserVisitRecords } from "@/components/visit/visitDb";
 
 export default async function PlacePage({
   params,
@@ -15,7 +15,7 @@ export default async function PlacePage({
     getPlaceRecord(params.placeId),
   ]);
   const userVisits = profile
-    ? await getUserVisitRecords(profile.id, params.placeId)
+    ? await getUserCheckinRecords(profile.id, params.placeId)
     : [];
 
   const visited =
@@ -38,8 +38,8 @@ export default async function PlacePage({
     <StraightPageLayout profile={profile}>
       <PlacePageContent
         place={place}
-        userVisits={userVisits}
-        visited={visited}
+        userCheckins={userVisits}
+        checkedIn={visited}
       />
     </StraightPageLayout>
   );

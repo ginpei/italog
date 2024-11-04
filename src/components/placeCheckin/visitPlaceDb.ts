@@ -1,0 +1,61 @@
+import { sql } from "@vercel/postgres";
+import { PlaceCheckin } from "./PlaceCheckin";
+
+export async function getUserVisitPlace(
+  userId: string,
+  options: { limit?: number; offset?: number } = {},
+): Promise<PlaceCheckin[]> {
+  const result = await sql`
+      SELECT checkin.*, place.display_name as place_name, profile.display_name as user_display_name
+      FROM checkin
+      JOIN place ON checkin.board_id = place.board_id
+      JOIN profile ON checkin.user_id = profile.id
+      WHERE checkin.user_id = ${userId}
+      ORDER BY checkin.created_at DESC
+      LIMIT ${options.limit || 10} OFFSET ${options.offset || 0}
+    `;
+
+  const visits = result.rows.map(
+    (row): PlaceCheckin => ({
+      boardId: row.board_id,
+      comment: row.comment,
+      createdAt: Number(row.created_at),
+      id: row.id,
+      placeName: row.place_name,
+      starred: row.starred,
+      userDate: row.user_date,
+      userId: row.user_id,
+      userName: row.user_display_name,
+    }),
+  );
+  return visits;
+}
+
+export async function getVisitTimeline(
+  userId: string,
+): Promise<PlaceCheckin[]> {
+  const result = await sql`
+      SELECT checkin.*, place.display_name as place_name, profile.display_name as user_display_name
+      FROM checkin
+      JOIN place ON checkin.board_id = place.board_id
+      JOIN profile ON checkin.user_id = profile.id
+      LEFT JOIN user_user ON checkin.user_id = user_user.friend_id
+      WHERE checkin.user_id = ${userId} OR user_user.user_id = ${userId}
+      ORDER BY checkin.created_at DESC
+    `;
+
+  const visits = result.rows.map(
+    (row): PlaceCheckin => ({
+      boardId: row.board_id,
+      comment: row.comment,
+      createdAt: Number(row.created_at),
+      id: row.id,
+      placeName: row.place_name,
+      starred: row.starred,
+      userDate: row.user_date,
+      userId: row.user_id,
+      userName: row.user_display_name,
+    }),
+  );
+  return visits;
+}

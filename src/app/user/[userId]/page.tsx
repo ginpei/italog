@@ -4,7 +4,7 @@ import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { hasFriendshipRecord } from "@/components/user/friendshipDb";
 import { getProfileRecord } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
-import { getUserVisitPlace } from "@/components/visit/visitPlaceDb";
+import { getUserVisitPlace } from "@/components/placeCheckin/visitPlaceDb";
 
 interface Params {
   params: {
@@ -42,7 +42,7 @@ export default async function Page({ params }: Params): Promise<JSX.Element> {
         currentUser={currentUserProfile}
         isFriend={isFriend}
         profile={pageUserProfile}
-        visits={publicVisits}
+        checkins={publicVisits}
       />
     </StraightPageLayout>
   );

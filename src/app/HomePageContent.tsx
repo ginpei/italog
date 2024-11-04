@@ -6,11 +6,11 @@ import { TimelineSection } from "./TimelineSection";
 import { VStack } from "@/components/layout/VStack";
 import { H1, H2 } from "@/components/style/Hn";
 import { Profile } from "@/components/user/Profile";
-import { VisitPlace } from "@/components/visit/VisitPlace";
+import { PlaceCheckin } from "@/components/placeCheckin/PlaceCheckin";
 
 export interface HomePageContentProps {
   profile: Profile | null;
-  visits: VisitPlace[];
+  visits: PlaceCheckin[];
 }
 
 export function HomePageContent({
@@ -36,7 +36,7 @@ export function HomePageContent({
               </Link>
             </p>
           </VStack>
-          <TimelineSection visits={visits} />
+          <TimelineSection checkins={visits} />
         </>
       ) : (
         <p className="mx-auto my-16">
