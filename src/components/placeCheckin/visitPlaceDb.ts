@@ -6,9 +6,9 @@ export async function getUserVisitPlace(
   options: { limit?: number; offset?: number } = {},
 ): Promise<PlaceCheckin[]> {
   const result = await sql`
-      SELECT checkin.*, place.display_name as place_name, profile.display_name as user_display_name
+      SELECT checkin.*, board.display_name as place_name, profile.display_name as user_display_name
       FROM checkin
-      JOIN place ON checkin.board_id = place.board_id
+      JOIN board ON checkin.board_id = board.board_id
       JOIN profile ON checkin.user_id = profile.id
       WHERE checkin.user_id = ${userId}
       ORDER BY checkin.created_at DESC
@@ -35,9 +35,9 @@ export async function getVisitTimeline(
   userId: string,
 ): Promise<PlaceCheckin[]> {
   const result = await sql`
-      SELECT checkin.*, place.display_name as place_name, profile.display_name as user_display_name
+      SELECT checkin.*, board.display_name as place_name, profile.display_name as user_display_name
       FROM checkin
-      JOIN place ON checkin.board_id = place.board_id
+      JOIN board ON checkin.board_id = board.board_id
       JOIN profile ON checkin.user_id = profile.id
       LEFT JOIN user_user ON checkin.user_id = user_user.friend_id
       WHERE checkin.user_id = ${userId} OR user_user.user_id = ${userId}

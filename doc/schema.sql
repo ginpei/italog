@@ -5,38 +5,37 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- create board table
 CREATE TABLE board (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  type VARCHAR(255) NOT NULL
+  board_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  board_type VARCHAR(255) NOT NULL,
+  display_name VARCHAR(255) NOT NULL
 );
 
 -- creates sample board
-INSERT INTO board (id, type)
-VALUES ('63fc77f7-a986-48a6-ab6a-ea544eb0ca8c', 'place');
+INSERT INTO board (board_id, board_type, display_name )
+VALUES ('63fc77f7-a986-48a6-ab6a-ea544eb0ca8c', 'place', 'Tim Hortons');
 
 -- create place table
 CREATE TABLE place (
   board_id UUID PRIMARY KEY,
   map_id VARCHAR(255) UNIQUE NOT NULL,
   address VARCHAR(255) NOT NULL,
-  display_name VARCHAR(255) NOT NULL,
   latitude DOUBLE PRECISION NOT NULL,
   longitude DOUBLE PRECISION NOT NULL,
   map_url VARCHAR(255) NOT NULL,
   type_display_name VARCHAR(255),
   web_url VARCHAR(255),
-  FOREIGN KEY (board_id) REFERENCES board(id)
+  FOREIGN KEY (board_id) REFERENCES board(board_id)
 );
 
 -- create index for place
 CREATE INDEX idx_map_id ON place (map_id);
 
 -- create sample place
-INSERT INTO place (board_id, map_id, address, display_name, latitude, longitude, map_url, type_display_name, web_url)
+INSERT INTO place (board_id, map_id, address, latitude, longitude, map_url, type_display_name, web_url)
 VALUES (
   '63fc77f7-a986-48a6-ab6a-ea544eb0ca8c',
   'ChIJfe2sYHhxhlQR6YR9clFor1Y',
   '555 W Hastings St Unit 6, Vancouver, BC V6B 5K3, Canada',
-  'Tim Hortons',
   49.2849465,
   -123.1119939,
   'https://maps.google.com/?cid=6246325907208635625',
@@ -72,7 +71,7 @@ CREATE TABLE checkin (
   created_at BIGINT NOT NULL,
   starred BOOLEAN NOT NULL,
   user_date VARCHAR(255) NOT NULL,
-  FOREIGN KEY (board_id) REFERENCES board(id),
+  FOREIGN KEY (board_id) REFERENCES board(board_id),
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );
 

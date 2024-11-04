@@ -1,16 +1,16 @@
 import { VercelPoolClient } from "@vercel/postgres";
-import { BoardType } from "./Board";
+import { Board } from "./Board";
 
 export function createBoardRecord(
   client: VercelPoolClient,
-  type: BoardType,
+  board: Omit<Board, "boardId">,
 ): Promise<string> {
   return client
     .query(
       /*sql*/ `
-        INSERT INTO board (type) VALUES ($1) RETURNING id
+        INSERT INTO board (board_type, display_name) VALUES ($1, $2) RETURNING id
       `,
-      [type],
+      [board.boardType, board.displayName],
     )
     .then((result) => {
       return result.rows[0].id;

@@ -1,8 +1,8 @@
-export interface Place {
-  boardId: string;
+import { Board } from "../board/Board";
+
+export interface Place extends Board {
   mapId: string;
   address: string;
-  displayName: string;
   latitude: number;
   longitude: number;
   mapUrl: string;

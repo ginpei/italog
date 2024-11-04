@@ -7,18 +7,17 @@ export async function createPlaceRecordSet(
   place: Omit<Place, "boardId">,
 ): Promise<Place> {
   return runTransaction(async (client) => {
-    const boardId = await createBoardRecord(client, "place");
+    const boardId = await createBoardRecord(client, place);
     await client.query(
       /*sql*/ `
         INSERT INTO place (
-          board_id, map_id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          board_id, map_id, address, latitude, longitude, map_url, type_display_name, web_url
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       `,
       [
         boardId,
         place.mapId,
         place.address,
-        place.displayName,
         place.latitude,
         place.longitude,
         place.mapUrl,
@@ -77,12 +76,13 @@ export async function getPlaceRecords(mapIds: string[]): Promise<Place[]> {
 
 function rowToPlace(row: QueryResultRow): Place {
   return {
-    boardId: row.board_id,
-    mapId: row.map_id,
     address: row.address,
+    boardId: row.board_id,
+    boardType: "place",
     displayName: row.display_name,
     latitude: row.latitude,
     longitude: row.longitude,
+    mapId: row.map_id,
     mapUrl: row.map_url,
     typeDisplayName: row.type_display_name,
     webUrl: row.web_url,

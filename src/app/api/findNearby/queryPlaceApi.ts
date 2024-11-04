@@ -168,6 +168,7 @@ export async function queryPlaceDetails(
 function resToPlace(data: PlaceDetailsApiResponse): Omit<Place, "boardId"> {
   return {
     address: data.formattedAddress,
+    boardType: "place",
     displayName: data.displayName.text,
     latitude: data.location.latitude,
     longitude: data.location.longitude,

@@ -1,6 +1,7 @@
 export interface Board {
-  id: string;
-  type: BoardType;
+  boardId: string;
+  boardType: BoardType;
+  displayName: string;
 }
 
 export type BoardType = "place";
