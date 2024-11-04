@@ -16,7 +16,7 @@ export function PlaceItem({
   return (
     <Link
       className="PlaceItem flex w-full items-center justify-between gap-4 border border-gray-300 p-2 text-start hover:bg-gray-50 active:bg-gray-200"
-      href={`/place/${place.id}`}
+      href={`/place/${place.boardId}`}
       onPointerCancel={() => onPointerLeaveOrCancel(place)}
       onPointerEnter={() => onPointerEnter(place)}
       onPointerLeave={() => onPointerLeaveOrCancel(place)}

@@ -8,14 +8,14 @@ import { getSessionProfile } from "@/components/user/profileSession";
 export default async function PlacePage({
   params,
 }: {
-  params: { placeId: string };
+  params: { boardId: string };
 }): Promise<JSX.Element> {
   const [profile, place] = await Promise.all([
     getSessionProfile(),
-    getPlaceRecord(params.placeId),
+    getPlaceRecord(params.boardId),
   ]);
   const userVisits = profile
-    ? await getUserCheckinRecords(profile.id, params.placeId)
+    ? await getUserCheckinRecords(profile.id, params.boardId)
     : [];
 
   const visited =

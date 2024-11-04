@@ -1,32 +1,35 @@
 import { QueryResultRow, sql } from "@vercel/postgres";
+import { createBoardRecord } from "../board/boardDb";
+import { runTransaction } from "../db/transaction";
 import { Place } from "./Place";
 
-export async function savePlaceRecord(place: Place): Promise<void> {
-  const getResult =
-    await sql`SELECT COUNT(*) FROM place WHERE board_id = ${place.boardId}`;
-  const exists = getResult.rows[0].count > 0;
+export async function createPlaceRecordSet(
+  place: Omit<Place, "boardId">,
+): Promise<Place> {
+  return runTransaction(async (client) => {
+    const boardId = await createBoardRecord(client, "place");
+    await client.query(
+      /*sql*/ `
+        INSERT INTO place (
+          board_id, map_id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `,
+      [
+        boardId,
+        place.mapId,
+        place.address,
+        place.displayName,
+        place.latitude,
+        place.longitude,
+        place.mapUrl,
+        place.typeDisplayName || null,
+        place.webUrl || null,
+      ],
+    );
 
-  if (exists) {
-    console.log(`savePlaces: exists`, place.boardId, place.displayName);
-    return;
-  }
-
-  console.log(`savePlaces: creating place`, place.boardId, place.displayName);
-  await sql`
-    INSERT INTO place (
-      board_id, map_id, address, display_name, latitude, longitude, map_url, type_display_name, web_url
-    ) VALUES (
-      ${place.boardId},
-      ${place.mapId},
-      ${place.address},
-      ${place.displayName},
-      ${place.latitude},
-      ${place.longitude},
-      ${place.mapUrl},
-      ${place.typeDisplayName || null},
-      ${place.webUrl || null}
-    )
-  `;
+    const placeWithBoardId = { ...place, boardId };
+    return placeWithBoardId;
+  });
 }
 
 export async function getPlaceRecord(
@@ -59,12 +62,17 @@ export async function getPlaceRecord(
   return place;
 }
 
-export async function getPlaceRecords(boardIds: string[]): Promise<Place[]> {
-  const result = await sql`
-    SELECT * FROM place WHERE board_id = ANY(ARRAY[${boardIds.map((v) => `"${v}"`).join(",")}])
-  `;
-  const places = result.rows.map((v) => rowToPlace(v));
-  return places;
+export async function getPlaceRecords(mapIds: string[]): Promise<Place[]> {
+  return runTransaction(async (client) => {
+    const result = await client.query(
+      /*sql*/ `
+        SELECT * FROM place WHERE map_id = ANY(ARRAY[${mapIds.map((v, i) => `$${i + 1}`).join(",")}])
+      `,
+      mapIds,
+    );
+    const places = result.rows.map((v) => rowToPlace(v));
+    return places;
+  });
 }
 
 function rowToPlace(row: QueryResultRow): Place {
