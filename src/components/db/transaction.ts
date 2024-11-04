@@ -1,15 +1,11 @@
-import { createPool, VercelPoolClient } from "@vercel/postgres";
-
-const pool = createPool({
-  connectionString: process.env.POSTGRES_URL,
-});
+import { db, VercelPoolClient } from "@vercel/postgres";
 
 export async function runTransaction<T>(
   callback: (client: VercelPoolClient) => Promise<T>,
 ): Promise<T> {
   let client: VercelPoolClient | null = null;
   try {
-    client = await pool.connect();
+    client = await db.connect();
     await client.query("BEGIN");
 
     const result = await callback(client);
