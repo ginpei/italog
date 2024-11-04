@@ -4,18 +4,18 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { TimelineSection } from "./TimelineSection";
 import { VStack } from "@/components/layout/VStack";
+import { PlaceCheckin } from "@/components/placeCheckin/PlaceCheckin";
 import { H1, H2 } from "@/components/style/Hn";
 import { Profile } from "@/components/user/Profile";
-import { VisitPlace } from "@/components/visit/VisitPlace";
 
 export interface HomePageContentProps {
   profile: Profile | null;
-  visits: VisitPlace[];
+  checkins: PlaceCheckin[];
 }
 
 export function HomePageContent({
   profile,
-  visits,
+  checkins,
 }: HomePageContentProps): JSX.Element {
   return (
     <VStack className="HomePageContent" gap="gap-8">
@@ -36,7 +36,7 @@ export function HomePageContent({
               </Link>
             </p>
           </VStack>
-          <TimelineSection visits={visits} />
+          <TimelineSection checkins={checkins} />
         </>
       ) : (
         <p className="mx-auto my-16">

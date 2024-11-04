@@ -135,7 +135,9 @@ export async function queryTextSearch(
   return ids;
 }
 
-export async function queryPlaceDetails(id: string): Promise<Place> {
+export async function queryPlaceDetails(
+  id: string,
+): Promise<Omit<Place, "boardId">> {
   const url = `https://places.googleapis.com/v1/places/${id}`;
 
   const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
@@ -163,13 +165,14 @@ export async function queryPlaceDetails(id: string): Promise<Place> {
   return places;
 }
 
-function resToPlace(data: PlaceDetailsApiResponse): Place {
+function resToPlace(data: PlaceDetailsApiResponse): Omit<Place, "boardId"> {
   return {
     address: data.formattedAddress,
+    boardType: "place",
     displayName: data.displayName.text,
-    id: data.id,
     latitude: data.location.latitude,
     longitude: data.location.longitude,
+    mapId: data.id,
     mapUrl: data.googleMapsUri,
     typeDisplayName: data.primaryTypeDisplayName?.text,
     webUrl: data.websiteUri,

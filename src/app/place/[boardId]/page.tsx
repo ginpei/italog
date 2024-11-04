@@ -1,26 +1,26 @@
 import { notFound } from "next/navigation";
 import { PlacePageContent } from "./PlacePageContent";
+import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getPlaceRecord } from "@/components/place/placeDb";
 import { getSessionProfile } from "@/components/user/profileSession";
-import { getUserVisitRecords } from "@/components/visit/visitDb";
 
 export default async function PlacePage({
   params,
 }: {
-  params: { placeId: string };
+  params: { boardId: string };
 }): Promise<JSX.Element> {
   const [profile, place] = await Promise.all([
     getSessionProfile(),
-    getPlaceRecord(params.placeId),
+    getPlaceRecord(params.boardId),
   ]);
-  const userVisits = profile
-    ? await getUserVisitRecords(profile.id, params.placeId)
+  const userCheckins = profile
+    ? await getUserCheckinRecords(profile.id, params.boardId)
     : [];
 
   const visited =
-    userVisits[0] &&
-    new Date(userVisits[0].createdAt).toLocaleDateString() ===
+    userCheckins[0] &&
+    new Date(userCheckins[0].createdAt).toLocaleDateString() ===
       new Date().toLocaleDateString();
 
   if (!place) {
@@ -38,8 +38,8 @@ export default async function PlacePage({
     <StraightPageLayout profile={profile}>
       <PlacePageContent
         place={place}
-        userVisits={userVisits}
-        visited={visited}
+        userCheckins={userCheckins}
+        checkedIn={visited}
       />
     </StraightPageLayout>
   );

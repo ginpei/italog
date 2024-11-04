@@ -5,22 +5,22 @@ import { GetQrCodeResult } from "../api/qrCode/route";
 import { ProfileSection } from "./ProfileSection";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
+import { PlaceCheckin } from "@/components/placeCheckin/PlaceCheckin";
 import { Button } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
 import { Profile } from "@/components/user/Profile";
-import { VisitPlace } from "@/components/visit/VisitPlace";
 
 export interface MyPageContentProps {
+  checkins: PlaceCheckin[];
   friends: Profile[];
   profile: Profile;
-  visits: VisitPlace[];
 }
 
 export function MyPageContent({
+  checkins,
   friends,
   profile,
-  visits,
 }: MyPageContentProps): JSX.Element {
   const [pageUrl, setPageUrl] = useState<string | null>(null);
   const [qrCodeWorking, setQrCodeWorking] = useState(false);
@@ -72,17 +72,19 @@ export function MyPageContent({
         <Link href={`/user/${profile.id}`}>Public profile</Link>
       </p>
       <VStack>
-        <H2>Recent visits</H2>
+        <H2>Recent checkins</H2>
         <ul className="ms-8 list-disc">
-          {visits.map((visit) => (
-            <li key={`${visit.placeId}-${visit.userId}-${visit.date}`}>
-              <Link href={`/place/${visit.placeId}`}>
-                {new Date(visit.createdAt).toLocaleDateString()}:{" "}
-                {visit.placeName}
+          {checkins.map((checkin) => (
+            <li
+              key={`${checkin.boardId}-${checkin.userId}-${checkin.userDate}`}
+            >
+              <Link href={`/place/${checkin.boardId}`}>
+                {new Date(checkin.createdAt).toLocaleDateString()}:{" "}
+                {checkin.placeName}
               </Link>
             </li>
           ))}
-          {visits.length === 0 && <li>No visits yet</li>}
+          {checkins.length === 0 && <li>No checkins yet</li>}
         </ul>
       </VStack>
       <ProfileSection profile={profile} onUpdated={onProfileUpdated} />

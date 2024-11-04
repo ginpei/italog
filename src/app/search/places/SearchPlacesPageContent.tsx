@@ -139,7 +139,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         ) : (
           places.map((place) => (
             <PlaceItem
-              key={place.id}
+              key={place.boardId}
               place={place}
               onPointerEnter={(v) =>
                 setPlacePosition({ lat: v.latitude, long: v.longitude })

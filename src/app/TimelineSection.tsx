@@ -1,44 +1,50 @@
 import { VStack } from "@/components/layout/VStack";
+import { PlaceCheckin } from "@/components/placeCheckin/PlaceCheckin";
 import { H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
-import { VisitPlace } from "@/components/visit/VisitPlace";
 
 export interface TimelineSectionProps {
-  visits: VisitPlace[];
+  checkins: PlaceCheckin[];
 }
 
-export function TimelineSection({ visits }: TimelineSectionProps): JSX.Element {
-  // Group visits by date
-  const visitsByDate = visits.reduce(
-    (acc, visit) => {
-      if (!acc[visit.date]) {
-        acc[visit.date] = [];
+export function TimelineSection({
+  checkins,
+}: TimelineSectionProps): JSX.Element {
+  // Group checkins by date
+  const checkinsByDate = checkins.reduce(
+    (acc, checkin) => {
+      if (!acc[checkin.userDate]) {
+        acc[checkin.userDate] = [];
       }
-      acc[visit.date].push(visit);
+      acc[checkin.userDate].push(checkin);
       return acc;
     },
-    {} as Record<string, VisitPlace[]>,
+    {} as Record<string, PlaceCheckin[]>,
   );
 
   return (
     <VStack className="TimelineSection">
       <H2>Timeline</H2>
       <ul>
-        {Object.entries(visitsByDate).map(([date, visitsOnDate]) => (
+        {Object.entries(checkinsByDate).map(([date, checkinsOnDate]) => (
           <li key={date}>
             <strong>{date}</strong>
             <ul className="ms-8 list-disc">
-              {visitsOnDate.map((visit) => (
-                <li key={`${visit.userId}-${visit.placeId}-${visit.date}`}>
-                  <Link href={`/user/${visit.userId}`}>{visit.userName}</Link> -{" "}
-                  {visit.placeName}
+              {checkinsOnDate.map((checkin) => (
+                <li
+                  key={`${checkin.userId}-${checkin.boardId}-${checkin.userDate}`}
+                >
+                  <Link href={`/user/${checkin.userId}`}>
+                    {checkin.userName}
+                  </Link>{" "}
+                  - {checkin.placeName}
                 </li>
               ))}
             </ul>
           </li>
         ))}
       </ul>
-      {visits.length === 0 && <p>No activities yet.</p>}
+      {checkins.length === 0 && <p>No activities yet.</p>}
     </VStack>
   );
 }

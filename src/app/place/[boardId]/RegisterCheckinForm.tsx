@@ -1,25 +1,25 @@
+import { Checkin } from "@/components/checkin/Checkin";
 import { Button } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
-import { Visit } from "@/components/visit/Visit";
 
-export interface RegisterVisitFormProps {
+export interface RegisterCheckinFormProps {
+  checkedIn: boolean;
+  checkin: Checkin;
   disabled: boolean;
-  onChange: (visit: Visit) => void;
-  onSubmit: (visit: Visit) => void;
-  visit: Visit;
-  visited: boolean;
+  onChange: (checkin: Checkin) => void;
+  onSubmit: (checkin: Checkin) => void;
 }
 
-export function RegisterVisitForm({
+export function RegisterCheckinForm({
+  checkedIn,
+  checkin,
   disabled,
   onChange,
   onSubmit,
-  visit,
-  visited,
-}: RegisterVisitFormProps): JSX.Element {
+}: RegisterCheckinFormProps): JSX.Element {
   const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit(visit);
+    onSubmit(checkin);
   };
 
   const onInputChange = (
@@ -27,24 +27,24 @@ export function RegisterVisitForm({
   ) => {
     const { name, value } = event.target;
     if (name === "comment") {
-      onChange({ ...visit, comment: value });
+      onChange({ ...checkin, comment: value });
     }
   };
 
   const onCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
     if (name === "star") {
-      onChange({ ...visit, starred: checked });
+      onChange({ ...checkin, starred: checked });
     }
   };
 
   return (
-    <form className="RegisterVisitForm" onSubmit={onFormSubmit}>
+    <form className="RegisterCheckinForm" onSubmit={onFormSubmit}>
       <fieldset className="flex flex-col gap-4" disabled={disabled}>
-        <H2>Register visit</H2>
+        <H2>Register checkin</H2>
         <label>
           <input
-            checked={visit.starred}
+            checked={checkin.starred}
             name="star"
             onChange={onCheckboxChange}
             type="checkbox"
@@ -57,10 +57,10 @@ export function RegisterVisitForm({
             className="border border-gray-400"
             name="comment"
             onChange={onInputChange}
-            value={visit.comment}
+            value={checkin.comment}
           />
         </label>
-        <Button>{visited ? "Update" : "Register"}</Button>
+        <Button>{checkedIn ? "Update" : "Register"}</Button>
       </fieldset>
     </form>
   );

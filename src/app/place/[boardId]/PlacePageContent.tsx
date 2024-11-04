@@ -4,57 +4,63 @@ import { GlobeAltIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { ReactNode, useMemo, useState } from "react";
-import { RegisterVisitForm } from "./RegisterVisitForm";
+import { RegisterCheckinForm } from "./RegisterCheckinForm";
+import { Checkin } from "@/components/checkin/Checkin";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
+import { requestRegisterVisit } from "@/components/placeCheckin/registerVisitRequest";
 import { H2 } from "@/components/style/Hn";
-import { Visit } from "@/components/visit/Visit";
-import { requestRegisterVisit } from "@/components/visit/registerVisitRequest";
 
 export interface PlacePageContentProps {
+  checkedIn: boolean;
   place: Place;
-  userVisits: Visit[];
-  visited: boolean;
+  userCheckins: Checkin[];
 }
 
 export function PlacePageContent({
   place,
-  userVisits,
-  visited,
+  userCheckins,
+  checkedIn,
 }: PlacePageContentProps): JSX.Element {
-  const todaysVisit = findTodaysVisit(userVisits);
-  const [editingVisit, setEditingVisit] = useState<Visit>(
-    todaysVisit || {
+  const todaysCheckin = findTodaysCheckin(userCheckins);
+  const [editingCheckin, setEditingCheckin] = useState<Checkin>(
+    todaysCheckin || {
+      boardId: place.boardId,
       comment: "",
       createdAt: 0,
-      date: "",
-      placeId: place.id,
+      id: "",
       starred: false,
+      userDate: "",
       userId: "",
     },
   );
-  const [liveUserVisits, setLiveUserVisits] = useState(userVisits);
+  const [liveUserCheckins, setLiveUserCheckins] = useState(userCheckins);
   const [formWorking, setFormWorking] = useState(false);
   const siteHostName = useHostNameOf(place.webUrl);
 
-  const onRegisterVisitChange = async (visit: Visit) => {
-    setEditingVisit(visit);
+  const onRegisterCheckinChange = async (checkin: Checkin) => {
+    setEditingCheckin(checkin);
   };
 
-  const onRegisterVisitSubmit = async (visit: Visit) => {
+  const onRegisterCheckinSubmit = async (checkin: Checkin) => {
     try {
       setFormWorking(true);
       const timezoneOffset = new Date().getTimezoneOffset();
-      await requestRegisterVisit({ timezoneOffset, visit, visited });
-      setLiveUserVisits((prevVisits) => {
-        const newVisits = prevVisits.filter(
-          (v) => v.date !== visit.date || v.placeId !== visit.placeId,
+      await requestRegisterVisit({
+        timezoneOffset,
+        checkin: checkin,
+        checkedIn: checkedIn,
+      });
+      setLiveUserCheckins((prevCheckins) => {
+        const newCheckins = prevCheckins.filter(
+          (v) =>
+            v.userDate !== checkin.userDate || v.boardId !== checkin.boardId,
         );
-        return [...newVisits, visit];
+        return [...newCheckins, checkin];
       });
     } catch (error) {
-      console.error("Failed to register visit", error);
-      alert("Failed to register visit"); // TODO
+      console.error("Failed to register checkin", error);
+      alert("Failed to register checkin"); // TODO
     } finally {
       setFormWorking(false);
     }
@@ -74,24 +80,24 @@ export function PlacePageContent({
         )}
       </div>
       <hr />
-      <RegisterVisitForm
+      <RegisterCheckinForm
         disabled={formWorking}
-        onChange={onRegisterVisitChange}
-        onSubmit={onRegisterVisitSubmit}
-        visit={editingVisit}
-        visited={visited}
+        onChange={onRegisterCheckinChange}
+        onSubmit={onRegisterCheckinSubmit}
+        checkin={editingCheckin}
+        checkedIn={checkedIn}
       />
       <hr />
-      <H2>Your visits</H2>
+      <H2>Your checkins</H2>
       <ul className="ms-4 list-disc">
-        {liveUserVisits.map((visit) => (
-          <li key={`${visit.placeId}-${visit.userId}-${visit.date}`}>
-            {new Date(visit.createdAt).toLocaleDateString()}{" "}
-            {visit.starred && "⭐ "}
-            {visit.comment}
+        {liveUserCheckins.map((checkin) => (
+          <li key={`${checkin.boardId}-${checkin.userId}-${checkin.userDate}`}>
+            {new Date(checkin.createdAt).toLocaleDateString()}{" "}
+            {checkin.starred && "⭐ "}
+            {checkin.comment}
           </li>
         ))}
-        {liveUserVisits.length < 1 && <li>No visits yet</li>}
+        {liveUserCheckins.length < 1 && <li>No checkins yet</li>}
       </ul>
     </VStack>
   );
@@ -137,7 +143,7 @@ function useHostNameOf(url: string | undefined): string | undefined {
   }, [url]);
 }
 
-function findTodaysVisit(visits: Visit[]): Visit | undefined {
+function findTodaysCheckin(checkins: Checkin[]): Checkin | undefined {
   const today = new Date().toISOString().slice(0, 10);
-  return visits.find((visit) => visit.date === today);
+  return checkins.find((checkin) => checkin.userDate === today);
 }

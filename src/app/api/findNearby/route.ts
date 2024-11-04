@@ -5,7 +5,10 @@ import {
 } from "@/app/api/findNearby/queryPlaceApi";
 import { toError } from "@/components/error/errorUtil";
 import { Place } from "@/components/place/Place";
-import { getPlaceRecords, savePlaceRecord } from "@/components/place/placeDb";
+import {
+  getPlaceRecords,
+  createPlaceRecordSet,
+} from "@/components/place/placeDb";
 import {
   isPlaceTypeCategory,
   PlaceTypeCategory,
@@ -59,24 +62,24 @@ export async function GET(request: Request) {
       );
     }
 
-    const ids = textQuery
+    const mapIds = textQuery
       ? await queryTextSearch(textQuery, category, lat, long)
       : await queryNearbySearch(includedTypes, lat, long);
-    const existingPlaces = await getPlaceRecords(ids);
-    const newPlaceIds = ids.filter(
-      (id) => !existingPlaces.find((p) => p.id === id),
+    const existingPlaces = await getPlaceRecords(mapIds);
+    const newPlaceIds = mapIds.filter(
+      (id) => !existingPlaces.find((p) => p.mapId === id),
     );
     const newPlaces = await Promise.all(
       newPlaceIds.map(async (id) => {
-        const place = await queryPlaceDetails(id);
-        await savePlaceRecord(place);
+        const placeData = await queryPlaceDetails(id);
+        const place = await createPlaceRecordSet(placeData);
         return place;
       }),
     );
-    const places = ids.map(
+    const places = mapIds.map(
       (id) =>
-        existingPlaces.find((p) => p.id === id) ||
-        newPlaces.find((p) => p.id === id)!,
+        existingPlaces.find((p) => p.mapId === id) ||
+        newPlaces.find((p) => p.mapId === id)!,
     );
 
     const jsonData: FindPlaceResponse = { places, ok: true };

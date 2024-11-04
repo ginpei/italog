@@ -1,17 +1,17 @@
 import { NextApiResponse } from "next";
 import { NextRequest } from "next/server";
+import { Checkin } from "@/components/checkin/Checkin";
+import {
+  createCheckinRecord,
+  updateCheckinRecord,
+} from "@/components/checkin/checkinDb";
 import { UserError } from "@/components/error/UserError";
 import { getSessionProfile } from "@/components/user/profileSession";
-import { Visit } from "@/components/visit/Visit";
-import {
-  createVisitRecord,
-  updateVisitRecord,
-} from "@/components/visit/visitDb";
 
-export interface RegisterVisitPayload {
+export interface RegisterCheckinPayload {
+  checkedIn: boolean;
+  checkin: Checkin;
   timezoneOffset: number;
-  visit: Visit;
-  visited: boolean;
 }
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
@@ -22,23 +22,24 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       throw new Error("User not authenticated");
     }
 
-    const body: RegisterVisitPayload = await req.json();
-    const visit = body.visit;
+    const body: RegisterCheckinPayload = await req.json();
+    const checkin = body.checkin; // TODO
 
     const now = Date.now();
-    const data: Visit = {
-      comment: visit.comment,
+    const data: Checkin = {
+      boardId: checkin.boardId,
+      comment: checkin.comment,
       createdAt: now,
-      date: getDateInUserTimeZone(now, body.timezoneOffset),
-      placeId: visit.placeId,
-      starred: visit.starred,
+      id: "",
+      starred: checkin.starred,
+      userDate: getDateInUserTimeZone(now, body.timezoneOffset),
       userId: profile.id,
     };
 
-    if (body.visited) {
-      await updateVisitRecord(data);
+    if (body.checkedIn) {
+      await updateCheckinRecord(data);
     } else {
-      await createVisitRecord(data);
+      await createCheckinRecord(data);
     }
 
     return Response.json({ ok: true });
