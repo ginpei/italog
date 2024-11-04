@@ -8,11 +8,11 @@ export function createBoardRecord(
   return client
     .query(
       /*sql*/ `
-        INSERT INTO board (board_type, display_name) VALUES ($1, $2) RETURNING id
+        INSERT INTO board (board_type, display_name) VALUES ($1, $2) RETURNING board_id
       `,
       [board.boardType, board.displayName],
     )
     .then((result) => {
-      return result.rows[0].id;
+      return result.rows[0].board_id;
     });
 }

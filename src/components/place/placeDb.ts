@@ -44,7 +44,9 @@ export async function getPlaceRecord(
   );
 
   const result = await sql`
-    SELECT * FROM place WHERE board_id = ${boardId}
+    SELECT p.*, b.display_name FROM place p
+    JOIN board b ON p.board_id = b.board_id
+    WHERE p.board_id = ${boardId}
   `;
   const row = result.rows[0];
   if (!row) {
@@ -65,7 +67,9 @@ export async function getPlaceRecords(mapIds: string[]): Promise<Place[]> {
   return runTransaction(async (client) => {
     const result = await client.query(
       /*sql*/ `
-        SELECT * FROM place WHERE map_id = ANY(ARRAY[${mapIds.map((v, i) => `$${i + 1}`).join(",")}])
+        SELECT p.*, b.display_name FROM place p
+        JOIN board b ON p.board_id = b.board_id
+        WHERE p.map_id = ANY(ARRAY[${mapIds.map((v, i) => `$${i + 1}`).join(",")}])
       `,
       mapIds,
     );
