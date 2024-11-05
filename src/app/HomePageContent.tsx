@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPinIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { TimelineSection } from "./TimelineSection";
 import { VStack } from "@/components/layout/VStack";
@@ -24,7 +24,7 @@ export function HomePageContent({
         <>
           <VStack>
             <H2>Search</H2>
-            <p className="mx-auto">
+            <p className="mx-auto flex gap-4">
               <Link
                 className="grid size-36 items-center justify-center border border-gray-400 bg-gray-50 hover:bg-gray-100 active:bg-gray-200"
                 href="/place/search"
@@ -32,6 +32,15 @@ export function HomePageContent({
                 <span>
                   <MapPinIcon className="mx-auto size-8" />
                   Place
+                </span>
+              </Link>
+              <Link
+                className="grid size-36 items-center justify-center border border-gray-400 bg-gray-50 hover:bg-gray-100 active:bg-gray-200"
+                href="/product/search"
+              >
+                <span>
+                  <ShoppingBagIcon className="mx-auto size-8" />
+                  Product
                 </span>
               </Link>
             </p>
