@@ -25,7 +25,7 @@ export function SearchNearbyForm({
   ) => {
     const { name, value } = event.target;
     if (name === "category") {
-      if (!isPlaceTypeCategory(value)) {
+      if (value !== "" && !isPlaceTypeCategory(value)) {
         throw new Error(`Invalid category: ${value}`);
       }
       onChange({ ...params, category: value });
@@ -52,6 +52,7 @@ export function SearchNearbyForm({
             onChange={onInputChange}
             value={params.category}
           >
+            <option value="">🌐 All</option>
             {popularPlaceTypes.map(({ categoryKey, displayName, emoji }) => (
               <option key={categoryKey} value={categoryKey}>
                 {emoji} {displayName}

@@ -87,7 +87,7 @@ export async function queryNearbySearch(
  */
 export async function queryTextSearch(
   textQuery: string,
-  category: PlaceTypeCategory,
+  category: "" | PlaceTypeCategory,
   lat: number,
   long: number,
 ): Promise<string[]> {

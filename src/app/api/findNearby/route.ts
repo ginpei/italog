@@ -3,6 +3,7 @@ import {
   queryPlaceDetails,
   queryTextSearch,
 } from "@/app/api/findNearby/queryPlaceApi";
+import { ToSearchParams } from "@/components/api/apiTypes";
 import { toError } from "@/components/error/errorUtil";
 import { Place } from "@/components/place/Place";
 import {
@@ -16,7 +17,7 @@ import {
 } from "@/components/place/placeTypes";
 
 export interface FindPlaceParams {
-  category: PlaceTypeCategory;
+  category: "" | PlaceTypeCategory;
   lat: number;
   long: number;
   textQuery: string;
@@ -37,10 +38,12 @@ export async function GET(request: Request) {
   const url = request.url;
 
   try {
-    const reqParams = Object.fromEntries(new URL(url).searchParams.entries());
+    const reqParams = Object.fromEntries(
+      new URL(url).searchParams.entries(),
+    ) as ToSearchParams<FindPlaceParams>;
 
     const category = reqParams.category;
-    if (!category || !isPlaceTypeCategory(category)) {
+    if (!category || !(category === "" || isPlaceTypeCategory(category))) {
       return new Response(
         JSON.stringify({ message: "Invalid category", ok: false }),
         { status: 400 },
