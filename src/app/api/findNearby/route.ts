@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     ) as ToSearchParams<FindPlaceParams>;
 
     const category = reqParams.category;
-    if (!category || !(category === "" || isPlaceTypeCategory(category))) {
+    if (category !== "" && (!category || !isPlaceTypeCategory(category))) {
       return new Response(
         JSON.stringify({ message: "Invalid category", ok: false }),
         { status: 400 },
