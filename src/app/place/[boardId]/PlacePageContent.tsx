@@ -8,7 +8,7 @@ import { RegisterCheckinForm } from "./RegisterCheckinForm";
 import { Checkin } from "@/components/checkin/Checkin";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
-import { requestRegisterVisit } from "@/components/placeCheckin/registerVisitRequest";
+import { requestRegisterVisit } from "@/components/placeCheckin/checkInPlace";
 import { H2 } from "@/components/style/Hn";
 
 export interface PlacePageContentProps {

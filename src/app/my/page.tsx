@@ -1,6 +1,6 @@
 import { MyPageContent } from "./MyPageContent";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
-import { getUserVisitPlace } from "@/components/placeCheckin/visitPlaceDb";
+import { getUserPlaceCheckin } from "@/components/placeCheckin/placeCheckinDb";
 import { getFriendProfileRecords } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
 
@@ -12,7 +12,7 @@ export default async function Home() {
   }
 
   const [checkins, friends] = await Promise.all([
-    getUserVisitPlace(profile.id),
+    getUserPlaceCheckin(profile.id),
     getFriendProfileRecords(profile.id),
   ]);
 

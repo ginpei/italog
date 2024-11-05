@@ -1,7 +1,7 @@
 import { sql } from "@vercel/postgres";
 import { PlaceCheckin } from "./PlaceCheckin";
 
-export async function getUserVisitPlace(
+export async function getUserPlaceCheckin(
   userId: string,
   options: { limit?: number; offset?: number } = {},
 ): Promise<PlaceCheckin[]> {
@@ -31,7 +31,7 @@ export async function getUserVisitPlace(
   return placeCheckin;
 }
 
-export async function getVisitTimeline(
+export async function getCheckinTimeline(
   userId: string,
 ): Promise<PlaceCheckin[]> {
   const result = await sql`
