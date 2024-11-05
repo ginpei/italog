@@ -14,7 +14,9 @@ export function TextInput({
       className={`
         ${className} TextInput
         h-10 rounded-none border border-gray-400 bg-white px-2
+        invalid:bg-red-50
         hover:border-gray-500
+        focus:bg-white
         disabled:bg-gray-300 disabled:text-gray-500
       `}
       type="text"
