@@ -169,12 +169,12 @@ interface RegisterFormContext {
 }
 
 function saveContext(w: Window, context: RegisterFormContext): void {
-  const key = "/checkin/place#context";
+  const key = "/search/place#context";
   w.sessionStorage.setItem(key, JSON.stringify(context));
 }
 
 function loadContext(w: Window): RegisterFormContext | null {
-  const key = "/checkin/place#context";
+  const key = "/search/place#context";
   const data = w.sessionStorage.getItem(key);
   if (!data) {
     return null;
