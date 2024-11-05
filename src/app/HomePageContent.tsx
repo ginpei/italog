@@ -27,7 +27,7 @@ export function HomePageContent({
             <p className="mx-auto">
               <Link
                 className="grid size-36 items-center justify-center border border-gray-400 bg-gray-50 hover:bg-gray-100 active:bg-gray-200"
-                href="/search/place"
+                href="/place/search"
               >
                 <span>
                   <MapPinIcon className="mx-auto size-8" />
