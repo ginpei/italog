@@ -1,3 +1,7 @@
+export type ToSearchParams<T extends object> = Partial<{
+  [K in keyof T]: string;
+}>;
+
 /**
  * @example
  * export type PostProfileResult = ResultOrError<{
