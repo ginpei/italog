@@ -44,6 +44,7 @@ export async function GET(request: Request) {
 
     const category = reqParams.category;
     if (category !== "" && (!category || !isPlaceTypeCategory(category))) {
+      console.error(`Invalid category: ${category}`);
       return new Response(
         JSON.stringify({ message: "Invalid category", ok: false }),
         { status: 400 },
@@ -59,6 +60,7 @@ export async function GET(request: Request) {
     const lat = Number(reqParams.lat);
     const long = Number(reqParams.long);
     if (Number.isNaN(lat) || Number.isNaN(long)) {
+      console.error(`Invalid lat/long: ${lat}/${long}`);
       return new Response(
         JSON.stringify({ message: "Location is required", ok: false }),
         { status: 400 },
