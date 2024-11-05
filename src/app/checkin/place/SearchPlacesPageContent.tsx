@@ -71,7 +71,6 @@ export function SearchPlacesPageContent(): JSX.Element {
           setPlaces(lastPlaces);
           return;
         }
-        setLastParams(newParams);
         setParams(newParams);
 
         const data = await findNearby(newParams);
@@ -79,6 +78,7 @@ export function SearchPlacesPageContent(): JSX.Element {
           throw new Error(data.message ?? "Unknown error on fetch");
         }
 
+        setLastParams(newParams);
         setPlaces(data.places);
         saveContext(window, {
           params: newParams,
