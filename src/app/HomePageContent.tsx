@@ -23,11 +23,11 @@ export function HomePageContent({
       {profile ? (
         <>
           <VStack>
-            <H2>Find</H2>
+            <H2>Check in</H2>
             <p className="mx-auto">
               <Link
                 className="grid size-36 items-center justify-center border border-gray-400 bg-gray-50 hover:bg-gray-100 active:bg-gray-200"
-                href="/search/places"
+                href="/checkin/place"
               >
                 <span>
                   <MapPinIcon className="mx-auto size-8" />
