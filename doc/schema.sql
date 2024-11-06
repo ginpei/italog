@@ -38,9 +38,6 @@ CREATE TABLE board (
   display_name VARCHAR(255) NOT NULL
 );
 
-INSERT INTO board (board_id, board_type, display_name )
-VALUES ('63fc77f7-a986-48a6-ab6a-ea544eb0ca8c', 'place', 'Tim Hortons');
-
 -- place
 CREATE TABLE place (
   board_id UUID PRIMARY KEY,
@@ -56,6 +53,8 @@ CREATE TABLE place (
 
 CREATE INDEX idx_map_id ON place (map_id);
 
+INSERT INTO board (board_id, board_type, display_name )
+VALUES ('63fc77f7-a986-48a6-ab6a-ea544eb0ca8c', 'place', 'Tim Hortons');
 INSERT INTO place (board_id, map_id, address, latitude, longitude, map_url, type_display_name, web_url)
 VALUES (
   '63fc77f7-a986-48a6-ab6a-ea544eb0ca8c',
@@ -66,6 +65,23 @@ VALUES (
   'https://maps.google.com/?cid=6246325907208635625',
   'Coffee Shop',
   'https://locations.timhortons.ca/en/bc/vancouver/555-hastings-st-west'
+);
+
+-- product
+CREATE TABLE product (
+  board_id UUID PRIMARY KEY,
+  barcode VARCHAR(255),
+  FOREIGN KEY (board_id) REFERENCES board(board_id)
+);
+
+CREATE INDEX idx_barcode ON product (barcode);
+
+INSERT INTO board (board_id, board_type, display_name )
+VALUES ('135ed8c0-37cc-4ec9-a03c-a4ab5026582a', 'product', 'excel white');
+INSERT INTO product (board_id, barcode)
+VALUES (
+  '135ed8c0-37cc-4ec9-a03c-a4ab5026582a',
+  '0064900409554'
 );
 
 -- checkin

@@ -4,4 +4,4 @@ export interface Board {
   displayName: string;
 }
 
-export type BoardType = "place";
+export type BoardType = "place" | "product";
