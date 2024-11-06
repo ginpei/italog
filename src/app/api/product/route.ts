@@ -1,5 +1,6 @@
 import { ResultOrError } from "@/components/api/apiTypes";
 import { Product } from "@/components/product/Product";
+import { getProductRecordByBarcode } from "@/components/product/productDb";
 
 export interface SearchProductPayload {
   barcode?: string;
@@ -33,8 +34,7 @@ export async function GET(req: Request) {
     }
 
     if (barcode) {
-      // const product = await getProductRecordByBarcode(barcode);
-      const product = null;
+      const product = await getProductRecordByBarcode(barcode);
       if (!product) {
         return Response.json(
           {
