@@ -12,6 +12,7 @@ export function ProductPageContent({
   return (
     <VStack className="ProductPageContent">
       <H1>{product.displayName}</H1>
+      <p>Barcode: {product.barcode}</p>
     </VStack>
   );
 }
