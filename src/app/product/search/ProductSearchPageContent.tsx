@@ -1,6 +1,7 @@
 "use client";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BarCodeReader } from "./BarCodeReader";
 import { fetchSearchProductApi } from "@/app/api/product/searchProductApis";
@@ -18,6 +19,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   const [barcode, setBarcode] = useState("");
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const router = useRouter();
 
   const onBarcodeFormSubmit = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -28,11 +30,14 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
 
     try {
       const product = await fetchSearchProductApi({ barcode });
-      console.log("# product", product);
+      if (!product) {
+        throw new Error(`Product with barcode ${barcode} not found`);
+      }
+
+      router.push(`/product/${product.boardId}`);
     } catch (error) {
       console.error(error);
       setError(toError(error));
-    } finally {
       setWorking(false);
     }
   };
