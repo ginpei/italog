@@ -3,6 +3,7 @@ import { Product } from "@/components/product/Product";
 import {
   getProductRecordByBarcode,
   getProductRecordsByText,
+  createProductToDatabase,
 } from "@/components/product/productDb";
 
 export interface SearchProductPayload {
@@ -13,6 +14,11 @@ export interface SearchProductPayload {
 export type SearchProductResult = ResultOrError<{
   ok: true;
   products: Product[];
+}>;
+
+export type CreateProductResult = ResultOrError<{
+  ok: true;
+  product: Product;
 }>;
 
 export async function GET(req: Request) {
@@ -70,6 +76,50 @@ export async function GET(req: Request) {
       {
         status: 500,
       },
+    );
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const { barcode, displayName } = await req.json();
+
+    if (!barcode || !displayName) {
+      return Response.json(
+        {
+          ok: false,
+          error: "Barcode and display name are required",
+        } satisfies CreateProductResult,
+        { status: 400 },
+      );
+    }
+
+    // TODO check if the barcode is already in use
+
+    const newProduct: Product = {
+      barcode,
+      boardId: "",
+      boardType: "product",
+      displayName,
+    };
+
+    const boardId = await createProductToDatabase(newProduct);
+
+    return Response.json(
+      {
+        ok: true,
+        product: { ...newProduct, boardId },
+      } satisfies CreateProductResult,
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error(error);
+    return Response.json(
+      {
+        ok: false,
+        error: "Internal server error",
+      },
+      { status: 500 },
     );
   }
 }

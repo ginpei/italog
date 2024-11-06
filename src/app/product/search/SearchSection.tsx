@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { fetchSearchProductApi } from "@/app/api/product/searchProductApis";
+import { fetchSearchProductApi } from "@/app/api/product/productApis";
 import { VStack } from "@/components/layout/VStack";
 import { Product } from "@/components/product/Product";
 import { Button } from "@/components/style/Button";

@@ -1,10 +1,14 @@
-import { SearchProductPayload, SearchProductResult } from "./route";
+import {
+  CreateProductResult,
+  SearchProductPayload,
+  SearchProductResult,
+} from "./route";
 import { UserError } from "@/components/error/UserError";
 import { Product } from "@/components/product/Product";
 
 export async function fetchSearchProductApi(
   params: SearchProductPayload,
-): Promise<Product[] | null> {
+): Promise<Product[]> {
   const endpoint = "/api/product";
 
   const oParams = new URLSearchParams({
@@ -20,4 +24,25 @@ export async function fetchSearchProductApi(
 
   const products = result.products;
   return products;
+}
+
+export async function createProductApi(product: Product): Promise<Product> {
+  const endpoint = "/api/product";
+
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+
+  const result: CreateProductResult = await res.json();
+
+  if (!result || !result.ok) {
+    throw new UserError(result.error ?? "Failed to create product");
+  }
+
+  const createdProduct = result.product;
+  return createdProduct;
 }

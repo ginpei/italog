@@ -70,7 +70,7 @@ VALUES (
 -- product
 CREATE TABLE product (
   board_id UUID PRIMARY KEY,
-  barcode VARCHAR(255),
+  barcode VARCHAR(255) UNIQUE,
   FOREIGN KEY (board_id) REFERENCES board(board_id)
 );
 

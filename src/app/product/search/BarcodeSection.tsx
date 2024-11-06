@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BarCodeReader } from "./BarCodeReader";
-import { fetchSearchProductApi } from "@/app/api/product/searchProductApis";
+import { fetchSearchProductApi } from "@/app/api/product/productApis";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Button } from "@/components/style/Button";
@@ -25,7 +25,7 @@ export function BarcodeSection(): JSX.Element {
     setWorking(true);
 
     try {
-      const product = await fetchSearchProductApi({ barcode });
+      const [product] = await fetchSearchProductApi({ barcode });
       if (!product) {
         throw new Error(`Product with barcode ${barcode} not found`);
       }
