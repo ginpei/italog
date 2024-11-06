@@ -157,6 +157,7 @@ export function BarCodeReader({ onRead }: BarCodeReaderProps): JSX.Element {
           [&>br]:hidden
         "
         ref={refContainer}
+        style={{ transform: "scaleX(-1)" }}
       ></div>
     </VStack>
   );
