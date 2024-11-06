@@ -1,6 +1,9 @@
 import { ResultOrError } from "@/components/api/apiTypes";
 import { Product } from "@/components/product/Product";
-import { getProductRecordByBarcode } from "@/components/product/productDb";
+import {
+  getProductRecordByBarcode,
+  getProductRecordsByText,
+} from "@/components/product/productDb";
 
 export interface SearchProductPayload {
   barcode?: string;
@@ -9,7 +12,7 @@ export interface SearchProductPayload {
 
 export type SearchProductResult = ResultOrError<{
   ok: true;
-  product: Product | null;
+  products: Product[];
 }>;
 
 export async function GET(req: Request) {
@@ -26,7 +29,7 @@ export async function GET(req: Request) {
         {
           ok: false,
           error: "At least either barcode or keyword is required",
-        },
+        } satisfies SearchProductResult,
         {
           status: 400,
         },
@@ -35,27 +38,35 @@ export async function GET(req: Request) {
 
     if (barcode) {
       const product = await getProductRecordByBarcode(barcode);
-      if (!product) {
-        return Response.json(
-          {
-            ok: false,
-            error: `Product with barcode ${barcode} not found`,
-          },
-          {
-            status: 404,
-          },
-        );
-      }
-
-      return Response.json({ ok: true, product });
+      return Response.json({
+        ok: true,
+        products: product ? [product] : [],
+      } satisfies SearchProductResult);
     }
+
+    if (!keyword) {
+      console.error("Keyword is required");
+      return Response.json(
+        {
+          ok: false,
+          error: "Keyword is required",
+        } satisfies SearchProductResult,
+        {
+          status: 400,
+        },
+      );
+    }
+
+    const products = await getProductRecordsByText(keyword);
+
+    return Response.json({ ok: true, products } satisfies SearchProductResult);
   } catch (error) {
     console.error(error);
     return Response.json(
       {
         ok: false,
         error: "Internal server error",
-      },
+      } satisfies SearchProductResult,
       {
         status: 500,
       },

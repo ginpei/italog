@@ -35,6 +35,18 @@ export async function getProductRecordByBarcode(
   return product;
 }
 
+export async function getProductRecordsByText(
+  query: string,
+): Promise<Product[]> {
+  const result = await sql`
+    SELECT p.*, b.display_name FROM product p
+    JOIN board b ON p.board_id = b.board_id
+    WHERE b.display_name ILIKE ${"%" + query + "%"}
+    LIMIT 10
+  `;
+  return result.rows.map(rowToProduct);
+}
+
 function rowToProduct(row: QueryResultRow): Product {
   return {
     barcode: row.barcode,
