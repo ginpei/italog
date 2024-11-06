@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPinIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { TimelineSection } from "./TimelineSection";
 import { VStack } from "@/components/layout/VStack";
