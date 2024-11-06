@@ -1,4 +1,4 @@
-import { ProductSearchPageContent } from "./ProductSearchPageContent";
+import { SearchProductPageContent } from "./SearchProductPageContent";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getSessionProfile } from "@/components/user/profileSession";
 
@@ -17,7 +17,7 @@ export default async function RegisterPage(): Promise<JSX.Element> {
 
   return (
     <StraightPageLayout profile={profile}>
-      <ProductSearchPageContent recentCheckins={recentCheckins} />
+      <SearchProductPageContent recentCheckins={recentCheckins} />
     </StraightPageLayout>
   );
 }
