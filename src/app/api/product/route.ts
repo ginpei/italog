@@ -16,10 +16,16 @@ export type SearchProductResult = ResultOrError<{
   products: Product[];
 }>;
 
-export type CreateProductResult = ResultOrError<{
-  ok: true;
-  product: Product;
-}>;
+export type CreateProductResult =
+  | {
+      ok: true;
+      product: Product;
+    }
+  | {
+      boardId?: string;
+      error: string;
+      ok: false;
+    };
 
 export async function GET(req: Request) {
   const sUrl = req.url;
@@ -98,6 +104,7 @@ export async function POST(req: Request) {
     if (existingProduct) {
       return Response.json(
         {
+          boardId: existingProduct.boardId,
           ok: false,
           error: "Barcode is already in use",
         } satisfies CreateProductResult,

@@ -40,7 +40,7 @@ export async function createProductApi(product: Product): Promise<Product> {
   const result: CreateProductResult = await res.json();
 
   if (!result || !result.ok) {
-    throw new UserError(result.error ?? "Failed to create product");
+    throw new UserError(result.error ?? "Failed to create product", result);
   }
 
   const createdProduct = result.product;
