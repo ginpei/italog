@@ -3,6 +3,8 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { BarCodeReader } from "./BarCodeReader";
+import { fetchSearchProductApi } from "@/app/api/product/searchProductApis";
+import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Button } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
@@ -14,10 +16,25 @@ export interface ProductSearchPageContentProps {
 
 export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX.Element {
   const [barcode, setBarcode] = useState("");
+  const [working, setWorking] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
-  const onBarcodeFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onBarcodeFormSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
-    console.log("Barcode form submitted");
+    setError(null);
+    setWorking(true);
+
+    try {
+      const product = await fetchSearchProductApi({ barcode });
+      console.log("# product", product);
+    } catch (error) {
+      console.error(error);
+      setError(toError(error));
+    } finally {
+      setWorking(false);
+    }
   };
 
   const onBarcodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,8 +57,9 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
           Hint: you might want to use speech recognition on your device to enter
           the barcode by reading it out loud.
         </p>
+        {error && <p className="text-rose-800">⚠️ {error.message}</p>}
         <form onSubmit={onBarcodeFormSubmit}>
-          <fieldset className="flex items-stretch gap-2">
+          <fieldset className="flex items-stretch gap-2" disabled={working}>
             <TextInput
               className="w-full"
               inputMode="numeric"
