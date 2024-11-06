@@ -1,9 +1,9 @@
 import { ResultOrError } from "@/components/api/apiTypes";
 import { Product } from "@/components/product/Product";
 import {
+  createProductToDatabase,
   getProductRecordByBarcode,
   getProductRecordsByText,
-  createProductToDatabase,
 } from "@/components/product/productDb";
 
 export interface SearchProductPayload {
@@ -94,7 +94,16 @@ export async function POST(req: Request) {
       );
     }
 
-    // TODO check if the barcode is already in use
+    const existingProduct = await getProductRecordByBarcode(barcode);
+    if (existingProduct) {
+      return Response.json(
+        {
+          ok: false,
+          error: "Barcode is already in use",
+        } satisfies CreateProductResult,
+        { status: 400 },
+      );
+    }
 
     const newProduct: Product = {
       barcode,
