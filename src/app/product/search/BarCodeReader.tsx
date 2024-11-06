@@ -119,20 +119,14 @@ export function BarCodeReader({ onRead }: BarCodeReaderProps): JSX.Element {
       }
 
       if (result.codeResult?.code) {
+        Quagga.stop();
+        setQuaggaState("stopped");
         onRead(result.codeResult.code);
       }
     };
 
-    const onDetected = (data: unknown) => {
-      console.log("Barcode detected and decoded:", data);
-    };
-
     Quagga.onProcessed(onProceeded);
-    Quagga.onDetected(onDetected);
-    return () => {
-      Quagga.offProcessed(onProceeded);
-      Quagga.offDetected(onDetected);
-    };
+    return () => Quagga.offProcessed(onProceeded);
   }, [onRead]);
 
   const onStopClick = useCallback(() => {

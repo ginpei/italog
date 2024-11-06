@@ -28,7 +28,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   };
 
   const onBarCodeRead = (barcode: string) => {
-    alert(barcode);
+    setBarcode(barcode);
   };
 
   return (
