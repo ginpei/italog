@@ -2,6 +2,7 @@
 import Quagga from "quagga";
 import { createRef, useCallback, useEffect, useState } from "react";
 import { toError } from "@/components/error/errorUtil";
+import { VStack } from "@/components/layout/VStack";
 import { Button } from "@/components/style/Button";
 
 export interface BarCodeReaderProps {
@@ -135,11 +136,9 @@ export function BarCodeReader({ onRead }: BarCodeReaderProps): JSX.Element {
   }, []);
 
   return (
-    <div className="BarCodeReader">
-      <div>BarCodeReader</div>
+    <VStack className="BarCodeReader">
       {error && <p className="text-rose-800">⚠️ {error.message}</p>}
-      <p>{quaggaState}</p>
-      <div>
+      <div className="flex items-center gap-4">
         <Button
           disabled={quaggaState !== "ready" && quaggaState !== "stopped"}
           onClick={onStartClick}
@@ -149,6 +148,7 @@ export function BarCodeReader({ onRead }: BarCodeReaderProps): JSX.Element {
         <Button disabled={quaggaState !== "shooting"} onClick={onStopClick}>
           Stop
         </Button>
+        <span>{quaggaState}</span>
       </div>
       <div
         className="
@@ -158,6 +158,6 @@ export function BarCodeReader({ onRead }: BarCodeReaderProps): JSX.Element {
         "
         ref={refContainer}
       ></div>
-    </div>
+    </VStack>
   );
 }

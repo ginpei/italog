@@ -56,7 +56,14 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
             </Button>
           </fieldset>
         </form>
-        <BarCodeReader onRead={onBarCodeRead} />
+        <details className="w-max border [&[open]]:w-auto">
+          <summary className="cursor-pointer bg-gray-100 p-2">
+            Bar code reader (beta)
+          </summary>
+          <div className="p-2">
+            <BarCodeReader onRead={onBarCodeRead} />
+          </div>
+        </details>
       </VStack>
     </VStack>
   );
