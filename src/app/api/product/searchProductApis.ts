@@ -16,7 +16,6 @@ export async function fetchSearchProductApi(
   const res = await fetch(`${endpoint}?${oParams.toString()}`);
   try {
     const result: SearchProductResult = await res.json();
-    console.log("# result", result);
     if (!result || !result.ok) {
       throw new UserError(result?.error ?? `Failed to fetch ${endpoint}`);
     }
