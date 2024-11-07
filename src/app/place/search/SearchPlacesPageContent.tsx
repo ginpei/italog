@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EmbeddedMap } from "./EmbeddedMap";
 import { PlaceItem } from "./PlaceItem";
 import { PlaceItemSkeleton } from "./PlaceItemSkeleton";
@@ -32,6 +32,9 @@ export function SearchPlacesPageContent(): JSX.Element {
     [params.lat, params.long],
   );
 
+  const placeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const mapWrapperRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const formContext = loadContext(window);
     if (formContext) {
@@ -40,6 +43,23 @@ export function SearchPlacesPageContent(): JSX.Element {
     }
     setWorking(false);
   }, []);
+
+  // scroll to the primary place
+  useEffect(() => {
+    const element = placeRefs.current.get(primaryPlaceId);
+    if (!primaryPlaceId || !element) {
+      return;
+    }
+
+    const mapWrapperHeight = mapWrapperRef.current?.offsetHeight || 0;
+    const rect = element.getBoundingClientRect();
+    const isVisible =
+      rect.top >= mapWrapperHeight && rect.bottom <= window.innerHeight;
+    if (!isVisible) {
+      const scrollOffset = element.offsetTop - mapWrapperHeight;
+      window.scrollTo({ top: scrollOffset, behavior: "smooth" });
+    }
+  }, [primaryPlaceId]);
 
   const onSubmit = useCallback(
     async (params: FindPlaceParams) => {
@@ -114,7 +134,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         Location:
         {!Number.isNaN(latLong.lat) ? `${params.lat},${params.long}` : ""}
       </p>
-      <div className="sticky top-0 h-[30vh] bg-white py-1">
+      <div ref={mapWrapperRef} className="sticky top-0 h-[30vh] bg-white py-1">
         {working ? (
           <div className="size-full animate-pulse bg-gray-300" />
         ) : Number.isNaN(latLong.lat) ? (
@@ -140,12 +160,21 @@ export function SearchPlacesPageContent(): JSX.Element {
           <div className="h-[30vh] text-gray-500">Nothing found around</div>
         ) : (
           places.map((place) => (
-            <PlaceItem
+            <div
               key={place.boardId}
-              onShowClick={() => setPrimaryPlaceId(place.boardId)}
-              place={place}
-              selected={place.boardId === (primaryPlaceId || places[0].boardId)}
-            />
+              ref={(el) => {
+                if (el) placeRefs.current.set(place.boardId, el);
+                else placeRefs.current.delete(place.boardId);
+              }}
+            >
+              <PlaceItem
+                onShowClick={() => setPrimaryPlaceId(place.boardId)}
+                place={place}
+                selected={
+                  place.boardId === (primaryPlaceId || places[0].boardId)
+                }
+              />
+            </div>
           ))
         )}
       </div>
