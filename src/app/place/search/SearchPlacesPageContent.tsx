@@ -33,6 +33,18 @@ export function SearchPlacesPageContent(): JSX.Element {
     [params.lat, params.long],
   );
 
+  const primaryPlaceLocation: LatLong | null = useMemo(() => {
+    if (placePosition) {
+      return placePosition;
+    }
+
+    if (places.length > 0) {
+      return { lat: places[0].latitude, long: places[0].longitude };
+    }
+
+    return null;
+  }, [placePosition, places]);
+
   useEffect(() => {
     const formContext = loadContext(window);
     if (formContext) {
@@ -48,6 +60,7 @@ export function SearchPlacesPageContent(): JSX.Element {
       setWorking(true);
       setError(null);
       setPlaces([]);
+      setPlacePosition(null);
 
       try {
         const position = await getLocation();
@@ -80,12 +93,6 @@ export function SearchPlacesPageContent(): JSX.Element {
 
         setLastParams(newParams);
         setPlaces(data.places);
-        if (data.places.length > 0) {
-          setPlacePosition({
-            lat: data.places[0].latitude,
-            long: data.places[0].longitude,
-          });
-        }
         saveContext(window, {
           params: newParams,
           places: data.places,
@@ -128,7 +135,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         ) : (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-            placePosition={placePosition}
+            placePosition={primaryPlaceLocation}
             userPosition={params}
           />
         )}
@@ -151,8 +158,8 @@ export function SearchPlacesPageContent(): JSX.Element {
               }
               place={place}
               selected={
-                placePosition?.lat === place.latitude &&
-                placePosition?.long === place.longitude
+                primaryPlaceLocation?.lat === place.latitude &&
+                primaryPlaceLocation?.long === place.longitude
               }
             />
           ))
