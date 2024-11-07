@@ -1,9 +1,16 @@
-import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
+import {
+  AdvancedMarker,
+  APIProvider,
+  Map,
+  Pin,
+} from "@vis.gl/react-google-maps";
 import { LatLong } from "@/components/place/LatLong";
+import { Place } from "@/components/place/Place";
 
 export interface EmbeddedMapProps {
   apiKey: string;
-  placePosition: LatLong | null;
+  places: Place[];
+  primaryPlaceId: string;
   userPosition: LatLong;
 }
 
@@ -12,15 +19,14 @@ export interface EmbeddedMapProps {
  */
 export function EmbeddedMap({
   apiKey,
+  places,
+  primaryPlaceId,
   userPosition,
-  placePosition,
 }: EmbeddedMapProps): JSX.Element {
   const mapId = "xxx"; // TODO https://developers.google.com/maps/documentation/get-map-id
 
   const userLatLong = { lat: userPosition.lat, lng: userPosition.long };
-  const placeLatLong = placePosition
-    ? { lat: placePosition.lat, lng: placePosition.long }
-    : null;
+  const emphasisPlaceId = primaryPlaceId || places[0]?.boardId;
 
   return (
     <APIProvider apiKey={apiKey}>
@@ -34,7 +40,20 @@ export function EmbeddedMap({
               />
             </div>
           </AdvancedMarker>
-          {placePosition && <AdvancedMarker position={placeLatLong} />}
+          {places.map((place) => (
+            <AdvancedMarker
+              key={place.boardId}
+              position={{ lat: place.latitude, lng: place.longitude }}
+              zIndex={place.boardId === emphasisPlaceId ? 1 : 0}
+            >
+              <Pin
+                scale={place.boardId === emphasisPlaceId ? 1 : 0.5}
+                glyphColor={
+                  place.boardId === emphasisPlaceId ? "white" : undefined
+                }
+              />
+            </AdvancedMarker>
+          ))}
         </Map>
       </div>
     </APIProvider>

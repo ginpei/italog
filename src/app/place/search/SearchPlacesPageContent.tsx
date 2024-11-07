@@ -8,7 +8,6 @@ import { SearchNearbyForm } from "./SearchNearbyForm";
 import { FindPlaceParams, FindPlaceResponse } from "@/app/api/findNearby/route";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
-import { LatLong } from "@/components/place/LatLong";
 import { Place } from "@/components/place/Place";
 import { H1 } from "@/components/style/Hn";
 import { sleep } from "@/components/time/timer";
@@ -26,24 +25,12 @@ export function SearchPlacesPageContent(): JSX.Element {
   });
   const [lastParams, setLastParams] = useState<FindPlaceParams>(params);
   const [places, setPlaces] = useState<Place[]>([]);
-  const [placePosition, setPlacePosition] = useState<LatLong | null>(null);
+  const [primaryPlaceId, setPrimaryPlaceId] = useState<string>("");
 
   const latLong = useMemo(
     () => ({ lat: params.lat, long: params.long }),
     [params.lat, params.long],
   );
-
-  const primaryPlaceLocation: LatLong | null = useMemo(() => {
-    if (placePosition) {
-      return placePosition;
-    }
-
-    if (places.length > 0) {
-      return { lat: places[0].latitude, long: places[0].longitude };
-    }
-
-    return null;
-  }, [placePosition, places]);
 
   useEffect(() => {
     const formContext = loadContext(window);
@@ -60,7 +47,7 @@ export function SearchPlacesPageContent(): JSX.Element {
       setWorking(true);
       setError(null);
       setPlaces([]);
-      setPlacePosition(null);
+      setPrimaryPlaceId("");
 
       try {
         const position = await getLocation();
@@ -135,7 +122,8 @@ export function SearchPlacesPageContent(): JSX.Element {
         ) : (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-            placePosition={primaryPlaceLocation}
+            places={places}
+            primaryPlaceId={primaryPlaceId}
             userPosition={params}
           />
         )}
@@ -153,14 +141,9 @@ export function SearchPlacesPageContent(): JSX.Element {
           places.map((place) => (
             <PlaceItem
               key={place.boardId}
-              onShowClick={(v) =>
-                setPlacePosition({ lat: v.latitude, long: v.longitude })
-              }
+              onShowClick={() => setPrimaryPlaceId(place.boardId)}
               place={place}
-              selected={
-                primaryPlaceLocation?.lat === place.latitude &&
-                primaryPlaceLocation?.long === place.longitude
-              }
+              selected={place.boardId === (primaryPlaceId || places[0].boardId)}
             />
           ))
         )}
