@@ -1,36 +1,45 @@
 import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
+import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Place } from "@/components/place/Place";
 
 export interface PlaceItemProps {
+  onShowClick: (place: Place) => void;
   place: Place;
-  onPointerEnter: (place: Place) => void;
-  onPointerLeaveOrCancel: (place: Place) => void;
+  selected: boolean;
 }
 
 export function PlaceItem({
+  onShowClick,
   place,
-  onPointerEnter,
-  onPointerLeaveOrCancel,
+  selected,
 }: PlaceItemProps): JSX.Element {
   return (
-    <Link
-      className="PlaceItem flex w-full items-center justify-between gap-4 border border-gray-300 p-2 text-start hover:bg-gray-50 active:bg-gray-200"
-      href={`/place/${place.boardId}`}
-      onPointerCancel={() => onPointerLeaveOrCancel(place)}
-      onPointerEnter={() => onPointerEnter(place)}
-      onPointerLeave={() => onPointerLeaveOrCancel(place)}
-    >
-      <div className="flex flex-col">
-        <span>{place.displayName}</span>
-        <span className="text-sm text-gray-400">
-          {place.typeDisplayName ?? "(Other)"}
+    <div className="PlaceItem flex border border-gray-300 ">
+      <button
+        className={`
+          grid w-12 items-center justify-center
+          ${selected ? "bg-gray-200" : "hover:bg-gray-50 active:bg-gray-200"}
+        `}
+        onClick={() => onShowClick(place)}
+      >
+        <MapIcon className="size-6 text-gray-500 " />
+      </button>
+      <Link
+        className="flex w-full items-center justify-between gap-4 p-2 text-start hover:bg-gray-50 active:bg-gray-200"
+        href={`/place/${place.boardId}`}
+      >
+        <div className="flex flex-col">
+          <span>{place.displayName}</span>
+          <span className="text-sm text-gray-400">
+            {place.typeDisplayName ?? "(Other)"}
+          </span>
+          <span className="text-sm text-gray-400">{place.address}</span>
+        </div>
+        <span>
+          <ChevronDoubleRightIcon className="size-6 text-gray-500" />
         </span>
-        <span className="text-sm text-gray-400">{place.address}</span>
-      </div>
-      <span>
-        <ChevronDoubleRightIcon className="size-6 text-gray-500" />
-      </span>
-    </Link>
+      </Link>
+    </div>
   );
 }

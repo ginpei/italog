@@ -140,11 +140,14 @@ export function SearchPlacesPageContent(): JSX.Element {
           places.map((place) => (
             <PlaceItem
               key={place.boardId}
-              place={place}
-              onPointerEnter={(v) =>
+              onShowClick={(v) =>
                 setPlacePosition({ lat: v.latitude, long: v.longitude })
               }
-              onPointerLeaveOrCancel={() => setPlacePosition(null)}
+              place={place}
+              selected={
+                placePosition?.lat === place.latitude &&
+                placePosition?.long === place.longitude
+              }
             />
           ))
         )}
