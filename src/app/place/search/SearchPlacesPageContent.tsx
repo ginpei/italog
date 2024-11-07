@@ -80,6 +80,12 @@ export function SearchPlacesPageContent(): JSX.Element {
 
         setLastParams(newParams);
         setPlaces(data.places);
+        if (data.places.length > 0) {
+          setPlacePosition({
+            lat: data.places[0].latitude,
+            long: data.places[0].longitude,
+          });
+        }
         saveContext(window, {
           params: newParams,
           places: data.places,
