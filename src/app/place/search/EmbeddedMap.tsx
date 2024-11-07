@@ -9,6 +9,7 @@ import { Place } from "@/components/place/Place";
 
 export interface EmbeddedMapProps {
   apiKey: string;
+  onPlaceClick: (id: string) => void;
   places: Place[];
   primaryPlaceId: string;
   userPosition: LatLong;
@@ -19,6 +20,7 @@ export interface EmbeddedMapProps {
  */
 export function EmbeddedMap({
   apiKey,
+  onPlaceClick,
   places,
   primaryPlaceId,
   userPosition,
@@ -43,11 +45,12 @@ export function EmbeddedMap({
           {places.map((place) => (
             <AdvancedMarker
               key={place.boardId}
+              onClick={() => onPlaceClick(place.boardId)}
               position={{ lat: place.latitude, lng: place.longitude }}
               zIndex={place.boardId === emphasisPlaceId ? 1 : 0}
             >
               <Pin
-                scale={place.boardId === emphasisPlaceId ? 1 : 0.5}
+                scale={place.boardId === emphasisPlaceId ? 1.2 : 1}
                 glyphColor={
                   place.boardId === emphasisPlaceId ? "white" : undefined
                 }
