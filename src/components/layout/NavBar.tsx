@@ -1,3 +1,4 @@
+import { MapPinIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { ComponentProps } from "react";
 import { Profile } from "../user/Profile";
@@ -17,11 +18,16 @@ export function NavBar({
   return (
     <section className="NavBar bg-ginpei text-white">
       <Content>
-        <div className="flex h-8 flex-row items-stretch justify-between leading-8">
-          <h1>
+        <div className="flex h-[1lh] flex-row items-stretch justify-between leading-10">
+          <h1 className="flex items-stretch gap-4">
             <NavBarLink href={titleLink}>{title}</NavBarLink>
+            {profile && (
+              <NavBarLink href="/place/search">
+                <MapPinIcon className="inline-block size-5" />
+              </NavBarLink>
+            )}
           </h1>
-          <div>
+          <div className="flex items-stretch gap-4">
             {profile ? (
               /* eslint-disable-next-line @next/next/no-html-link-for-pages */
               <a href="/my">{profile.displayName}</a>
