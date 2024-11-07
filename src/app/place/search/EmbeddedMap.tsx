@@ -9,10 +9,10 @@ import { Place } from "@/components/place/Place";
 
 export interface EmbeddedMapProps {
   apiKey: string;
+  center: LatLong;
   onPlaceClick: (id: string) => void;
   places: Place[];
   primaryPlaceId: string;
-  userPosition: LatLong;
 }
 
 /**
@@ -20,14 +20,14 @@ export interface EmbeddedMapProps {
  */
 export function EmbeddedMap({
   apiKey,
+  center,
   onPlaceClick,
   places,
   primaryPlaceId,
-  userPosition,
 }: EmbeddedMapProps): JSX.Element {
   const mapId = "xxx"; // TODO https://developers.google.com/maps/documentation/get-map-id
 
-  const userLatLong = { lat: userPosition.lat, lng: userPosition.long };
+  const userLatLong = { lat: center.lat, lng: center.long };
   const emphasisPlaceId = primaryPlaceId || places[0]?.boardId;
 
   return (

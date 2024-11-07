@@ -142,10 +142,10 @@ export function SearchPlacesPageContent(): JSX.Element {
         ) : (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+            center={params}
             onPlaceClick={setPrimaryPlaceId}
             places={places}
             primaryPlaceId={primaryPlaceId}
-            userPosition={params}
           />
         )}
       </div>
