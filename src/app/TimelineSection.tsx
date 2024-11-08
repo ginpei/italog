@@ -1,15 +1,15 @@
 import { useRef, useState } from "react";
+import { AnyCheckin } from "@/components/checkin/AnyCheckin";
 import { Checkin } from "@/components/checkin/Checkin";
 import { VStack } from "@/components/layout/VStack";
 import { LatLong } from "@/components/place/LatLong";
-import { PlaceCheckin } from "@/components/placeCheckin/PlaceCheckin";
 import { Button } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
 import { EmbeddedMap } from "@/components/timeline/EmbeddedMap";
 import { TimelineItem } from "@/components/timeline/TimelineItem";
 
 export interface TimelineSectionProps {
-  checkins: PlaceCheckin[];
+  checkins: AnyCheckin[];
 }
 
 export function TimelineSection({
