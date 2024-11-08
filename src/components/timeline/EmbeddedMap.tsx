@@ -45,7 +45,7 @@ export function EmbeddedMap({
           {places.map(([place, key]) => (
             <AdvancedMarker
               key={key}
-              onClick={() => onPlaceClick(place.boardId)}
+              onClick={() => onPlaceClick(key)}
               position={{ lat: place.latitude, lng: place.longitude }}
               zIndex={key === emphasisPlaceId ? 1 : 0}
             >

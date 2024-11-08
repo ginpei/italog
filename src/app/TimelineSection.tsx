@@ -40,6 +40,10 @@ export function TimelineSection({
     }
   };
 
+  const onMapMarkerClick = (id: string) => {
+    setPrimaryPlaceId(id);
+  };
+
   const onShowCheckinClick = (checkin: Checkin) => {
     setPrimaryPlaceId(checkin.id);
   };
@@ -59,7 +63,7 @@ export function TimelineSection({
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
             center={userLocation}
-            onPlaceClick={console.log}
+            onPlaceClick={onMapMarkerClick}
             places={checkins.map((v) => [v, v.id])}
             primaryPlaceKey={primaryPlaceId}
           />
@@ -77,7 +81,7 @@ export function TimelineSection({
             <TimelineItem
               checkin={checkin}
               onShowClick={onShowCheckinClick}
-              selected={false}
+              selected={checkin.id === primaryPlaceId}
             />
           </div>
         ))}

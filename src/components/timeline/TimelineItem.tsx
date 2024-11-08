@@ -28,7 +28,7 @@ export function TimelineItem({
       <Link
         className={`
           grid w-12 items-center justify-center
-          ${selected ? "bg-gray-200" : "hover:bg-gray-50 active:bg-gray-200"}
+          hover:bg-gray-50 active:bg-gray-200
         `}
         onClick={() => onShowClick(checkin)}
         href={`/user/${checkin.userId}`}
