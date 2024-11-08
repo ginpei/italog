@@ -33,15 +33,26 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
 
   return (
     <VStack className="ProductSearchPageContent" gap="gap-8">
-      <H1>Search product</H1>
       <VStack>
+        <p>
+          <span className="rounded bg-purple-800 px-2 py-1 text-white">
+            Preview
+          </span>
+        </p>
+        <H1>Search product</H1>
+      </VStack>
+      <p className="text-gray-500">
+        You will be able to check in products to share your impression as well
+        as places.
+      </p>
+      <VStack className="hidden">
         <H2>By barcode</H2>
         <p className="text-sm text-gray-500">
           Hint: you might want to use speech recognition on your device to enter
           the barcode by reading it out loud.
         </p>
         <form onSubmit={onBarcodeFormSubmit}>
-          <fieldset className="flex items-stretch gap-2">
+          <fieldset className="flex items-stretch gap-2" disabled>
             <TextInput
               className="w-full"
               inputMode="numeric"
