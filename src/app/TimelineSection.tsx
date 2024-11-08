@@ -63,8 +63,10 @@ export function TimelineSection({
         </Button>
       </p>
       <div ref={mapWrapperRef} className="sticky top-0 h-[30vh] bg-white py-1">
-        {working || !userLocation ? (
+        {working ? (
           <div className="size-full animate-pulse bg-gray-300" />
+        ) : !userLocation ? (
+          <div className="size-full bg-gray-100" />
         ) : (
           <EmbeddedMap
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
