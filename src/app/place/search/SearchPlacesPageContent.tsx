@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { EmbeddedMap } from "./EmbeddedMap";
+import { EmbeddedMap } from "../../../components/timeline/EmbeddedMap";
 import { PlaceItem } from "./PlaceItem";
 import { PlaceItemSkeleton } from "./PlaceItemSkeleton";
 import { SearchNearbyForm } from "./SearchNearbyForm";
@@ -144,8 +144,8 @@ export function SearchPlacesPageContent(): JSX.Element {
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
             center={params}
             onPlaceClick={setPrimaryPlaceId}
-            places={places}
-            primaryPlaceId={primaryPlaceId}
+            places={places.map((v) => [v, v.boardId])}
+            primaryPlaceKey={primaryPlaceId}
           />
         )}
       </div>
