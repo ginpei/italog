@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { AnyCheckin } from "@/components/checkin/AnyCheckin";
 import { Checkin } from "@/components/checkin/Checkin";
+import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { LatLong } from "@/components/place/LatLong";
@@ -55,7 +56,7 @@ export function TimelineSection({
   return (
     <VStack className="TimelineSection">
       <H2>Timeline</H2>
-      {error && <p className="text-rose-800">⚠️ {error.message}</p>}
+      <ErrorBlock error={error} />
       <p>
         <Button disabled={working} onClick={onGetLocationClick}>
           Get location

@@ -1,6 +1,7 @@
 // @ts-expect-error - Quagga is not typed
 import Quagga from "quagga";
 import { createRef, useCallback, useEffect, useState } from "react";
+import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Button } from "@/components/style/Button";
@@ -137,7 +138,7 @@ export function BarCodeReader({ onRead }: BarCodeReaderProps): JSX.Element {
 
   return (
     <VStack className="BarCodeReader">
-      {error && <p className="text-rose-800">⚠️ {error.message}</p>}
+      <ErrorBlock error={error} />
       <div className="flex items-center gap-4">
         <Button
           disabled={quaggaState !== "ready" && quaggaState !== "stopped"}

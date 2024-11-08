@@ -6,6 +6,7 @@ import { PlaceItem } from "./PlaceItem";
 import { PlaceItemSkeleton } from "./PlaceItemSkeleton";
 import { SearchNearbyForm } from "./SearchNearbyForm";
 import { FindPlaceParams, FindPlaceResponse } from "@/app/api/findNearby/route";
+import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
@@ -123,7 +124,7 @@ export function SearchPlacesPageContent(): JSX.Element {
   return (
     <VStack>
       <H1>Search places</H1>
-      {error && <p className="text-rose-800">⚠️ {error.message}</p>}
+      <ErrorBlock error={error} />
       <SearchNearbyForm
         disabled={working}
         onChange={setParams}
