@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { AnyCheckin } from "@/components/checkin/AnyCheckin";
 import { Checkin } from "@/components/checkin/Checkin";
+import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { LatLong } from "@/components/place/LatLong";
 import { Button } from "@/components/style/Button";
@@ -16,6 +17,7 @@ export function TimelineSection({
   checkins,
 }: TimelineSectionProps): JSX.Element {
   const [working, setWorking] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
   const [userLocation, setUserLocation] = useState<LatLong | null>(null);
   const [primaryPlaceId, setPrimaryPlaceId] = useState("");
   const placeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -23,6 +25,7 @@ export function TimelineSection({
 
   const onGetLocationClick = async () => {
     setWorking(true);
+    setError(null);
     try {
       const position = await new Promise<GeolocationPosition>(
         (resolve, reject) => {
@@ -35,6 +38,7 @@ export function TimelineSection({
       });
     } catch (error) {
       console.error("Failed to get location", error);
+      setError(toError(error));
     } finally {
       setWorking(false);
     }
@@ -51,6 +55,7 @@ export function TimelineSection({
   return (
     <VStack className="TimelineSection">
       <H2>Timeline</H2>
+      {error && <p className="text-rose-800">⚠️ {error.message}</p>}
       <p>
         <Button disabled={working} onClick={onGetLocationClick}>
           Get location
