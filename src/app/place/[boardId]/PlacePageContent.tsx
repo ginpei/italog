@@ -11,6 +11,7 @@ import { Place } from "@/components/place/Place";
 import { requestRegisterVisit } from "@/components/placeCheckin/checkInPlace";
 import { H2 } from "@/components/style/Hn";
 import { BoardCheckinItem } from "@/components/timeline/BoardCheckinItem";
+import { CheckinList } from "@/components/timeline/CheckinList";
 
 export interface PlacePageContentProps {
   checkedIn: boolean;
@@ -104,11 +105,11 @@ export function PlacePageContent({
       />
       <hr />
       <H2>Checkins</H2>
-      <div className="flex flex-col gap-1">
+      <CheckinList>
         {liveCheckins.map((checkin) => (
           <BoardCheckinItem key={checkin.id} checkin={checkin} />
         ))}
-      </div>
+      </CheckinList>
     </VStack>
   );
 }

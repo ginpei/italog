@@ -7,6 +7,7 @@ import { VStack } from "@/components/layout/VStack";
 import { LatLong } from "@/components/place/LatLong";
 import { Place } from "@/components/place/Place";
 import { H2 } from "@/components/style/Hn";
+import { CheckinList } from "@/components/timeline/CheckinList";
 import { EmbeddedMap } from "@/components/timeline/EmbeddedMap";
 import { TimelineItem } from "@/components/timeline/TimelineItem";
 
@@ -86,7 +87,7 @@ export function TimelineSection({
           </APIProvider>
         )}
       </div>
-      <div className="flex flex-col gap-1">
+      <CheckinList>
         {checkins.map((checkin) => (
           <div
             key={checkin.id}
@@ -103,7 +104,7 @@ export function TimelineSection({
           </div>
         ))}
         {checkins.length === 0 && <p>No activities yet.</p>}
-      </div>
+      </CheckinList>
     </VStack>
   );
 }

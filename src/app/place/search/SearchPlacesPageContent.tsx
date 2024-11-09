@@ -13,6 +13,7 @@ import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { H1 } from "@/components/style/Hn";
 import { sleep } from "@/components/time/timer";
+import { CheckinList } from "@/components/timeline/CheckinList";
 
 export function SearchPlacesPageContent(): JSX.Element {
   const [working, setWorking] = useState(true);
@@ -152,7 +153,7 @@ export function SearchPlacesPageContent(): JSX.Element {
           </APIProvider>
         )}
       </div>
-      <div className="flex flex-col gap-1">
+      <CheckinList>
         {working ? (
           <>
             <PlaceItemSkeleton />
@@ -180,7 +181,7 @@ export function SearchPlacesPageContent(): JSX.Element {
             </div>
           ))
         )}
-      </div>
+      </CheckinList>
     </VStack>
   );
 }
