@@ -97,6 +97,8 @@ CREATE TABLE checkin (
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );
 
+CREATE INDEX idx_checkin_created_at ON checkin (created_at);
+
 INSERT INTO checkin (board_id, user_id, comment, created_at, starred, user_date)
 VALUES (
   '63fc77f7-a986-48a6-ab6a-ea544eb0ca8c',
