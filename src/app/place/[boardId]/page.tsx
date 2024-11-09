@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PlacePageContent } from "./PlacePageContent";
-import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
+import { getCheckinRecordsOn } from "@/components/checkin/checkinDb";
 import { isUUID } from "@/components/db/transaction";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getPlaceRecord } from "@/components/place/placeDb";
@@ -19,13 +19,14 @@ export default async function PlacePage({
     getSessionProfile(),
     getPlaceRecord(params.boardId),
   ]);
-  const userCheckins = profile
-    ? await getUserCheckinRecords(profile.id, params.boardId)
+  const checkins = profile
+    ? await getCheckinRecordsOn(profile.id, params.boardId)
     : [];
 
+  // TODO remove
   const visited =
-    userCheckins[0] &&
-    new Date(userCheckins[0].createdAt).toLocaleDateString() ===
+    checkins[0] &&
+    new Date(checkins[0].createdAt).toLocaleDateString() ===
       new Date().toLocaleDateString();
 
   if (!place) {
@@ -41,11 +42,7 @@ export default async function PlacePage({
 
   return (
     <StraightPageLayout profile={profile}>
-      <PlacePageContent
-        place={place}
-        userCheckins={userCheckins}
-        checkedIn={visited}
-      />
+      <PlacePageContent place={place} checkins={checkins} checkedIn={visited} />
     </StraightPageLayout>
   );
 }

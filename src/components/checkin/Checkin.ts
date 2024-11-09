@@ -1,3 +1,6 @@
+import { Board } from "../board/Board";
+import { Profile } from "../user/Profile";
+
 export interface CheckinRow {
   boardId: string;
   comment: string;
@@ -11,4 +14,9 @@ export interface CheckinRow {
   userDate: string;
 
   userId: string;
+}
+
+export interface Checkin extends CheckinRow {
+  board: Board;
+  profile: Profile;
 }

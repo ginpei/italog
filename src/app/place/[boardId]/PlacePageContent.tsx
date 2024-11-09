@@ -5,7 +5,7 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { ReactNode, useMemo, useState } from "react";
 import { RegisterCheckinForm } from "./RegisterCheckinForm";
-import { CheckinRow } from "@/components/checkin/Checkin";
+import { Checkin, CheckinRow } from "@/components/checkin/Checkin";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { requestRegisterVisit } from "@/components/placeCheckin/checkInPlace";
@@ -13,28 +13,25 @@ import { H2 } from "@/components/style/Hn";
 
 export interface PlacePageContentProps {
   checkedIn: boolean;
+  checkins: Checkin[];
   place: Place;
-  userCheckins: CheckinRow[];
 }
 
 export function PlacePageContent({
-  place,
-  userCheckins,
   checkedIn,
+  checkins,
+  place,
 }: PlacePageContentProps): JSX.Element {
-  const todaysCheckin = findTodaysCheckin(userCheckins);
-  const [editingCheckin, setEditingCheckin] = useState<CheckinRow>(
-    todaysCheckin || {
-      boardId: place.boardId,
-      comment: "",
-      createdAt: 0,
-      id: "",
-      starred: false,
-      userDate: "",
-      userId: "",
-    },
-  );
-  const [liveUserCheckins, setLiveUserCheckins] = useState(userCheckins);
+  const [editingCheckin, setEditingCheckin] = useState<CheckinRow>({
+    boardId: place.boardId,
+    comment: "",
+    createdAt: 0,
+    id: "",
+    starred: false,
+    userDate: "",
+    userId: "",
+  });
+  const [liveCheckins, setUserCheckins] = useState(checkins);
   const [formWorking, setFormWorking] = useState(false);
   const siteHostName = useHostNameOf(place.webUrl);
 
@@ -42,8 +39,21 @@ export function PlacePageContent({
     setEditingCheckin(checkin);
   };
 
-  const onRegisterCheckinSubmit = async (checkin: CheckinRow) => {
+  const onRegisterCheckinSubmit = async (checkinRow: CheckinRow) => {
     try {
+      const checkin: Checkin = {
+        ...checkinRow,
+        profile: {
+          id: "checkinRow.userId", // TODO
+          displayName: "checkinRow.userDate", // TODO
+        },
+        board: {
+          boardId: place.boardId,
+          displayName: place.displayName,
+          boardType: place.boardType,
+        },
+      };
+
       setFormWorking(true);
       const timezoneOffset = new Date().getTimezoneOffset();
       await requestRegisterVisit({
@@ -51,12 +61,16 @@ export function PlacePageContent({
         checkin: checkin,
         checkedIn: checkedIn,
       });
-      setLiveUserCheckins((prevCheckins) => {
-        const newCheckins = prevCheckins.filter(
-          (v) =>
-            v.userDate !== checkin.userDate || v.boardId !== checkin.boardId,
+      setUserCheckins((checkins) => {
+        const index = checkins.findIndex((v) => v.id === checkin.id);
+        const newCheckins =
+          index === -1
+            ? [...checkins, checkin]
+            : checkins.map((v) => (v.id === checkin.id ? checkin : v));
+        const sorted = newCheckins.toSorted(
+          (a, b) => b.createdAt - a.createdAt,
         );
-        return [...newCheckins, checkin];
+        return sorted;
       });
     } catch (error) {
       console.error("Failed to register checkin", error);
@@ -88,16 +102,16 @@ export function PlacePageContent({
         checkedIn={checkedIn}
       />
       <hr />
-      <H2>Your checkins</H2>
+      <H2>Checkins</H2>
       <ul className="ms-4 list-disc">
-        {liveUserCheckins.map((checkin) => (
+        {liveCheckins.map((checkin) => (
           <li key={`${checkin.boardId}-${checkin.userId}-${checkin.userDate}`}>
             {new Date(checkin.createdAt).toLocaleDateString()}{" "}
             {checkin.starred && "⭐ "}
-            {checkin.comment}
+            {checkin.profile.displayName}: {checkin.comment}
           </li>
         ))}
-        {liveUserCheckins.length < 1 && <li>No checkins yet</li>}
+        {liveCheckins.length < 1 && <li>No checkins yet</li>}
       </ul>
     </VStack>
   );
@@ -141,9 +155,4 @@ function useHostNameOf(url: string | undefined): string | undefined {
     const urlObj = new URL(url);
     return urlObj.hostname;
   }, [url]);
-}
-
-function findTodaysCheckin(checkins: CheckinRow[]): CheckinRow | undefined {
-  const today = new Date().toISOString().slice(0, 10);
-  return checkins.find((checkin) => checkin.userDate === today);
 }
