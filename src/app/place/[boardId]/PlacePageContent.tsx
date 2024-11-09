@@ -10,6 +10,7 @@ import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { requestRegisterVisit } from "@/components/placeCheckin/checkInPlace";
 import { H2 } from "@/components/style/Hn";
+import { BoardCheckinItem } from "@/components/timeline/BoardCheckinItem";
 
 export interface PlacePageContentProps {
   checkedIn: boolean;
@@ -103,16 +104,11 @@ export function PlacePageContent({
       />
       <hr />
       <H2>Checkins</H2>
-      <ul className="ms-4 list-disc">
+      <div className="flex flex-col gap-1">
         {liveCheckins.map((checkin) => (
-          <li key={`${checkin.boardId}-${checkin.userId}-${checkin.userDate}`}>
-            {new Date(checkin.createdAt).toLocaleDateString()}{" "}
-            {checkin.starred && "⭐ "}
-            {checkin.profile.displayName}: {checkin.comment}
-          </li>
+          <BoardCheckinItem key={checkin.id} checkin={checkin} />
         ))}
-        {liveCheckins.length < 1 && <li>No checkins yet</li>}
-      </ul>
+      </div>
     </VStack>
   );
 }
