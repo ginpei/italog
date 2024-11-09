@@ -1,3 +1,4 @@
+import { APIProvider } from "@vis.gl/react-google-maps";
 import { useRef, useState } from "react";
 import { AnyCheckin } from "@/components/checkin/AnyCheckin";
 import { Checkin } from "@/components/checkin/Checkin";
@@ -67,13 +68,14 @@ export function TimelineSection({
             Click to get your location
           </button>
         ) : (
-          <EmbeddedMap
-            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-            center={userLocation}
-            onPlaceClick={onMapMarkerClick}
-            places={checkins.map((v) => [v, v.id])}
-            primaryPlaceKey={primaryPlaceId}
-          />
+          <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+            <EmbeddedMap
+              center={userLocation}
+              onPlaceClick={onMapMarkerClick}
+              places={checkins.map((v) => [v, v.id])}
+              primaryPlaceKey={primaryPlaceId}
+            />
+          </APIProvider>
         )}
       </div>
       <div className="flex flex-col gap-1">

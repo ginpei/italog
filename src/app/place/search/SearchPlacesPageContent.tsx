@@ -1,5 +1,6 @@
 "use client";
 
+import { APIProvider } from "@vis.gl/react-google-maps";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EmbeddedMap } from "../../../components/timeline/EmbeddedMap";
 import { PlaceItem } from "./PlaceItem";
@@ -141,13 +142,14 @@ export function SearchPlacesPageContent(): JSX.Element {
         ) : Number.isNaN(latLong.lat) ? (
           <div className="size-full bg-gray-100" />
         ) : (
-          <EmbeddedMap
-            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-            center={params}
-            onPlaceClick={setPrimaryPlaceId}
-            places={places.map((v) => [v, v.boardId])}
-            primaryPlaceKey={primaryPlaceId}
-          />
+          <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+            <EmbeddedMap
+              center={params}
+              onPlaceClick={setPrimaryPlaceId}
+              places={places.map((v) => [v, v.boardId])}
+              primaryPlaceKey={primaryPlaceId}
+            />
+          </APIProvider>
         )}
       </div>
       <div className="flex flex-col gap-1">
