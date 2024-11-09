@@ -1,14 +1,14 @@
 import { sql } from "@vercel/postgres";
-import { Checkin } from "./Checkin";
+import { CheckinRow } from "./Checkin";
 
-export async function createCheckinRecord(checkin: Checkin): Promise<void> {
+export async function createCheckinRecord(checkin: CheckinRow): Promise<void> {
   await sql`
     INSERT INTO checkin (comment, created_at, user_date, board_id, starred, user_id)
     VALUES (${checkin.comment}, ${checkin.createdAt}, ${checkin.userDate}, ${checkin.boardId}, ${checkin.starred}, ${checkin.userId})
   `;
 }
 
-export async function updateCheckinRecord(checkin: Checkin): Promise<void> {
+export async function updateCheckinRecord(checkin: CheckinRow): Promise<void> {
   await sql`
     UPDATE checkin
     SET comment = ${checkin.comment},
@@ -21,7 +21,7 @@ export async function getUserCheckinRecords(
   userId: string,
   boardId: string,
   options: { limit?: number; offset?: number } = {},
-): Promise<Checkin[]> {
+): Promise<CheckinRow[]> {
   const result = await sql`
     SELECT * FROM checkin
     WHERE user_id = ${userId} AND board_id = ${boardId}
@@ -30,7 +30,7 @@ export async function getUserCheckinRecords(
   `;
 
   const checkins = result.rows.map(
-    (row): Checkin => ({
+    (row): CheckinRow => ({
       id: row.id,
       comment: row.comment,
       createdAt: Number(row.created_at),

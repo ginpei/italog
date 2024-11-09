@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next";
 import { NextRequest } from "next/server";
-import { Checkin } from "@/components/checkin/Checkin";
+import { CheckinRow } from "@/components/checkin/Checkin";
 import {
   createCheckinRecord,
   updateCheckinRecord,
@@ -10,7 +10,7 @@ import { getSessionProfile } from "@/components/user/profileSession";
 
 export interface RegisterCheckinPayload {
   checkedIn: boolean;
-  checkin: Checkin;
+  checkin: CheckinRow;
   timezoneOffset: number;
 }
 
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     const checkin = body.checkin; // TODO
 
     const now = Date.now();
-    const data: Checkin = {
+    const data: CheckinRow = {
       boardId: checkin.boardId,
       comment: checkin.comment,
       createdAt: now,

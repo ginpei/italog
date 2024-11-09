@@ -5,7 +5,7 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { ReactNode, useMemo, useState } from "react";
 import { RegisterCheckinForm } from "./RegisterCheckinForm";
-import { Checkin } from "@/components/checkin/Checkin";
+import { CheckinRow } from "@/components/checkin/Checkin";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { requestRegisterVisit } from "@/components/placeCheckin/checkInPlace";
@@ -14,7 +14,7 @@ import { H2 } from "@/components/style/Hn";
 export interface PlacePageContentProps {
   checkedIn: boolean;
   place: Place;
-  userCheckins: Checkin[];
+  userCheckins: CheckinRow[];
 }
 
 export function PlacePageContent({
@@ -23,7 +23,7 @@ export function PlacePageContent({
   checkedIn,
 }: PlacePageContentProps): JSX.Element {
   const todaysCheckin = findTodaysCheckin(userCheckins);
-  const [editingCheckin, setEditingCheckin] = useState<Checkin>(
+  const [editingCheckin, setEditingCheckin] = useState<CheckinRow>(
     todaysCheckin || {
       boardId: place.boardId,
       comment: "",
@@ -38,11 +38,11 @@ export function PlacePageContent({
   const [formWorking, setFormWorking] = useState(false);
   const siteHostName = useHostNameOf(place.webUrl);
 
-  const onRegisterCheckinChange = async (checkin: Checkin) => {
+  const onRegisterCheckinChange = async (checkin: CheckinRow) => {
     setEditingCheckin(checkin);
   };
 
-  const onRegisterCheckinSubmit = async (checkin: Checkin) => {
+  const onRegisterCheckinSubmit = async (checkin: CheckinRow) => {
     try {
       setFormWorking(true);
       const timezoneOffset = new Date().getTimezoneOffset();
@@ -143,7 +143,7 @@ function useHostNameOf(url: string | undefined): string | undefined {
   }, [url]);
 }
 
-function findTodaysCheckin(checkins: Checkin[]): Checkin | undefined {
+function findTodaysCheckin(checkins: CheckinRow[]): CheckinRow | undefined {
   const today = new Date().toISOString().slice(0, 10);
   return checkins.find((checkin) => checkin.userDate === today);
 }

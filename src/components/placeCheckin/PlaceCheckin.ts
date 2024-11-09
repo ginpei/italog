@@ -1,6 +1,6 @@
-import { Checkin } from "../checkin/Checkin";
+import { CheckinRow } from "../checkin/Checkin";
 
-export interface PlaceCheckin extends Checkin {
+export interface PlaceCheckin extends CheckinRow {
   latitude: number;
   longitude: number;
   placeName: string;

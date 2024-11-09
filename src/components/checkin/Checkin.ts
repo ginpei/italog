@@ -1,4 +1,4 @@
-export interface Checkin {
+export interface CheckinRow {
   boardId: string;
   comment: string;
   createdAt: number;

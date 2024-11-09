@@ -1,7 +1,7 @@
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { useRef, useState } from "react";
 import { AnyCheckin } from "@/components/checkin/AnyCheckin";
-import { Checkin } from "@/components/checkin/Checkin";
+import { CheckinRow } from "@/components/checkin/Checkin";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
@@ -49,7 +49,7 @@ export function TimelineSection({
     setPrimaryPlaceId(id);
   };
 
-  const onShowCheckinClick = (checkin: Checkin) => {
+  const onShowCheckinClick = (checkin: CheckinRow) => {
     setPrimaryPlaceId(checkin.id);
   };
 

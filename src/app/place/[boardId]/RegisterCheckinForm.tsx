@@ -1,13 +1,13 @@
-import { Checkin } from "@/components/checkin/Checkin";
+import { CheckinRow } from "@/components/checkin/Checkin";
 import { Button } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
 
 export interface RegisterCheckinFormProps {
   checkedIn: boolean;
-  checkin: Checkin;
+  checkin: CheckinRow;
   disabled: boolean;
-  onChange: (checkin: Checkin) => void;
-  onSubmit: (checkin: Checkin) => void;
+  onChange: (checkin: CheckinRow) => void;
+  onSubmit: (checkin: CheckinRow) => void;
 }
 
 export function RegisterCheckinForm({
