@@ -19,13 +19,11 @@ export function BoardCheckinItem({
           </Link>{" "}
           <span className="text-gray-400">{checkin.userDate}</span>
         </span>
-        <span>
+        <span className="text-sm text-gray-400">
           {checkin.starred && "⭐"}
           {checkin.board.displayName}
         </span>
-        <span className="text-sm text-gray-400">
-          {checkin.comment && <> {checkin.comment}</>}
-        </span>
+        <span>{checkin.comment && <> {checkin.comment}</>}</span>
       </div>
     </div>
   );
