@@ -1,17 +1,17 @@
 import { APIProvider } from "@vis.gl/react-google-maps";
-import { useRef, useState } from "react";
-import { AnyCheckin } from "@/components/checkin/AnyCheckin";
-import { CheckinRow } from "@/components/checkin/Checkin";
+import { useMemo, useRef, useState } from "react";
+import { Checkin, CheckinRow } from "@/components/checkin/Checkin";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { LatLong } from "@/components/place/LatLong";
+import { Place } from "@/components/place/Place";
 import { H2 } from "@/components/style/Hn";
 import { EmbeddedMap } from "@/components/timeline/EmbeddedMap";
 import { TimelineItem } from "@/components/timeline/TimelineItem";
 
 export interface TimelineSectionProps {
-  checkins: AnyCheckin[];
+  checkins: Checkin[];
 }
 
 export function TimelineSection({
@@ -23,6 +23,14 @@ export function TimelineSection({
   const [primaryPlaceId, setPrimaryPlaceId] = useState("");
   const placeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const mapWrapperRef = useRef<HTMLDivElement>(null);
+
+  const places: Place[] = useMemo(
+    () =>
+      checkins
+        .filter((v): v is Checkin<Place> => v.board.boardType === "place")
+        .map((v) => v.board),
+    [checkins],
+  );
 
   const onGetLocationClick = async () => {
     setWorking(true);
@@ -50,7 +58,7 @@ export function TimelineSection({
   };
 
   const onShowCheckinClick = (checkin: CheckinRow) => {
-    setPrimaryPlaceId(checkin.id);
+    setPrimaryPlaceId(checkin.boardId);
   };
 
   return (
@@ -72,7 +80,7 @@ export function TimelineSection({
             <EmbeddedMap
               center={userLocation}
               onPlaceClick={onMapMarkerClick}
-              places={checkins.map((v) => [v, v.id])}
+              places={places.map((v) => [v, v.boardId])}
               primaryPlaceKey={primaryPlaceId}
             />
           </APIProvider>
@@ -90,7 +98,7 @@ export function TimelineSection({
             <TimelineItem
               checkin={checkin}
               onShowClick={onShowCheckinClick}
-              selected={checkin.id === primaryPlaceId}
+              selected={checkin.boardId === primaryPlaceId}
             />
           </div>
         ))}

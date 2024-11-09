@@ -16,7 +16,7 @@ export interface CheckinRow {
   userId: string;
 }
 
-export interface Checkin extends CheckinRow {
-  board: Board;
+export interface Checkin<Type extends Board = Board> extends CheckinRow {
+  board: Type;
   profile: Profile;
 }

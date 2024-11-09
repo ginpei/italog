@@ -6,7 +6,10 @@ import { LatLong } from "@/components/place/LatLong";
 export interface EmbeddedMapProps {
   center: LatLong;
   onPlaceClick: (id: string) => void;
-  places: [Pick<Place, "boardId" | "latitude" | "longitude">, key: string][];
+  places: [
+    Pick<Place, "boardId" | "latitude" | "longitude">,
+    boardId: string,
+  ][];
   primaryPlaceKey: string;
 }
 
@@ -27,13 +30,22 @@ export function EmbeddedMap({
   const map = useMap();
 
   const emphasisPlaceId = primaryPlaceKey || places[0]?.[0].boardId;
+  const uniquePlaces = useMemo(
+    () =>
+      places.filter(
+        ([place], index, arr) =>
+          arr.findIndex(([p]) => p.boardId === place.boardId) === index,
+      ),
+    [places],
+  );
   const userLatLong = useMemo(
     () => ({ lat: center.lat, lng: center.long }),
     [center],
   );
   const emphasisPlace = useMemo(
-    () => places.find(([, key]) => key === emphasisPlaceId)?.[0],
-    [emphasisPlaceId, places],
+    () =>
+      uniquePlaces.find(([place]) => place.boardId === emphasisPlaceId)?.[0],
+    [emphasisPlaceId, uniquePlaces],
   );
 
   useEffect(() => {
@@ -55,16 +67,18 @@ export function EmbeddedMap({
             />
           </div>
         </AdvancedMarker>
-        {places.map(([place, key]) => (
+        {uniquePlaces.map(([place]) => (
           <AdvancedMarker
-            key={key}
-            onClick={() => onPlaceClick(key)}
+            key={place.boardId}
+            onClick={() => onPlaceClick(place.boardId)}
             position={{ lat: place.latitude, lng: place.longitude }}
-            zIndex={key === emphasisPlaceId ? 1 : 0}
+            zIndex={place.boardId === emphasisPlaceId ? 1 : 0}
           >
             <Pin
-              scale={key === emphasisPlaceId ? 1.2 : 1}
-              glyphColor={key === emphasisPlaceId ? "white" : undefined}
+              scale={place.boardId === emphasisPlaceId ? 1.2 : 1}
+              glyphColor={
+                place.boardId === emphasisPlaceId ? "white" : undefined
+              }
             />
           </AdvancedMarker>
         ))}

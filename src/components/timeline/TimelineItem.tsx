@@ -1,12 +1,12 @@
 import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
 import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { AnyCheckin } from "../checkin/AnyCheckin";
+import { Checkin } from "../checkin/Checkin";
 import { CheckinProfileLink } from "./CheckinProfileLink";
 
 export interface TimelineItemProps {
-  checkin: AnyCheckin;
-  onShowClick: (place: AnyCheckin) => void;
+  checkin: Checkin;
+  onShowClick: (place: Checkin) => void;
   selected: boolean;
 }
 
@@ -27,19 +27,19 @@ export function TimelineItem({
         <MapIcon className="size-6 text-gray-500 " />
       </button>
       {/* TODO */}
-      <CheckinProfileLink profile={{ id: checkin.userId }} />
+      <CheckinProfileLink profile={checkin.profile} />
       <Link
         className="flex w-full items-center justify-between gap-4 p-2 text-start hover:bg-gray-50 active:bg-gray-200"
         href={`/place/${checkin.boardId}`}
       >
         <div className="flex flex-col">
           <span className="text-sm">
-            {checkin.userName}{" "}
+            {checkin.profile.displayName}{" "}
             <span className="text-gray-400">{checkin.userDate}</span>
           </span>
           <span>
             {checkin.starred && "⭐"}
-            {checkin.placeName}
+            {checkin.board.displayName}
           </span>
           <span className="text-sm text-gray-400">
             {checkin.comment && <> {checkin.comment}</>}
