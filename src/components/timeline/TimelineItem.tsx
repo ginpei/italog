@@ -1,7 +1,8 @@
 import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
-import { MapIcon, UserIcon } from "@heroicons/react/24/outline";
+import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { AnyCheckin } from "../checkin/AnyCheckin";
+import { CheckinProfileLink } from "./CheckinProfileLink";
 
 export interface TimelineItemProps {
   checkin: AnyCheckin;
@@ -18,23 +19,15 @@ export function TimelineItem({
     <div className="TimelineItem flex border border-gray-300 ">
       <button
         className={`
-          grid w-12 items-center justify-center
+          grid size-12 items-center justify-center
           ${selected ? "bg-gray-200" : "hover:bg-gray-50 active:bg-gray-200"}
         `}
         onClick={() => onShowClick(checkin)}
       >
         <MapIcon className="size-6 text-gray-500 " />
       </button>
-      <Link
-        className={`
-          grid w-12 items-center justify-center
-          hover:bg-gray-50 active:bg-gray-200
-        `}
-        onClick={() => onShowClick(checkin)}
-        href={`/user/${checkin.userId}`}
-      >
-        <UserIcon className="size-6 text-gray-500" />
-      </Link>
+      {/* TODO */}
+      <CheckinProfileLink profile={{ id: checkin.userId }} />
       <Link
         className="flex w-full items-center justify-between gap-4 p-2 text-start hover:bg-gray-50 active:bg-gray-200"
         href={`/place/${checkin.boardId}`}
