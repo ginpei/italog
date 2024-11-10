@@ -19,11 +19,13 @@ export interface PlacePageContentProps {
   checkedIn: boolean; // TODO remove
   checkins: Checkin[];
   place: Place;
+  userId: string;
 }
 
 export function PlacePageContent({
   checkins,
   place,
+  userId,
 }: PlacePageContentProps): JSX.Element {
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -100,7 +102,11 @@ export function PlacePageContent({
       <H2>Checkins</H2>
       <CheckinList>
         {checkins.map((checkin) => (
-          <CheckinItem key={checkin.id} checkin={checkin} />
+          <CheckinItem
+            key={checkin.id}
+            checkin={checkin}
+            own={checkin.userId === userId}
+          />
         ))}
       </CheckinList>
     </VStack>

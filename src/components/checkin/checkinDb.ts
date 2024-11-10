@@ -11,6 +11,40 @@ export async function createCheckinRecord(
   `;
 }
 
+export async function getCheckinRecord(id: string): Promise<Checkin | null> {
+  const result = await sql`
+    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name
+    FROM checkin c
+    JOIN board b ON c.board_id = b.board_id
+    JOIN profile p ON c.user_id = p.id
+    WHERE c.id = ${id}
+  `;
+
+  const row = result.rows[0];
+  if (!row) {
+    return null;
+  }
+
+  return {
+    id: row.id,
+    comment: row.comment,
+    createdAt: Number(row.created_at),
+    userDate: row.user_date,
+    boardId: row.board_id,
+    rate: row.rate,
+    userId: row.user_id,
+    board: {
+      boardId: row.board_id,
+      boardType: row.board_type,
+      displayName: row.board_display_name,
+    },
+    profile: {
+      id: row.user_id,
+      displayName: row.profile_display_name,
+    },
+  };
+}
+
 export async function updateCheckinRecord(checkin: CheckinRow): Promise<void> {
   await sql`
     UPDATE checkin

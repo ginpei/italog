@@ -19,6 +19,7 @@ export default async function PlacePage({
     getSessionProfile(),
     getPlaceRecord(params.boardId),
   ]);
+
   const checkins = profile
     ? await getPlaceCheckinRecords(profile.id, params.boardId)
     : [];
@@ -42,7 +43,12 @@ export default async function PlacePage({
 
   return (
     <StraightPageLayout profile={profile}>
-      <PlacePageContent place={place} checkins={checkins} checkedIn={visited} />
+      <PlacePageContent
+        place={place}
+        checkins={checkins}
+        checkedIn={visited}
+        userId={profile?.id ?? ""}
+      />
     </StraightPageLayout>
   );
 }
