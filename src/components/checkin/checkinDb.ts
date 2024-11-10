@@ -45,12 +45,14 @@ export async function getCheckinRecord(id: string): Promise<Checkin | null> {
   };
 }
 
-export async function updateCheckinRecord(checkin: CheckinRow): Promise<void> {
+export async function updateCheckinRecord(
+  checkin: Omit<CheckinRow, "createdAt" | "userDate" | "boardId" | "userId">,
+): Promise<void> {
   await sql`
     UPDATE checkin
     SET comment = ${checkin.comment},
         rate = ${checkin.rate}
-    WHERE board_id = ${checkin.boardId} AND user_id = ${checkin.userId} AND user_date = ${checkin.userDate}
+    WHERE id = ${checkin.id}
   `;
 }
 

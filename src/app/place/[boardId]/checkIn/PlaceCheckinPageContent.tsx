@@ -1,27 +1,14 @@
 "use client";
 
-import {
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-  HandThumbUpIcon,
-  SparklesIcon,
-} from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { CheckinRate, CheckinRow } from "@/components/checkin/Checkin";
+import { CheckinForm } from "@/components/checkin/CheckinForm";
 import { requestCreatePlaceCheckin } from "@/components/checkin/checkinApis";
-import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { PlaceDescription } from "@/components/place/PlaceDescription";
-import { Button } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
 
 export interface PlaceCheckinPageContentProps {
@@ -88,94 +75,23 @@ export function PlaceCheckinPageContent({
   return (
     <VStack className="PlaceCheckinPageContent" gap="gap-8">
       <PlaceDescription place={place} />
-      <form className="CheckInForm" onSubmit={onFormSubmit} ref={formRef}>
-        <fieldset className="flex flex-col gap-4" disabled={working}>
-          <hgroup>
-            <H2>Tell something</H2>
-            <p className="text-gray-500">
-              To your friends. The comment and feeling will not be shared to
-              public internet.
-            </p>
-          </hgroup>
-          <ErrorBlock error={error} />
-          <div className="flex flex-col">
-            Check in with feeling of:
-            <span className="flex gap-1">
-              <RateRadio
-                rate={editingCheckin.rate}
-                onChange={onInputChange}
-                value="+1"
-              >
-                <SparklesIcon className="mx-auto h-6" />
-                Excellent
-              </RateRadio>
-              <RateRadio
-                rate={editingCheckin.rate}
-                onChange={onInputChange}
-                value="0"
-              >
-                <HandThumbUpIcon className="mx-auto h-6" />
-                Not really
-              </RateRadio>
-              <RateRadio
-                rate={editingCheckin.rate}
-                onChange={onInputChange}
-                value="-1"
-              >
-                <ExclamationCircleIcon className="mx-auto h-6" />
-                Horrible
-              </RateRadio>
-            </span>
-          </div>
-          <label className="flex flex-col">
-            Comment{editingCheckin.rate === "0" ? " (optional)" : ""}:
-            <textarea
-              className="h-32 border"
-              name="comment"
-              onChange={onInputChange}
-              required={editingCheckin.rate !== "0"}
-              value={editingCheckin.comment}
-            />
-          </label>
-          <Button>Check in</Button>
-        </fieldset>
-      </form>
+      <VStack>
+        <hgroup>
+          <H2>Tell something</H2>
+          <p className="text-gray-500">
+            To your friends. The comment and feeling will not be shared to
+            public internet.
+          </p>
+        </hgroup>
+        <CheckinForm
+          formRef={formRef}
+          working={working}
+          error={error}
+          editingCheckin={editingCheckin}
+          onInputChange={onInputChange}
+          onFormSubmit={onFormSubmit}
+        />
+      </VStack>
     </VStack>
-  );
-}
-
-function RateRadio({
-  children,
-  rate,
-  onChange,
-  value,
-}: {
-  children: React.ReactNode;
-  rate: CheckinRate;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  value: CheckinRate;
-}) {
-  const selected = rate === value;
-
-  return (
-    <label
-      className={`RateRadio
-        relative mx-auto grid h-16 w-full cursor-pointer place-items-center border border-gray-400 ${selected ? "bg-white" : "bg-gray-50"}
-        ${selected ? "" : "hover:bg-gray-100"}
-        focus-within:outline
-        active:bg-gray-200
-        [fieldset:disabled_&]:cursor-default [fieldset:disabled_&]:bg-gray-300 [fieldset:disabled_&]:text-gray-500
-      `}
-    >
-      <input
-        className="absolute opacity-0"
-        name="rate"
-        onChange={onChange}
-        type="radio"
-        value={value}
-      />
-      <div className="text-sm">{children}</div>
-      {selected && <CheckCircleIcon className="absolute left-1 top-1 size-6" />}
-    </label>
   );
 }
