@@ -4,8 +4,8 @@ import { Checkin, CheckinRow } from "./Checkin";
 
 export async function createCheckinRecord(checkin: CheckinRow): Promise<void> {
   await sql`
-    INSERT INTO checkin (comment, created_at, user_date, board_id, starred, user_id)
-    VALUES (${checkin.comment}, ${checkin.createdAt}, ${checkin.userDate}, ${checkin.boardId}, ${checkin.starred}, ${checkin.userId})
+    INSERT INTO checkin (comment, created_at, user_date, board_id, rate, user_id)
+    VALUES (${checkin.comment}, ${checkin.createdAt}, ${checkin.userDate}, ${checkin.boardId}, ${checkin.rate}, ${checkin.userId})
   `;
 }
 
@@ -13,7 +13,7 @@ export async function updateCheckinRecord(checkin: CheckinRow): Promise<void> {
   await sql`
     UPDATE checkin
     SET comment = ${checkin.comment},
-        starred = ${checkin.starred}
+        rate = ${checkin.rate}
     WHERE board_id = ${checkin.boardId} AND user_id = ${checkin.userId} AND user_date = ${checkin.userDate}
   `;
 }
@@ -43,7 +43,7 @@ export async function getTimelineCheckinRecords(
       createdAt: Number(row.created_at),
       userDate: row.user_date,
       boardId: row.board_id,
-      starred: row.starred,
+      rate: row.rate,
       userId: row.user_id,
       board: {
         address: row.address,
@@ -89,7 +89,7 @@ export async function getPlaceCheckinRecords(
       createdAt: Number(row.created_at),
       userDate: row.user_date,
       boardId: row.board_id,
-      starred: row.starred,
+      rate: row.rate,
       userId: row.user_id,
       board: {
         boardId: row.board_id,
@@ -128,7 +128,7 @@ export async function getUserCheckinRecords(
       createdAt: Number(row.created_at),
       userDate: row.user_date,
       boardId: row.board_id,
-      starred: row.starred,
+      rate: row.rate,
       userId: row.user_id,
       board: {
         boardId: row.board_id,

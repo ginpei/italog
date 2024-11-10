@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       comment: checkin.comment,
       createdAt: now,
       id: "",
-      starred: checkin.starred,
+      rate: checkin.rate,
       userDate: getDateInUserTimeZone(now, body.timezoneOffset),
       userId: profile.id,
     };

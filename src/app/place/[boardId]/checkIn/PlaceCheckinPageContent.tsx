@@ -30,7 +30,7 @@ export function PlaceCheckinPageContent({
     comment: "",
     createdAt: 0,
     id: "",
-    starred: false,
+    rate: "0",
     userDate: "",
     userId: "",
   });
@@ -51,6 +51,7 @@ export function PlaceCheckinPageContent({
       throw new Error(`Not implemented`);
       const checkin: Checkin = {
         ...checkinRow,
+        rate: impression,
         profile: {
           id: "checkinRow.userId", // TODO
           displayName: "checkinRow.userDate", // TODO
