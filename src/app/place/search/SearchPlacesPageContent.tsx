@@ -147,7 +147,7 @@ export function SearchPlacesPageContent(): JSX.Element {
             <EmbeddedMap
               userLocation={params}
               onPlaceClick={setPrimaryPlaceId}
-              places={places.map((v) => [v, v.boardId])}
+              places={places}
               primaryPlaceKey={primaryPlaceId}
             />
           </APIProvider>

@@ -80,7 +80,7 @@ export function TimelineSection({
           <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
             <EmbeddedMap
               onPlaceClick={onMapMarkerClick}
-              places={places.map((v) => [v, v.boardId])}
+              places={places}
               primaryPlaceKey={primaryPlaceId}
               userLocation={userLocation}
             />
