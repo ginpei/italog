@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button, ButtonLink } from "@/components/style/Button";
 import { Profile } from "@/components/user/Profile";
 import {
-  createFriendship,
-  deleteFriendship,
-} from "@/components/user/friendshipApi";
+  requestCreateFriendship,
+  requestDeleteFriendship,
+} from "@/components/user/friendshipApis";
 
 export interface FriendshipSectionProps {
   currentUser: Profile;
@@ -29,7 +29,7 @@ export function FriendshipSection({
 
     try {
       setFriendshipWorking(true);
-      await deleteFriendship(profile.id);
+      await requestDeleteFriendship(profile.id);
       window.location.reload();
     } catch (error) {
       console.error(error);
@@ -44,7 +44,7 @@ export function FriendshipSection({
 
     try {
       setFriendshipWorking(true);
-      await createFriendship(profile.id);
+      await requestCreateFriendship(profile.id);
       window.location.reload();
     } catch (error) {
       console.error(error);

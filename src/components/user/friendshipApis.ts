@@ -3,7 +3,9 @@ import {
   PostFriendshipPayload,
 } from "@/app/api/friendship/route";
 
-export function createFriendship(targetUserId: string): Promise<Response> {
+export function requestCreateFriendship(
+  targetUserId: string,
+): Promise<Response> {
   const endpoint = "/api/friendship";
   return fetch(endpoint, {
     method: "POST",
@@ -16,7 +18,9 @@ export function createFriendship(targetUserId: string): Promise<Response> {
   });
 }
 
-export function deleteFriendship(targetUserId: string): Promise<Response> {
+export function requestDeleteFriendship(
+  targetUserId: string,
+): Promise<Response> {
   const endpoint = "/api/friendship";
   return fetch(endpoint, {
     method: "DELETE",
