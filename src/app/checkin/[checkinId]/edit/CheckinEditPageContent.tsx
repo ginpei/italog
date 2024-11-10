@@ -4,9 +4,13 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useRef, useState } from "react";
 import { Checkin, CheckinRate } from "@/components/checkin/Checkin";
 import { CheckinForm } from "@/components/checkin/CheckinForm";
-import { requestUpdatePlaceCheckin } from "@/components/checkin/checkinApis";
+import {
+  requestUpdatePlaceCheckin,
+  requestDeletePlaceCheckin,
+} from "@/components/checkin/checkinApis";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
+import { DangerButton } from "@/components/style/Button";
 import { H1 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
 
@@ -59,6 +63,26 @@ export function CheckinEditPageContent({
     }
   };
 
+  const onDeleteClick = async () => {
+    const ok = window.confirm("Are you sure you want to delete this checkin?");
+    if (!ok) {
+      return;
+    }
+
+    setWorking(true);
+    setError(null);
+
+    try {
+      await requestDeletePlaceCheckin(checkin.id);
+      router.push(`/place/${checkin.boardId}`);
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      setError(toError(error));
+      setWorking(false);
+    }
+  };
+
   return (
     <VStack className="CheckinEditPageContent">
       <H1>
@@ -75,6 +99,10 @@ export function CheckinEditPageContent({
         onInputChange={onInputChange}
         onFormSubmit={onFormSubmit}
       />
+      <p>Or...</p>
+      <DangerButton disabled={working} onClick={onDeleteClick}>
+        Delete this checkin
+      </DangerButton>
     </VStack>
   );
 }

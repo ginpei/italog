@@ -57,3 +57,18 @@ export async function requestUpdatePlaceCheckin(
     throw new Error(data.error);
   }
 }
+
+export async function requestDeletePlaceCheckin(
+  checkinId: string,
+): Promise<void> {
+  const endpoint = `/api/checkin/${checkinId}`;
+
+  const res = await fetch(endpoint, {
+    method: "DELETE",
+  });
+
+  const data = await res.json();
+  if (!data.ok) {
+    throw new Error(data.error);
+  }
+}

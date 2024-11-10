@@ -19,6 +19,24 @@ export function Button({
   );
 }
 
+export function DangerButton({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"button">): React.JSX.Element {
+  return (
+    <button
+      className={`
+        ${className} Button
+        min-h-10 border border-red-700 bg-red-50 p-2 text-red-700
+        hover:border-red-500
+        active:bg-red-200
+        disabled:border-gray-500 disabled:bg-gray-300 disabled:text-gray-500
+      `}
+      {...props}
+    />
+  );
+}
+
 export function ButtonLink({
   className,
   ...props

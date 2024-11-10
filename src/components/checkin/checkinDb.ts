@@ -181,3 +181,10 @@ export async function getUserCheckinRecords(
   );
   return checkins;
 }
+
+export async function deleteCheckinRecord(id: string): Promise<void> {
+  await sql`
+    DELETE FROM checkin
+    WHERE id = ${id}
+  `;
+}
