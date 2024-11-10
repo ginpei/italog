@@ -2,7 +2,12 @@
 
 import { CheckCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Checkin } from "@/components/checkin/Checkin";
+import { requestCreatePlaceCheckin } from "@/components/checkin/checkinApis";
+import { ErrorBlock } from "@/components/error/ErrorBlock";
+import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { PlaceDescription } from "@/components/place/PlaceDescription";
@@ -20,9 +25,29 @@ export function PlacePageContent({
   checkins,
   place,
 }: PlacePageContentProps): JSX.Element {
+  const [working, setWorking] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const router = useRouter();
+
   const onCheckInClick = async () => {
-    // TODO
-    alert("TODO");
+    setWorking(true);
+    setError(null);
+    setSuccessMessage(null);
+
+    try {
+      await requestCreatePlaceCheckin(place.boardId, {
+        comment: "",
+        rate: "0",
+      });
+      router.refresh();
+      setSuccessMessage("Checked in!");
+    } catch (error) {
+      console.error(error);
+      setError(toError(error));
+    } finally {
+      setWorking(false);
+    }
   };
 
   return (
@@ -37,6 +62,10 @@ export function PlacePageContent({
         checkedIn={checkedIn}
       /> */}
       {/* <hr /> */}
+      {successMessage && (
+        <div className="mx-auto text-green-500">{successMessage}</div>
+      )}
+      <ErrorBlock error={error} />
       <div className="mx-auto flex gap-1">
         <button
           className="
@@ -45,6 +74,7 @@ export function PlacePageContent({
             active:bg-gray-200
             disabled:bg-gray-300 disabled:text-gray-500
           "
+          disabled={working}
           onClick={onCheckInClick}
         >
           <div className="text-center">

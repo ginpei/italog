@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import { Checkin, CheckinRow } from "@/components/checkin/Checkin";
+import { requestCreatePlaceCheckin } from "@/components/checkin/checkinApis";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
@@ -48,28 +49,12 @@ export function PlaceCheckinPageContent({
     setError(null);
 
     try {
-      throw new Error(`Not implemented`);
-      const checkin: Checkin = {
-        ...checkinRow,
+      const checkin: Checkin<Place> = {
+        ...editingCheckin,
         rate: impression,
-        profile: {
-          id: "checkinRow.userId", // TODO
-          displayName: "checkinRow.userDate", // TODO
-        },
-        board: {
-          boardId: place.boardId,
-          displayName: place.displayName,
-          boardType: place.boardType,
-        },
       };
 
-      setFormWorking(true);
-      const timezoneOffset = new Date().getTimezoneOffset();
-      await requestRegisterVisit({
-        timezoneOffset,
-        checkin: checkin,
-        checkedIn: false,
-      });
+      const result = await requestCreatePlaceCheckin(checkin);
     } catch (error) {
       console.error(error);
       setError(toError(error));

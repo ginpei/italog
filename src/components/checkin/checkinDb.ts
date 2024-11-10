@@ -2,7 +2,9 @@ import { sql } from "@vercel/postgres";
 import { Place } from "../place/Place";
 import { Checkin, CheckinRow } from "./Checkin";
 
-export async function createCheckinRecord(checkin: CheckinRow): Promise<void> {
+export async function createCheckinRecord(
+  checkin: Omit<CheckinRow, "id">,
+): Promise<void> {
   await sql`
     INSERT INTO checkin (comment, created_at, user_date, board_id, rate, user_id)
     VALUES (${checkin.comment}, ${checkin.createdAt}, ${checkin.userDate}, ${checkin.boardId}, ${checkin.rate}, ${checkin.userId})

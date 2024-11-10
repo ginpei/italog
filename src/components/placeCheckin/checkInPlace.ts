@@ -1,4 +1,4 @@
-import { RegisterCheckinPayload } from "@/app/api/place/checkIn/route";
+import { RegisterCheckinPayload } from "@/app/api/place/[placeId]/checkIn/route";
 
 export async function requestRegisterVisit(
   payload: RegisterCheckinPayload,
