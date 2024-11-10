@@ -42,7 +42,8 @@ export function PlaceCheckinPageContent({
     setEditingCheckin(checkin);
   };
 
-  const onRegisterCheckinSubmit = async (checkinRow: CheckinRow) => {
+  const onRegisterCheckinSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setFormWorking(true);
     setError(null);
 
@@ -83,7 +84,7 @@ export function PlaceCheckinPageContent({
   }, []);
 
   return (
-    <VStack className="PlaceCheckinPageContent">
+    <VStack className="PlaceCheckinPageContent" gap="gap-8">
       <PlaceDescription place={place} />
       <form
         className="CheckInForm"
@@ -91,7 +92,13 @@ export function PlaceCheckinPageContent({
         ref={formRef}
       >
         <fieldset className="flex flex-col gap-4" disabled={formWorking}>
-          <H2>Tell something</H2>
+          <hgroup>
+            <H2>Tell something</H2>
+            <p className="text-gray-500">
+              To your friends. The comment and feeling will not be shared to
+              public internet.
+            </p>
+          </hgroup>
           <ErrorBlock error={error} />
           <div className="flex flex-col">
             Check in with feeling of:
@@ -124,7 +131,10 @@ export function PlaceCheckinPageContent({
           </div>
           <label className="flex flex-col">
             Comment{impression === "0" ? " (optional)" : ""}:
-            <textarea className="h-32 border"></textarea>
+            <textarea
+              className="h-32 border"
+              required={impression !== "0"}
+            ></textarea>
           </label>
           <Button>Check in</Button>
         </fieldset>
