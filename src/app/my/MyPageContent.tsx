@@ -1,18 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { GetQrCodeResult } from "../api/qrCode/route";
 import { ProfileSection } from "./ProfileSection";
+import { Checkin } from "@/components/checkin/Checkin";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
-import { PlaceCheckin } from "@/components/placeCheckin/PlaceCheckin";
 import { Button } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
+import { CheckinList } from "@/components/timeline/CheckinList";
+import { TimelineItem } from "@/components/timeline/TimelineItem";
 import { Profile } from "@/components/user/Profile";
 
 export interface MyPageContentProps {
-  checkins: PlaceCheckin[];
+  checkins: Checkin[];
   friends: Profile[];
   profile: Profile;
 }
@@ -23,8 +25,10 @@ export function MyPageContent({
   profile,
 }: MyPageContentProps): JSX.Element {
   const [pageUrl, setPageUrl] = useState<string | null>(null);
+  const [primaryPlaceId, setPrimaryPlaceId] = useState("");
   const [qrCodeWorking, setQrCodeWorking] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const placeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const myPageUrl = useMemo(() => {
     if (!pageUrl) {
@@ -39,6 +43,10 @@ export function MyPageContent({
   useEffect(() => {
     setPageUrl(location.href);
   }, []);
+
+  const onShowCheckinClick = (checkin: Checkin) => {
+    setPrimaryPlaceId(checkin.boardId);
+  };
 
   const onProfileUpdated = () => {
     // Reload the page to update the profile
@@ -72,20 +80,25 @@ export function MyPageContent({
         <Link href={`/user/${profile.id}`}>Public profile</Link>
       </p>
       <VStack>
-        <H2>Recent checkins</H2>
-        <ul className="ms-8 list-disc">
+        <H2>Checkins</H2>
+        <div>TODO: map</div>
+        <CheckinList>
           {checkins.map((checkin) => (
-            <li
-              key={`${checkin.boardId}-${checkin.userId}-${checkin.userDate}`}
+            <div
+              key={checkin.id}
+              ref={(el) => {
+                if (el) placeRefs.current.set(checkin.id, el);
+                else placeRefs.current.delete(checkin.id);
+              }}
             >
-              <Link href={`/place/${checkin.boardId}`}>
-                {new Date(checkin.createdAt).toLocaleDateString()}:{" "}
-                {checkin.placeName}
-              </Link>
-            </li>
+              <TimelineItem
+                checkin={checkin}
+                onShowClick={onShowCheckinClick}
+                selected={checkin.boardId === primaryPlaceId}
+              />
+            </div>
           ))}
-          {checkins.length === 0 && <li>No checkins yet</li>}
-        </ul>
+        </CheckinList>
       </VStack>
       <ProfileSection profile={profile} onUpdated={onProfileUpdated} />
       <VStack>
