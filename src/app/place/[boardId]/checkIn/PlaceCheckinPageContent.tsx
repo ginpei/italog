@@ -6,15 +6,21 @@ import {
   HandThumbUpIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect, useRef, useState } from "react";
-import { Checkin, CheckinRow } from "@/components/checkin/Checkin";
+import { useRouter } from "next/navigation";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { CheckinRate, CheckinRow } from "@/components/checkin/Checkin";
 import { requestCreatePlaceCheckin } from "@/components/checkin/checkinApis";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { PlaceDescription } from "@/components/place/PlaceDescription";
-import { requestRegisterVisit } from "@/components/placeCheckin/checkInPlace";
 import { Button } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
 
@@ -25,7 +31,8 @@ export interface PlaceCheckinPageContentProps {
 export function PlaceCheckinPageContent({
   place,
 }: PlaceCheckinPageContentProps): JSX.Element {
-  const [impression, setImpression] = useState<ImpressionType>("0"); // TODO
+  const [working, setWorking] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
   const [editingCheckin, setEditingCheckin] = useState<CheckinRow>({
     boardId: place.boardId,
     comment: "",
@@ -35,34 +42,43 @@ export function PlaceCheckinPageContent({
     userDate: "",
     userId: "",
   });
-  const [formWorking, setFormWorking] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
-  const onRegisterCheckinChange = async (checkin: CheckinRow) => {
-    setEditingCheckin(checkin);
-  };
-
-  const onRegisterCheckinSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setFormWorking(true);
-    setError(null);
-
-    try {
-      const checkin: Checkin<Place> = {
-        ...editingCheckin,
-        rate: impression,
-      };
-
-      const result = await requestCreatePlaceCheckin(checkin);
-    } catch (error) {
-      console.error(error);
-      setError(toError(error));
-    } finally {
-      setFormWorking(false);
+  const onInputChange = async (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = event.target;
+    if (name === "rate") {
+      setEditingCheckin({ ...editingCheckin, rate: value as CheckinRate });
+    } else if (name === "comment") {
+      setEditingCheckin({ ...editingCheckin, comment: value });
+    } else {
+      throw new Error("unexpected input name: " + name);
     }
   };
 
+  const onFormSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    setWorking(true);
+    setError(null);
+
+    try {
+      await requestCreatePlaceCheckin(place.boardId, {
+        comment: editingCheckin.comment,
+        rate: editingCheckin.rate,
+      });
+      router.push(`/place/${place.boardId}`);
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      setError(toError(error));
+      setWorking(false);
+    }
+  };
+
+  // scroll to show the form immediately you open the page
   useEffect(() => {
     if (formRef.current) {
       formRef.current.scrollIntoView({ behavior: "smooth" });
@@ -72,12 +88,8 @@ export function PlaceCheckinPageContent({
   return (
     <VStack className="PlaceCheckinPageContent" gap="gap-8">
       <PlaceDescription place={place} />
-      <form
-        className="CheckInForm"
-        onSubmit={onRegisterCheckinSubmit}
-        ref={formRef}
-      >
-        <fieldset className="flex flex-col gap-4" disabled={formWorking}>
+      <form className="CheckInForm" onSubmit={onFormSubmit} ref={formRef}>
+        <fieldset className="flex flex-col gap-4" disabled={working}>
           <hgroup>
             <H2>Tell something</H2>
             <p className="text-gray-500">
@@ -89,38 +101,41 @@ export function PlaceCheckinPageContent({
           <div className="flex flex-col">
             Check in with feeling of:
             <span className="flex gap-1">
-              <ImpressionRadio
-                impression={impression}
-                onChange={setImpression}
+              <RateRadio
+                rate={editingCheckin.rate}
+                onChange={onInputChange}
                 value="+1"
               >
                 <SparklesIcon className="mx-auto h-6" />
                 Excellent
-              </ImpressionRadio>
-              <ImpressionRadio
-                impression={impression}
-                onChange={setImpression}
+              </RateRadio>
+              <RateRadio
+                rate={editingCheckin.rate}
+                onChange={onInputChange}
                 value="0"
               >
                 <HandThumbUpIcon className="mx-auto h-6" />
                 Not really
-              </ImpressionRadio>
-              <ImpressionRadio
-                impression={impression}
-                onChange={setImpression}
+              </RateRadio>
+              <RateRadio
+                rate={editingCheckin.rate}
+                onChange={onInputChange}
                 value="-1"
               >
                 <ExclamationCircleIcon className="mx-auto h-6" />
                 Horrible
-              </ImpressionRadio>
+              </RateRadio>
             </span>
           </div>
           <label className="flex flex-col">
-            Comment{impression === "0" ? " (optional)" : ""}:
+            Comment{editingCheckin.rate === "0" ? " (optional)" : ""}:
             <textarea
               className="h-32 border"
-              required={impression !== "0"}
-            ></textarea>
+              name="comment"
+              onChange={onInputChange}
+              required={editingCheckin.rate !== "0"}
+              value={editingCheckin.comment}
+            />
           </label>
           <Button>Check in</Button>
         </fieldset>
@@ -129,28 +144,22 @@ export function PlaceCheckinPageContent({
   );
 }
 
-type ImpressionType = "+1" | "0" | "-1";
-
-function ImpressionRadio({
+function RateRadio({
   children,
-  impression,
+  rate,
   onChange,
   value,
 }: {
   children: React.ReactNode;
-  impression: ImpressionType;
-  onChange: (value: ImpressionType) => void;
-  value: ImpressionType;
+  rate: CheckinRate;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  value: CheckinRate;
 }) {
-  const selected = impression === value;
-
-  const onRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.value as ImpressionType);
-  };
+  const selected = rate === value;
 
   return (
     <label
-      className={`ImpressionRadio
+      className={`RateRadio
         relative mx-auto grid h-16 w-full cursor-pointer place-items-center border border-gray-400 ${selected ? "bg-white" : "bg-gray-50"}
         ${selected ? "" : "hover:bg-gray-100"}
         focus-within:outline
@@ -160,8 +169,8 @@ function ImpressionRadio({
     >
       <input
         className="absolute opacity-0"
-        name="impression"
-        onChange={onRadioChange}
+        name="rate"
+        onChange={onChange}
         type="radio"
         value={value}
       />

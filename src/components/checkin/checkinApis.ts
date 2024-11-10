@@ -11,11 +11,13 @@ export async function requestCreatePlaceCheckin(
 
   const timezoneOffset = new Date().getTimezoneOffset();
 
+  const body: CreateCheckinPayload = {
+    checkin: { ...checkin, userDate: new Date().toISOString() }, // TODO remove userDate
+    timezoneOffset,
+  };
+
   const res = await fetch(endpoint, {
-    body: JSON.stringify({
-      checkin: { ...checkin, userDate: new Date().toISOString() }, // TODO remove userDate
-      timezoneOffset,
-    } satisfies CreateCheckinPayload),
+    body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
     },
@@ -26,6 +28,4 @@ export async function requestCreatePlaceCheckin(
   if (!data.ok) {
     throw new Error(data.error);
   }
-
-  // return data.checkin;
 }

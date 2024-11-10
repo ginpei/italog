@@ -11,7 +11,6 @@ export interface CreateCheckinPayload {
 }
 
 export type CreateCheckinResult = ResultOrError<{
-  // checkin: CheckinRow;
   ok: true;
 }>;
 
