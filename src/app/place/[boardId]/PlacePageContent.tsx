@@ -2,6 +2,7 @@
 
 import { GlobeAltIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
+import { APIProvider } from "@vis.gl/react-google-maps";
 import Link from "next/link";
 import { ReactNode, useMemo, useState } from "react";
 import { RegisterCheckinForm } from "./RegisterCheckinForm";
@@ -12,6 +13,7 @@ import { requestRegisterVisit } from "@/components/placeCheckin/checkInPlace";
 import { H2 } from "@/components/style/Hn";
 import { BoardCheckinItem } from "@/components/timeline/BoardCheckinItem";
 import { CheckinList } from "@/components/timeline/CheckinList";
+import { EmbeddedMap } from "@/components/timeline/EmbeddedMap";
 
 export interface PlacePageContentProps {
   checkedIn: boolean;
@@ -84,7 +86,17 @@ export function PlacePageContent({
 
   return (
     <VStack>
-      <h1 className="text-2xl font-bold">{place.displayName || "(No name)"}</h1>
+      <hgroup>
+        <h1 className="text-2xl font-bold">
+          {place.displayName || "(No name)"}
+        </h1>
+        <p>{place.typeDisplayName}</p>
+      </hgroup>
+      <div className="h-[30vh] py-1">
+        <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+          <EmbeddedMap places={[place]} />
+        </APIProvider>
+      </div>
       <div className="flex flex-col">
         <PlaceInfoLink href={place.mapUrl} Icon={MapPinIcon}>
           {place.address}
