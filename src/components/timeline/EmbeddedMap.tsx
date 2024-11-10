@@ -4,10 +4,13 @@ import { Place } from "../place/Place";
 import { LatLong } from "@/components/place/LatLong";
 
 export interface EmbeddedMapProps {
-  onPlaceClick: (id: string) => void;
+  onPlaceClick?: (id: string) => void;
   places: Place[];
-  primaryPlaceKey: string;
-  userLocation: LatLong | null;
+  /**
+   * Give `boardId`.
+   */
+  primaryPlaceId?: string;
+  userLocation?: LatLong | null;
 }
 
 /**
@@ -20,13 +23,13 @@ export interface EmbeddedMapProps {
 export function EmbeddedMap({
   onPlaceClick,
   places,
-  primaryPlaceKey,
+  primaryPlaceId,
   userLocation,
 }: EmbeddedMapProps): JSX.Element {
   const mapId = "xxx"; // TODO https://developers.google.com/maps/documentation/get-map-id
   const map = useMap();
 
-  const emphasisPlaceId = primaryPlaceKey || places[0].boardId;
+  const emphasisPlaceId = primaryPlaceId || places[0].boardId;
 
   const uniquePlaces = useMemo(
     () =>
@@ -82,7 +85,7 @@ export function EmbeddedMap({
         {uniquePlaces.map((place) => (
           <AdvancedMarker
             key={place.boardId}
-            onClick={() => onPlaceClick(place.boardId)}
+            onClick={() => onPlaceClick?.(place.boardId)}
             position={{ lat: place.latitude, lng: place.longitude }}
             zIndex={place.boardId === emphasisPlaceId ? 1 : 0}
           >

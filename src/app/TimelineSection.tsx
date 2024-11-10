@@ -81,7 +81,7 @@ export function TimelineSection({
             <EmbeddedMap
               onPlaceClick={onMapMarkerClick}
               places={places}
-              primaryPlaceKey={primaryPlaceId}
+              primaryPlaceId={primaryPlaceId}
               userLocation={userLocation}
             />
           </APIProvider>

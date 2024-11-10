@@ -148,7 +148,7 @@ export function SearchPlacesPageContent(): JSX.Element {
               userLocation={params}
               onPlaceClick={setPrimaryPlaceId}
               places={places}
-              primaryPlaceKey={primaryPlaceId}
+              primaryPlaceId={primaryPlaceId}
             />
           </APIProvider>
         )}
