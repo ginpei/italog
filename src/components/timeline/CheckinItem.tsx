@@ -3,15 +3,13 @@ import { CheckinProfileLink } from "./CheckinProfileLink";
 import { RateIcon } from "./RateIcon";
 import { Checkin } from "@/components/checkin/Checkin";
 
-export interface BoardCheckinItemProps {
+export interface CheckinItemProps {
   checkin: Checkin;
 }
 
-export function BoardCheckinItem({
-  checkin,
-}: BoardCheckinItemProps): JSX.Element {
+export function CheckinItem({ checkin }: CheckinItemProps): JSX.Element {
   return (
-    <div className="BoardCheckinItem flex flex-col border border-gray-300 p-2">
+    <div className="CheckinItem flex flex-col border border-gray-300 p-2">
       <div className="flex gap-2">
         <CheckinProfileLink profile={checkin.profile} />
         <span className="flex flex-col">

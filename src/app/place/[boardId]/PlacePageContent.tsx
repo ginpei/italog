@@ -12,7 +12,7 @@ import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { PlaceDescription } from "@/components/place/PlaceDescription";
 import { H2 } from "@/components/style/Hn";
-import { BoardCheckinItem } from "@/components/timeline/BoardCheckinItem";
+import { CheckinItem } from "@/components/timeline/CheckinItem";
 import { CheckinList } from "@/components/timeline/CheckinList";
 
 export interface PlacePageContentProps {
@@ -100,7 +100,7 @@ export function PlacePageContent({
       <H2>Checkins</H2>
       <CheckinList>
         {checkins.map((checkin) => (
-          <BoardCheckinItem key={checkin.id} checkin={checkin} />
+          <CheckinItem key={checkin.id} checkin={checkin} />
         ))}
       </CheckinList>
     </VStack>
