@@ -1,11 +1,16 @@
 "use client";
 
-import { GlobeAltIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import {
+  CheckCircleIcon,
+  GlobeAltIcon,
+  MapPinIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/24/outline";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import Link from "next/link";
 import { ReactNode, useMemo, useState } from "react";
-import { RegisterCheckinForm } from "./RegisterCheckinForm";
+import { CheckInForm } from "./CheckInForm";
 import { Checkin, CheckinRow } from "@/components/checkin/Checkin";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
@@ -107,15 +112,49 @@ export function PlacePageContent({
           </PlaceInfoLink>
         )}
       </div>
-      <hr />
+      {/* <hr />
       <RegisterCheckinForm
         disabled={formWorking}
         onChange={onRegisterCheckinChange}
         onSubmit={onRegisterCheckinSubmit}
         checkin={editingCheckin}
         checkedIn={checkedIn}
+      /> */}
+      {/* <hr /> */}
+      <div className="mx-auto flex gap-1">
+        <button
+          className="
+            mx-auto grid size-32 place-items-center border border-gray-400 bg-gray-50 text-sm
+            hover:bg-gray-100
+            active:bg-gray-200
+            disabled:bg-gray-300 disabled:text-gray-500
+          "
+        >
+          <div className="text-center">
+            <CheckCircleIcon className="mx-auto size-12" />
+            Check in
+          </div>
+        </button>
+        <button
+          className="
+            mx-auto grid size-32 place-items-center border border-gray-400 bg-gray-50 text-sm
+            hover:bg-gray-100
+            active:bg-gray-200
+            disabled:bg-gray-300 disabled:text-gray-500
+          "
+        >
+          <div className="text-center">
+            <PencilSquareIcon className="mx-auto size-12" />
+            Tell something
+          </div>
+        </button>
+      </div>
+      <CheckInForm
+        checkin={editingCheckin}
+        disabled={formWorking}
+        onCheckinChange={onRegisterCheckinChange}
+        onCheckinSubmit={onRegisterCheckinSubmit}
       />
-      <hr />
       <H2>Checkins</H2>
       <CheckinList>
         {liveCheckins.map((checkin) => (
