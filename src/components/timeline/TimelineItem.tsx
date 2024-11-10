@@ -38,7 +38,7 @@ export function TimelineItem({
             <span className="text-gray-400">{checkin.userDate}</span>
           </span>
           <span>
-            {checkin.starred && "⭐"}
+            {checkin.rate === "+1" && "⭐"}
             {checkin.board.displayName}
           </span>
           <span className="text-sm text-gray-400">

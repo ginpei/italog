@@ -6,7 +6,7 @@ export interface CheckinRow {
   comment: string;
   createdAt: number;
   id: string;
-  starred: boolean;
+  rate: CheckinRate;
 
   /**
    * "YYYY-MM-DD". The date the checkin was created.
@@ -15,6 +15,8 @@ export interface CheckinRow {
 
   userId: string;
 }
+
+export type CheckinRate = "+1" | "0" | "-1";
 
 export interface Checkin<Type extends Board = Board> extends CheckinRow {
   board: Type;
