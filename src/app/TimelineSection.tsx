@@ -6,6 +6,7 @@ import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { LatLong } from "@/components/place/LatLong";
 import { Place } from "@/components/place/Place";
+import { Button } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
 import { CheckinList } from "@/components/timeline/CheckinList";
 import { EmbeddedMap } from "@/components/timeline/EmbeddedMap";
@@ -66,23 +67,22 @@ export function TimelineSection({
     <VStack className="TimelineSection">
       <H2>Timeline</H2>
       <ErrorBlock error={error} />
+      <div className="hidden">
+        {/* TODO */}
+        <Button disabled={working} onClick={onGetLocationClick}>
+          Click to get your location
+        </Button>
+      </div>
       <div ref={mapWrapperRef} className="sticky top-0 h-[30vh] bg-white py-1">
         {working ? (
           <div className="size-full animate-pulse bg-gray-300" />
-        ) : !userLocation ? (
-          <button
-            className="size-full bg-gray-100"
-            onClick={onGetLocationClick}
-          >
-            Click to get your location
-          </button>
         ) : (
           <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
             <EmbeddedMap
-              center={userLocation}
               onPlaceClick={onMapMarkerClick}
               places={places.map((v) => [v, v.boardId])}
               primaryPlaceKey={primaryPlaceId}
+              userLocation={userLocation}
             />
           </APIProvider>
         )}

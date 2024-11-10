@@ -145,7 +145,7 @@ export function SearchPlacesPageContent(): JSX.Element {
         ) : (
           <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
             <EmbeddedMap
-              center={params}
+              userLocation={params}
               onPlaceClick={setPrimaryPlaceId}
               places={places.map((v) => [v, v.boardId])}
               primaryPlaceKey={primaryPlaceId}

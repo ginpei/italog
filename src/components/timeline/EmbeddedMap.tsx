@@ -4,13 +4,13 @@ import { Place } from "../place/Place";
 import { LatLong } from "@/components/place/LatLong";
 
 export interface EmbeddedMapProps {
-  center: LatLong;
   onPlaceClick: (id: string) => void;
   places: [
     Pick<Place, "boardId" | "latitude" | "longitude">,
     boardId: string,
   ][];
   primaryPlaceKey: string;
+  userLocation: LatLong | null;
 }
 
 /**
@@ -21,15 +21,16 @@ export interface EmbeddedMapProps {
  * </APIProvider>
  */
 export function EmbeddedMap({
-  center,
   onPlaceClick,
   places,
   primaryPlaceKey,
+  userLocation,
 }: EmbeddedMapProps): JSX.Element {
   const mapId = "xxx"; // TODO https://developers.google.com/maps/documentation/get-map-id
   const map = useMap();
 
   const emphasisPlaceId = primaryPlaceKey || places[0]?.[0].boardId;
+
   const uniquePlaces = useMemo(
     () =>
       places.filter(
@@ -38,10 +39,23 @@ export function EmbeddedMap({
       ),
     [places],
   );
+
   const userLatLong = useMemo(
-    () => ({ lat: center.lat, lng: center.long }),
-    [center],
+    () => userLocation && { lat: userLocation.lat, lng: userLocation.long },
+    [userLocation],
   );
+
+  const defaultCenter = useMemo(() => {
+    if (userLatLong) {
+      return userLatLong;
+    }
+    if (uniquePlaces.length > 0) {
+      const [place] = uniquePlaces[0];
+      return { lat: place.latitude, lng: place.longitude };
+    }
+    return undefined;
+  }, [uniquePlaces, userLatLong]);
+
   const emphasisPlace = useMemo(
     () =>
       uniquePlaces.find(([place]) => place.boardId === emphasisPlaceId)?.[0],
@@ -58,15 +72,17 @@ export function EmbeddedMap({
 
   return (
     <div className="EmbeddedMap contents">
-      <Map defaultCenter={userLatLong} defaultZoom={15} mapId={mapId}>
-        <AdvancedMarker position={userLatLong}>
-          <div className="EmbeddedMap-userMarker mb-[-12px] grid size-4 items-center justify-center rounded-full border-2 border-white bg-blue-400">
-            <div
-              className="size-3 rounded-full bg-blue-400 motion-safe:animate-ping"
-              style={{ animationDuration: "2000ms" }}
-            />
-          </div>
-        </AdvancedMarker>
+      <Map defaultCenter={defaultCenter} defaultZoom={15} mapId={mapId}>
+        {userLatLong && (
+          <AdvancedMarker position={userLatLong}>
+            <div className="EmbeddedMap-userMarker mb-[-12px] grid size-4 items-center justify-center rounded-full border-2 border-white bg-blue-400">
+              <div
+                className="size-3 rounded-full bg-blue-400 motion-safe:animate-ping"
+                style={{ animationDuration: "2000ms" }}
+              />
+            </div>
+          </AdvancedMarker>
+        )}
         {uniquePlaces.map(([place]) => (
           <AdvancedMarker
             key={place.boardId}
