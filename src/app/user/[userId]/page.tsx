@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { UserPageContent } from "./UserPageContent";
+import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
-import { getUserPlaceCheckin } from "@/components/placeCheckin/placeCheckinDb";
 import { hasFriendshipRecord } from "@/components/user/friendshipDb";
 import { getProfileRecord } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
@@ -17,7 +17,7 @@ export default async function Page({ params }: Params): Promise<JSX.Element> {
   const [currentUserProfile, pageUserProfile, checkins] = await Promise.all([
     getSessionProfile(),
     getProfileRecord(userId),
-    getUserPlaceCheckin(userId),
+    getUserCheckinRecords(userId),
   ]);
 
   if (!currentUserProfile) {

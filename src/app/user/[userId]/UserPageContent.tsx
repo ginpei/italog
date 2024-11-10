@@ -1,17 +1,19 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { FriendshipSection } from "./FriendshipSection";
+import { Checkin } from "@/components/checkin/Checkin";
 import { VStack } from "@/components/layout/VStack";
-import { PlaceCheckin } from "@/components/placeCheckin/PlaceCheckin";
 import { H1, H2 } from "@/components/style/Hn";
-import { Link } from "@/components/style/Link";
+import { CheckinList } from "@/components/timeline/CheckinList";
+import { TimelineItem } from "@/components/timeline/TimelineItem";
 import { Profile } from "@/components/user/Profile";
 
 export interface UserPageContentProps {
   currentUser: Profile;
   isFriend: boolean;
   profile: Profile;
-  checkins: PlaceCheckin[];
+  checkins: Checkin[];
 }
 
 export function UserPageContent({
@@ -20,6 +22,13 @@ export function UserPageContent({
   profile,
   checkins,
 }: UserPageContentProps): JSX.Element {
+  const [primaryPlaceId, setPrimaryPlaceId] = useState("");
+  const placeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  const onShowCheckinClick = (checkin: Checkin) => {
+    setPrimaryPlaceId(checkin.boardId);
+  };
+
   return (
     <VStack gap="gap-8">
       <H1>{profile.displayName}</H1>
@@ -33,19 +42,24 @@ export function UserPageContent({
           <hr />
           <VStack>
             <H2>Recent checkins</H2>
-            <ul className="ms-8 list-disc">
+            <div>TODO: map</div>
+            <CheckinList>
               {checkins.map((checkin) => (
-                <li
-                  key={`${checkin.boardId}-${checkin.userId}-${checkin.userDate}`}
+                <div
+                  key={checkin.id}
+                  ref={(el) => {
+                    if (el) placeRefs.current.set(checkin.id, el);
+                    else placeRefs.current.delete(checkin.id);
+                  }}
                 >
-                  <Link href={`/place/${checkin.boardId}`}>
-                    {new Date(checkin.createdAt).toLocaleDateString()}:{" "}
-                    {checkin.placeName}
-                  </Link>
-                </li>
+                  <TimelineItem
+                    checkin={checkin}
+                    onShowClick={onShowCheckinClick}
+                    selected={checkin.boardId === primaryPlaceId}
+                  />
+                </div>
               ))}
-              {checkins.length === 0 && <li>No checkins yet</li>}
-            </ul>
+            </CheckinList>
           </VStack>
         </>
       )}
