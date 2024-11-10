@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PlacePageContent } from "./PlacePageContent";
-import { getCheckinRecordsOn } from "@/components/checkin/checkinDb";
+import { getPlaceCheckinRecords } from "@/components/checkin/checkinDb";
 import { isUUID } from "@/components/db/transaction";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getPlaceRecord } from "@/components/place/placeDb";
@@ -20,7 +20,7 @@ export default async function PlacePage({
     getPlaceRecord(params.boardId),
   ]);
   const checkins = profile
-    ? await getCheckinRecordsOn(profile.id, params.boardId)
+    ? await getPlaceCheckinRecords(profile.id, params.boardId)
     : [];
 
   // TODO remove
