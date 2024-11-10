@@ -3,6 +3,7 @@ import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Checkin } from "../checkin/Checkin";
 import { CheckinProfileLink } from "./CheckinProfileLink";
+import { RateIcon } from "./RateIcon";
 
 export interface TimelineItemProps {
   checkin: Checkin;
@@ -37,13 +38,12 @@ export function TimelineItem({
             {checkin.profile.displayName}{" "}
             <span className="text-gray-400">{checkin.userDate}</span>
           </span>
-          <span>
-            {checkin.rate === "+1" && "⭐"}
-            {checkin.board.displayName}
-          </span>
-          <span className="text-sm text-gray-400">
-            {checkin.comment && <> {checkin.comment}</>}
-          </span>
+          <span>{checkin.board.displayName}</span>
+          {checkin.comment && (
+            <span className="text-sm text-gray-400">
+              <RateIcon rate={checkin.rate} /> {checkin.comment}
+            </span>
+          )}
         </div>
         <span>
           <ChevronDoubleRightIcon className="size-6 text-gray-500" />

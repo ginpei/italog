@@ -1,8 +1,7 @@
-import { SparklesIcon } from "@heroicons/react/24/solid";
-import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { CheckinProfileLink } from "./CheckinProfileLink";
-import { Checkin, CheckinRate } from "@/components/checkin/Checkin";
+import { RateIcon } from "./RateIcon";
+import { Checkin } from "@/components/checkin/Checkin";
 
 export interface BoardCheckinItemProps {
   checkin: Checkin;
@@ -34,12 +33,4 @@ export function BoardCheckinItem({
       )}
     </div>
   );
-}
-
-function RateIcon({ rate }: { rate: CheckinRate }): JSX.Element | null {
-  return rate === "+1" ? (
-    <SparklesIcon className="inline-block size-4 text-yellow-400" />
-  ) : rate === "-1" ? (
-    <ExclamationCircleIcon className="inline-block size-4 text-red-500" />
-  ) : null;
 }
