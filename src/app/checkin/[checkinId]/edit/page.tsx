@@ -5,6 +5,8 @@ import { isUUID } from "@/components/db/transaction";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getSessionProfile } from "@/components/user/profileSession";
 
+export const fetchCache = "force-no-store";
+
 export default async function Page({
   params,
 }: {
