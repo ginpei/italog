@@ -1,5 +1,9 @@
 import NextLink from "next/link";
 import { ComponentProps, ComponentPropsWithoutRef } from "react";
+import {
+  buttonThemeClassNames,
+  controlShapeClassNames,
+} from "./controlClassNames";
 
 export function Button({
   className,
@@ -7,12 +11,7 @@ export function Button({
 }: ComponentPropsWithoutRef<"button">): React.JSX.Element {
   return (
     <button
-      className={`${className} Button
-        min-h-10 border border-gray-400 bg-gray-50 p-2 text-black
-        hover:border-gray-500
-        active:bg-gray-200
-        disabled:bg-gray-300 disabled:text-gray-500
-      `}
+      className={`${className} Button ${controlShapeClassNames} ${buttonThemeClassNames}`}
       {...props}
     />
   );
@@ -24,8 +23,8 @@ export function DangerButton({
 }: ComponentPropsWithoutRef<"button">): React.JSX.Element {
   return (
     <button
-      className={`${className} DangerButton
-        min-h-10 border border-red-700 bg-red-50 p-2 text-red-700
+      className={`${className} DangerButton ${controlShapeClassNames}
+        border-red-700 bg-red-50 text-red-700
         hover:border-red-500
         active:bg-red-200
         disabled:border-gray-500 disabled:bg-gray-300 disabled:text-gray-500
@@ -41,11 +40,7 @@ export function ButtonLink({
 }: ComponentProps<typeof NextLink>): React.JSX.Element {
   return (
     <NextLink
-      className={`${className} ButtonLink
-        border border-gray-400 bg-gray-50 p-2 text-black
-        hover:bg-gray-100
-        active:bg-gray-200
-      `}
+      className={`${className} ButtonLink ${controlShapeClassNames} ${buttonThemeClassNames}`}
       {...props}
     />
   );

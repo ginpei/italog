@@ -1,4 +1,8 @@
 import { ComponentPropsWithoutRef } from "react";
+import {
+  controlShapeClassNames,
+  inputThemeClassNames,
+} from "./controlClassNames";
 
 export function Select({
   className,
@@ -7,12 +11,7 @@ export function Select({
   return (
     <select
       className={`
-        ${className} Select
-        h-10 rounded-none border border-gray-400 bg-white px-2 text-black
-        hover:border-gray-500
-        active:bg-gray-200
-        disabled:bg-gray-300 disabled:text-gray-500
-      `}
+        ${className} Select ${controlShapeClassNames} ${inputThemeClassNames}`}
       {...props}
     />
   );
