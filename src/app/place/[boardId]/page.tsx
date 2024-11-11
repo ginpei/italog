@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PlacePageContent } from "./PlacePageContent";
 import { getPlaceCheckinRecords } from "@/components/checkin/checkinDb";
@@ -6,10 +7,25 @@ import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getPlaceRecord } from "@/components/place/placeDb";
 import { getSessionProfile } from "@/components/user/profileSession";
 
+interface PageParams {
+  boardId: string;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: PageParams;
+}): Promise<Metadata> {
+  const place = await getPlaceRecord(params.boardId);
+  return {
+    title: place?.displayName,
+  };
+}
+
 export default async function PlacePage({
   params,
 }: {
-  params: { boardId: string };
+  params: PageParams;
 }): Promise<JSX.Element> {
   if (!isUUID(params.boardId)) {
     notFound();

@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Italog",
+  title: {
+    template: "%s - Italog",
+    default: "Italog",
+  },
 };
 
 export default function RootLayout({

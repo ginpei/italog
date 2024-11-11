@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CheckinEditPageContent } from "./CheckinEditPageContent";
 import { getCheckinRecord } from "@/components/checkin/checkinDb";
@@ -7,10 +8,25 @@ import { getSessionProfile } from "@/components/user/profileSession";
 
 export const fetchCache = "force-no-store";
 
+interface PageParams {
+  checkinId: string;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: PageParams;
+}): Promise<Metadata> {
+  const checkin = await getCheckinRecord(params.checkinId);
+  return {
+    title: `Edit checkin at ${checkin?.board.displayName}`,
+  };
+}
+
 export default async function Page({
   params,
 }: {
-  params: { checkinId: string };
+  params: PageParams;
 }): Promise<JSX.Element> {
   if (!isUUID(params.checkinId)) {
     notFound();

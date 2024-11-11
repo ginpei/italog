@@ -1,8 +1,13 @@
+import { Metadata } from "next";
 import { MyPageContent } from "./MyPageContent";
 import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getFriendProfileRecords } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
+
+export const metadata: Metadata = {
+  title: "My Page",
+};
 
 export default async function Home() {
   const profile = await getSessionProfile();

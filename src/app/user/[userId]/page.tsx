@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { UserPageContent } from "./UserPageContent";
 import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
@@ -7,12 +8,25 @@ import { hasFriendshipRecord } from "@/components/user/friendshipDb";
 import { getProfileRecord } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
 
+interface PageParams {
+  userId: string;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: PageParams;
+}): Promise<Metadata> {
+  const pageProfile = await getProfileRecord(params.userId);
+  return {
+    title: pageProfile?.displayName,
+  };
+}
+
 export default async function Page({
   params,
 }: {
-  params: {
-    userId: string;
-  };
+  params: PageParams;
 }): Promise<JSX.Element> {
   const userId = params.userId;
   if (!isUUID(userId)) {
