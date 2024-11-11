@@ -22,7 +22,7 @@ export default async function Page({ params }: Params): Promise<JSX.Element> {
 
   if (!currentUserProfile) {
     // TODO 401
-    return <div>401</div>;
+    return <div>Log in please</div>;
   }
 
   if (!pageUserProfile) {
