@@ -7,8 +7,8 @@ export interface RateIconProps {
 
 export function RateIcon({ rate }: RateIconProps): JSX.Element | null {
   return rate === "+1" ? (
-    <SparklesIcon className="inline-block size-4 text-yellow-400" />
+    <SparklesIcon className="RateIcon me-2 inline-block size-4 text-yellow-400" />
   ) : rate === "-1" ? (
-    <ExclamationCircleIcon className="inline-block size-4 text-red-500" />
+    <ExclamationCircleIcon className="RateIcon me-2 inline-block size-4 text-red-500" />
   ) : null;
 }

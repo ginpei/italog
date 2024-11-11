@@ -40,9 +40,10 @@ export function TimelineItem({
           </span>
           <span>{checkin.board.displayName}</span>
           {checkin.comment && (
-            <span className="text-sm text-gray-400">
-              <RateIcon rate={checkin.rate} /> {checkin.comment}
-            </span>
+            <div className="whitespace-pre-wrap text-sm text-gray-400">
+              <RateIcon rate={checkin.rate} />
+              {checkin.comment.trim()}
+            </div>
           )}
         </div>
         <span>

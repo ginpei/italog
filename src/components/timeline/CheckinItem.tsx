@@ -38,8 +38,9 @@ export function CheckinItem({ checkin, own }: CheckinItemProps): JSX.Element {
         </span>
       </div>
       {checkin.comment && (
-        <div className="">
-          <RateIcon rate={checkin.rate} /> {checkin.comment}
+        <div className="whitespace-pre-wrap">
+          <RateIcon rate={checkin.rate} />
+          {checkin.comment.trim()}
         </div>
       )}
     </div>
