@@ -25,7 +25,7 @@ export function SelectLink({
 }: ComponentProps<typeof NextLink>): React.JSX.Element {
   return (
     <NextLink
-      className={`Select ${className} border border-gray-400 bg-gray-50 p-2 hover:bg-gray-100 active:bg-gray-200`}
+      className={`${className} Select border border-gray-400 bg-gray-50 p-2 hover:bg-gray-100 active:bg-gray-200`}
       {...props}
     />
   );

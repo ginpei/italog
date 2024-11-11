@@ -43,8 +43,8 @@ export function ButtonLink({
 }: ComponentProps<typeof NextLink>): React.JSX.Element {
   return (
     <NextLink
-      className={`Button
-        ${className} border border-gray-400 bg-gray-50 p-2 text-black
+      className={`${className} Button
+        border border-gray-400 bg-gray-50 p-2 text-black
         hover:bg-gray-100
         active:bg-gray-200
       `}
