@@ -1,19 +1,24 @@
 import { notFound } from "next/navigation";
 import { UserPageContent } from "./UserPageContent";
 import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
+import { isUUID } from "@/components/db/transaction";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { hasFriendshipRecord } from "@/components/user/friendshipDb";
 import { getProfileRecord } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
 
-interface Params {
+export default async function Page({
+  params,
+}: {
   params: {
     userId: string;
   };
-}
+}): Promise<JSX.Element> {
+  const userId = params.userId;
+  if (!isUUID(userId)) {
+    notFound();
+  }
 
-export default async function Page({ params }: Params): Promise<JSX.Element> {
-  const userId = decodeURI(params.userId);
   const [currentUserProfile, pageUserProfile, checkins] = await Promise.all([
     getSessionProfile(),
     getProfileRecord(userId),
