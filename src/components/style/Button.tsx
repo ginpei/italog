@@ -7,8 +7,7 @@ export function Button({
 }: ComponentPropsWithoutRef<"button">): React.JSX.Element {
   return (
     <button
-      className={`
-        ${className} Button
+      className={`${className} Button
         min-h-10 border border-gray-400 bg-gray-50 p-2 text-black
         hover:border-gray-500
         active:bg-gray-200
@@ -25,8 +24,7 @@ export function DangerButton({
 }: ComponentPropsWithoutRef<"button">): React.JSX.Element {
   return (
     <button
-      className={`
-        ${className} Button
+      className={`${className} DangerButton
         min-h-10 border border-red-700 bg-red-50 p-2 text-red-700
         hover:border-red-500
         active:bg-red-200
@@ -43,7 +41,7 @@ export function ButtonLink({
 }: ComponentProps<typeof NextLink>): React.JSX.Element {
   return (
     <NextLink
-      className={`${className} Button
+      className={`${className} ButtonLink
         border border-gray-400 bg-gray-50 p-2 text-black
         hover:bg-gray-100
         active:bg-gray-200
