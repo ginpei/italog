@@ -29,7 +29,7 @@ export function EmbeddedMap({
   const mapId = "xxx"; // TODO https://developers.google.com/maps/documentation/get-map-id
   const map = useMap();
 
-  const emphasisPlaceId = primaryPlaceId || places[0].boardId;
+  const emphasisPlaceId = primaryPlaceId || places[0]?.boardId;
 
   const uniquePlaces = useMemo(
     () =>
@@ -50,7 +50,7 @@ export function EmbeddedMap({
       return userLatLong;
     }
     if (uniquePlaces.length > 0) {
-      const place = uniquePlaces[0];
+      const place = uniquePlaces[0]!;
       return { lat: place.latitude, lng: place.longitude };
     }
     return undefined;

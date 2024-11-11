@@ -51,6 +51,10 @@ export async function getProfileRecordByAuth(
   `;
 
   const row = profileResult.rows[0];
+  if (!row) {
+    return null;
+  }
+
   const profile: Profile = {
     displayName: row.display_name,
     id: row.id,

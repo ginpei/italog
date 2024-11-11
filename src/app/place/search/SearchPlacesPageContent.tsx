@@ -175,7 +175,7 @@ export function SearchPlacesPageContent(): JSX.Element {
                 onShowClick={() => setPrimaryPlaceId(place.boardId)}
                 place={place}
                 selected={
-                  place.boardId === (primaryPlaceId || places[0].boardId)
+                  place.boardId === (primaryPlaceId || places[0]?.boardId)
                 }
               />
             </div>

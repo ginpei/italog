@@ -9,7 +9,7 @@ export async function hasFriendshipRecord(
     SELECT COUNT(*) FROM user_user
     WHERE user_id = ${userId1} AND friend_id = ${userId2}
   `;
-  return result.rows[0].count > 0;
+  return result.rows[0]!.count > 0;
 }
 
 export async function createFriendshipRecord(

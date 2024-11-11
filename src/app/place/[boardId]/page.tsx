@@ -25,10 +25,10 @@ export default async function PlacePage({
     : [];
 
   // TODO remove
-  const visited =
-    checkins[0] &&
-    new Date(checkins[0].createdAt).toLocaleDateString() ===
-      new Date().toLocaleDateString();
+  const visited = checkins[0]
+    ? new Date(checkins[0].createdAt).toLocaleDateString() ===
+      new Date().toLocaleDateString()
+    : false;
 
   if (!place) {
     console.log(`No place found (2)`);
