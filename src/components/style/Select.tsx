@@ -1,5 +1,4 @@
-import NextLink from "next/link";
-import { ComponentProps, ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef } from "react";
 
 export function Select({
   className,
@@ -14,18 +13,6 @@ export function Select({
         active:bg-gray-200
         disabled:bg-gray-300 disabled:text-gray-500
       `}
-      {...props}
-    />
-  );
-}
-
-export function SelectLink({
-  className,
-  ...props
-}: ComponentProps<typeof NextLink>): React.JSX.Element {
-  return (
-    <NextLink
-      className={`${className} Select border border-gray-400 bg-gray-50 p-2 hover:bg-gray-100 active:bg-gray-200`}
       {...props}
     />
   );
