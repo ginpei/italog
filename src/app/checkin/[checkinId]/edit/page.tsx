@@ -22,8 +22,7 @@ export default async function Page({
   ]);
 
   if (!profile) {
-    // TODO 401
-    notFound();
+    throw new Error("Need login");
   }
 
   if (!checkin) {

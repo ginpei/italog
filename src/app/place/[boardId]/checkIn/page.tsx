@@ -20,8 +20,7 @@ export default async function PlacePage({
   ]);
 
   if (!profile) {
-    // TODO
-    notFound();
+    throw new Error("Need login");
   }
 
   if (!place) {

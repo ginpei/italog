@@ -8,7 +8,7 @@ export default async function Home() {
   const profile = await getSessionProfile();
 
   if (!profile) {
-    return <div>Not logged in</div>;
+    throw new Error("Need login");
   }
 
   const [checkins, friends] = await Promise.all([
