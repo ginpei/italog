@@ -131,7 +131,11 @@ export function MyPageContent({
         <H2>Logout</H2>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a
-          className="border border-gray-400 bg-gray-50 p-2 text-center hover:bg-gray-100 active:bg-gray-200"
+          className="
+            border border-gray-400 bg-gray-50 p-2 text-center text-black
+            hover:bg-gray-100
+            active:bg-gray-200
+          "
           href="/api/auth/logout"
         >
           Log out

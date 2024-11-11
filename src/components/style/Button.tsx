@@ -9,7 +9,7 @@ export function Button({
     <button
       className={`
         ${className} Button
-        min-h-10 border border-gray-400 bg-gray-50 p-2
+        min-h-10 border border-gray-400 bg-gray-50 p-2 text-black
         hover:border-gray-500
         active:bg-gray-200
         disabled:bg-gray-300 disabled:text-gray-500
@@ -43,7 +43,11 @@ export function ButtonLink({
 }: ComponentProps<typeof NextLink>): React.JSX.Element {
   return (
     <NextLink
-      className={`Button ${className} border border-gray-400 bg-gray-50 p-2 hover:bg-gray-100 active:bg-gray-200`}
+      className={`Button
+        ${className} border border-gray-400 bg-gray-50 p-2 text-black
+        hover:bg-gray-100
+        active:bg-gray-200
+      `}
       {...props}
     />
   );

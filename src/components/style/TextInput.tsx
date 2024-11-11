@@ -13,7 +13,7 @@ export function TextInput({
     <input
       className={`
         ${className} TextInput
-        h-10 rounded-none border border-gray-400 bg-white px-2
+        h-10 rounded-none border border-gray-400 bg-white px-2 text-black
         invalid:bg-red-50
         hover:border-gray-500
         focus:bg-white

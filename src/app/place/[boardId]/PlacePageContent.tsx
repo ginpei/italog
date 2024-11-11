@@ -71,7 +71,7 @@ export function PlacePageContent({
       <div className="mx-auto flex gap-1">
         <button
           className="
-            mx-auto grid size-32 place-items-center border border-gray-400 bg-gray-50 text-sm
+            mx-auto grid size-32 place-items-center border border-gray-400 bg-gray-50 text-sm text-black
             hover:bg-gray-100
             active:bg-gray-200
             disabled:bg-gray-300 disabled:text-gray-500
@@ -86,7 +86,7 @@ export function PlacePageContent({
         </button>
         <Link
           className="
-            mx-auto grid size-32 place-items-center border border-gray-400 bg-gray-50 text-sm
+            mx-auto grid size-32 place-items-center border border-gray-400 bg-gray-50 text-sm text-black
             hover:bg-gray-100
             active:bg-gray-200
             disabled:bg-gray-300 disabled:text-gray-500

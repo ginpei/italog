@@ -60,7 +60,7 @@ export function CheckinForm({
         <label className="flex flex-col">
           Comment{editingCheckin.rate === "0" ? " (optional)" : ""}:
           <textarea
-            className="h-32 border"
+            className="h-32 border bg-white text-black"
             name="comment"
             onChange={onInputChange}
             required={editingCheckin.rate !== "0"}
@@ -89,7 +89,7 @@ function RateRadio({
   return (
     <label
       className={`RateRadio
-        relative mx-auto grid h-16 w-full cursor-pointer place-items-center border border-gray-400 ${selected ? "bg-white" : "bg-gray-50"}
+        relative mx-auto grid h-16 w-full cursor-pointer place-items-center border  border-gray-400 text-black ${selected ? "bg-white" : "bg-gray-50"}
         ${selected ? "" : "hover:bg-gray-100"}
         focus-within:outline
         active:bg-gray-200

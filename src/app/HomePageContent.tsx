@@ -27,7 +27,11 @@ export function HomePageContent({
             <H2>Search</H2>
             <p className="mx-auto flex gap-4">
               <Link
-                className="grid size-36 items-center justify-center border border-gray-400 bg-gray-50 hover:bg-gray-100 active:bg-gray-200"
+                className="
+                  grid size-36 items-center justify-center border border-gray-400 bg-gray-50 text-black
+                  hover:bg-gray-100
+                  active:bg-gray-200
+                "
                 href="/place/search"
               >
                 <span>
@@ -36,7 +40,11 @@ export function HomePageContent({
                 </span>
               </Link>
               <Link
-                className="grid size-36 items-center justify-center border border-gray-400 bg-gray-50 hover:bg-gray-100 active:bg-gray-200"
+                className="
+                  grid size-36 items-center justify-center border border-gray-400 bg-gray-50 text-black
+                  hover:bg-gray-100
+                  active:bg-gray-200
+                "
                 href="/product/search"
               >
                 <span>
