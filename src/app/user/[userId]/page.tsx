@@ -21,8 +21,7 @@ export default async function Page({ params }: Params): Promise<JSX.Element> {
   ]);
 
   if (!currentUserProfile) {
-    // TODO 401
-    return <div>Log in please</div>;
+    throw new Error("Need login");
   }
 
   if (!pageUserProfile) {
