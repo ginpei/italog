@@ -19,7 +19,7 @@ export function NavBar({
     <section className="NavBar bg-ginpei text-white">
       <Content>
         <div className="flex h-[1lh] flex-row items-stretch justify-between leading-10">
-          <h1 className="flex items-stretch gap-4">
+          <h1 className="ms-[-1em] flex items-stretch">
             <NavBarLink href={titleLink}>{title}</NavBarLink>
             {profile && (
               <NavBarLink href="/place/search">
@@ -27,13 +27,13 @@ export function NavBar({
               </NavBarLink>
             )}
           </h1>
-          <div className="flex items-stretch gap-4">
+          <div className="me-[-1em] flex items-stretch">
             {profile ? (
-              /* eslint-disable-next-line @next/next/no-html-link-for-pages */
-              <a href="/my">{profile.displayName}</a>
+              <NavBarLink href="/my">{profile.displayName}</NavBarLink>
             ) : (
-              /* eslint-disable-next-line @next/next/no-html-link-for-pages */
-              <a href="/api/auth/login">Login</a>
+              <NavBarLink auth href="/api/auth/login">
+                Login
+              </NavBarLink>
             )}
           </div>
         </div>
@@ -42,12 +42,24 @@ export function NavBar({
   );
 }
 
-function NavBarLink(props: ComponentProps<typeof Link>): React.JSX.Element {
-  const { className, ...otherProps } = props;
+function NavBarLink({
+  auth,
+  className,
+  ...props
+}: Omit<ComponentProps<typeof Link>, "href"> & {
+  auth?: boolean;
+  href: string;
+}): React.JSX.Element {
+  const Tag = auth ? "a" : Link;
+
   return (
-    <Link
-      className={`${className} text-inherit hover:underline`}
-      {...otherProps}
+    <Tag
+      className={`${className} NavBarLink
+        px-4 text-inherit
+        hover:bg-white/20
+        active:bg-white/10
+      `}
+      {...props}
     />
   );
 }
