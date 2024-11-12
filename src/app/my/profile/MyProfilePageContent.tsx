@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ProfileForm } from "./ProfileForm";
 import { PostProfilePayload } from "@/app/api/profile/route";
@@ -18,6 +19,7 @@ export function MyProfilePageContent({
 }: MyProfilePageContentProps): JSX.Element {
   const [editingProfile, setEditingProfile] = useState(profile);
   const [working, setWorking] = useState(false);
+  const router = useRouter();
 
   const onProfileChange = (profile: Profile) => {
     setEditingProfile(profile);
@@ -27,11 +29,10 @@ export function MyProfilePageContent({
     try {
       setWorking(true);
       await postProfile(profile);
-
-      // Reload the page to update the profile
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       console.error(error);
+    } finally {
       setWorking(false);
     }
   };
