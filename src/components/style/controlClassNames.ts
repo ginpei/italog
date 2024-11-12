@@ -8,23 +8,32 @@ export const controlShapeClassNames = `
   min-h-10 rounded-none border px-2
 `;
 
+export const controlBorderThemeClassNames = `
+  border-gray-400
+  dark:border-gray-700
+`;
+
 export const buttonThemeClassNames = `
-  border-gray-400 bg-gray-50 text-black
+  ${controlBorderThemeClassNames}
+
+  bg-gray-50 text-black
   hover:border-gray-500
   active:bg-gray-200
   disabled:bg-gray-300 disabled:text-gray-500
 
-  dark:border-gray-700 dark:bg-gray-900 dark:text-white
+  dark:bg-gray-900 dark:text-white
   active:dark:bg-gray-800
   disabled:dark:bg-gray-800 disabled:dark:text-gray-500
 `;
 
 export const inputThemeClassNames = `
-  border-gray-400 bg-white text-black
+  ${controlBorderThemeClassNames}
+
+  bg-white text-black
   hover:border-gray-500
   disabled:bg-gray-300 disabled:text-gray-500
 
-  dark:border-gray-700 dark:bg-black dark:text-white
+  dark:bg-black dark:text-white
   disabled:dark:bg-gray-800 disabled:dark:text-gray-500
 `;
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { controlBorderThemeClassNames } from "../style/controlClassNames";
 import { CheckinProfileLink } from "./CheckinProfileLink";
 import { RateIcon } from "./RateIcon";
 import { Checkin } from "@/components/checkin/Checkin";
@@ -10,7 +11,9 @@ export interface CheckinItemProps {
 
 export function CheckinItem({ checkin, own }: CheckinItemProps): JSX.Element {
   return (
-    <div className="CheckinItem flex flex-col border border-gray-300 p-2">
+    <div
+      className={`CheckinItem flex flex-col border p-2 ${controlBorderThemeClassNames}`}
+    >
       <div className="flex gap-2">
         <CheckinProfileLink profile={checkin.profile} />
         <span className="flex flex-col">

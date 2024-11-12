@@ -2,7 +2,10 @@ import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
 import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Checkin } from "../checkin/Checkin";
-import { hoverBlockThemeClassNames } from "../style/controlClassNames";
+import {
+  controlBorderThemeClassNames,
+  hoverBlockThemeClassNames,
+} from "../style/controlClassNames";
 import { CheckinProfileLink } from "./CheckinProfileLink";
 import { RateIcon } from "./RateIcon";
 
@@ -18,7 +21,9 @@ export function TimelineItem({
   selected,
 }: TimelineItemProps): JSX.Element {
   return (
-    <div className="TimelineItem flex border border-gray-300 ">
+    <div
+      className={`TimelineItem flex border border-gray-300 ${controlBorderThemeClassNames}`}
+    >
       <button
         className={`
           grid size-12 items-center justify-center

@@ -2,7 +2,10 @@ import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
 import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Place } from "@/components/place/Place";
-import { hoverBlockThemeClassNames } from "@/components/style/controlClassNames";
+import {
+  controlBorderThemeClassNames,
+  hoverBlockThemeClassNames,
+} from "@/components/style/controlClassNames";
 
 export interface PlaceItemProps {
   onShowClick: (place: Place) => void;
@@ -16,7 +19,9 @@ export function PlaceItem({
   selected,
 }: PlaceItemProps): JSX.Element {
   return (
-    <div className="PlaceItem flex border border-gray-300 ">
+    <div
+      className={`PlaceItem flex border border-gray-300 ${controlBorderThemeClassNames}`}
+    >
       <button
         className={`
           grid w-12 items-center justify-center
