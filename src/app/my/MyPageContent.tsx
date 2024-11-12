@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GetQrCodeResult } from "../api/qrCode/route";
-import { ProfileSection } from "./ProfileSection";
 import { Checkin } from "@/components/checkin/Checkin";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
@@ -48,11 +47,6 @@ export function MyPageContent({
     setPrimaryPlaceId(checkin.boardId);
   };
 
-  const onProfileUpdated = () => {
-    // Reload the page to update the profile
-    window.location.reload();
-  };
-
   const onShowQrCodeClick = async () => {
     if (!myPageUrl) {
       return;
@@ -77,7 +71,8 @@ export function MyPageContent({
     <VStack gap="gap-8">
       <H1>My page</H1>
       <p>
-        <Link href={`/user/${profile.id}`}>Public profile</Link>
+        <Link href={`/user/${profile.id}`}>Public profile</Link> |{" "}
+        <Link href={`/my/profile`}>Edit profile</Link>
       </p>
       <VStack>
         <H2>Checkins</H2>
@@ -100,7 +95,6 @@ export function MyPageContent({
           ))}
         </CheckinList>
       </VStack>
-      <ProfileSection profile={profile} onUpdated={onProfileUpdated} />
       <VStack>
         <H2>Friends</H2>
         <ul className="ms-8 list-disc">
