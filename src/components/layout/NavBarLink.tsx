@@ -1,16 +1,11 @@
 import Link from "next/link";
-import { ComponentProps } from "react";
-
-export type NavBarLinkProps = Omit<ComponentProps<typeof Link>, "href"> & {
-  as?: "a" | "Link";
-  href: string;
-};
+import { LinkProps } from "../style/Link";
 
 export function NavBarLink({
   as = "Link",
   className,
   ...props
-}: NavBarLinkProps): React.JSX.Element {
+}: LinkProps): React.JSX.Element {
   const Tag = as === "a" ? "a" : Link;
 
   return (

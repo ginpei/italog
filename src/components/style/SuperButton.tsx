@@ -1,5 +1,6 @@
 import NextLink from "next/link";
-import { ComponentProps, ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef } from "react";
+import { LinkProps } from "./Link";
 import { buttonThemeClassNames } from "./controlClassNames";
 
 const superButtonShapeClassNames = `
@@ -23,11 +24,14 @@ export function SuperButton({
 }
 
 export function SuperButtonLink({
+  as,
   className,
   ...props
-}: ComponentProps<typeof NextLink>): React.JSX.Element {
+}: LinkProps): React.JSX.Element {
+  const Tag = as === "a" ? "a" : NextLink;
+
   return (
-    <NextLink
+    <Tag
       className={`${className} SuperButtonLink ${superButtonShapeClassNames} ${buttonThemeClassNames}
       `}
       {...props}
