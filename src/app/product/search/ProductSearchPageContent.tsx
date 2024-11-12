@@ -15,6 +15,8 @@ export interface ProductSearchPageContentProps {
 export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX.Element {
   const [barcode, setBarcode] = useState("");
 
+  const special = new URL(location.href).searchParams.get("special") === "1";
+
   const onBarcodeFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -64,44 +66,52 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
         </p>
         <H1>Search product</H1>
       </VStack>
-      <VStack>
-        <H2>By barcode</H2>
-        <p className="text-sm text-gray-500">
-          Hint: you might want to use speech recognition on your device to enter
-          the barcode by reading it out loud.
-        </p>
-        <form onSubmit={onBarcodeFormSubmit}>
-          <VStack>
-            <fieldset className="flex items-stretch gap-2">
-              <TextInput
-                className="w-full"
-                inputMode="numeric"
-                onChange={onBarcodeChange}
-                name="barcode"
-                pattern="(\d|\s)*"
-                placeholder="0 00000 00000 0"
-                value={barcode}
-              />
-              <Button>
-                <MagnifyingGlassIcon className="size-5" />
-              </Button>
-            </fieldset>
-            <div>
-              <ButtonLabel>
-                <input
-                  accept="image/*"
-                  capture
-                  className="hidden"
-                  onChange={onBarcodeFileChange}
-                  type="file"
+
+      {special ? (
+        <VStack>
+          <H2>By barcode</H2>
+          <p className="text-sm text-gray-500">
+            Hint: you might want to use speech recognition on your device to
+            enter the barcode by reading it out loud.
+          </p>
+          <form onSubmit={onBarcodeFormSubmit}>
+            <VStack>
+              <fieldset className="flex items-stretch gap-2">
+                <TextInput
+                  className="w-full"
+                  inputMode="numeric"
+                  onChange={onBarcodeChange}
+                  name="barcode"
+                  pattern="(\d|\s)*"
+                  placeholder="0 00000 00000 0"
+                  value={barcode}
                 />
-                <CameraIcon className="inline-block size-5" /> Capture barcode
-                (beta)
-              </ButtonLabel>
-            </div>
-          </VStack>
-        </form>
-      </VStack>
+                <Button>
+                  <MagnifyingGlassIcon className="size-5" />
+                </Button>
+              </fieldset>
+              <div>
+                <ButtonLabel>
+                  <input
+                    accept="image/*"
+                    capture
+                    className="hidden"
+                    onChange={onBarcodeFileChange}
+                    type="file"
+                  />
+                  <CameraIcon className="inline-block size-5" /> Capture barcode
+                  (beta)
+                </ButtonLabel>
+              </div>
+            </VStack>
+          </form>
+        </VStack>
+      ) : (
+        <p className="text-gray-500">
+          You will be able to check in products to share your impression as well
+          as places.
+        </p>
+      )}
     </VStack>
   );
 }
