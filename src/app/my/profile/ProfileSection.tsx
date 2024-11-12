@@ -34,7 +34,7 @@ export function ProfileSection({
 
   return (
     <VStack as="section" className="ProfileSection">
-      <H2>Profile</H2>
+      <H2>Edit profile</H2>
       <ProfileForm
         disabled={working}
         onChange={onProfileChange}

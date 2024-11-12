@@ -22,7 +22,7 @@ export function MyProfilePageContent({
   return (
     <VStack gap="gap-8">
       <VStack>
-        <H1>Edit profile</H1>
+        <H1>My profile</H1>
         <nav>
           <Link href="/my">
             <ChevronDoubleLeftIcon className="me-1 inline-block size-4" />

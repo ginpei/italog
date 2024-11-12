@@ -4,7 +4,7 @@ import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getSessionProfile } from "@/components/user/profileSession";
 
 export const metadata: Metadata = {
-  title: "Edit profile",
+  title: "My profile",
 };
 
 export default async function Home() {
