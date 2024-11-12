@@ -1,12 +1,12 @@
 "use client";
 
 import { MapPinIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { TimelineSection } from "./TimelineSection";
 import { Checkin } from "@/components/checkin/Checkin";
 import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { H1, H2 } from "@/components/style/Hn";
+import { SuperButtonLink } from "@/components/style/SuperButton";
 import { Profile } from "@/components/user/Profile";
 
 export interface HomePageContentProps {
@@ -26,45 +26,25 @@ export function HomePageContent({
           <VStack>
             <H2>Search</H2>
             <p className="mx-auto flex gap-4">
-              <Link
-                className="
-                  grid size-36 items-center justify-center border border-gray-400 bg-gray-50 text-black
-                  hover:bg-gray-100
-                  active:bg-gray-200
-                "
-                href="/place/search"
-              >
+              <SuperButtonLink href="/place/search">
                 <span>
                   <MapPinIcon className="mx-auto size-8" />
                   Place
                 </span>
-              </Link>
-              <Link
-                className="
-                  grid size-36 items-center justify-center border border-gray-400 bg-gray-50 text-black
-                  hover:bg-gray-100
-                  active:bg-gray-200
-                "
-                href="/product/search"
-              >
+              </SuperButtonLink>
+              <SuperButtonLink href="/product/search">
                 <span>
                   <ShoppingBagIcon className="mx-auto size-8" />
                   Product
                 </span>
-              </Link>
+              </SuperButtonLink>
             </p>
           </VStack>
           <TimelineSection checkins={checkins} />
         </>
       ) : (
         <p className="mx-auto my-16">
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a
-            className="border border-gray-400 bg-gray-50 p-8 hover:bg-gray-100 active:bg-gray-200"
-            href="/api/auth/login"
-          >
-            Login
-          </a>
+          <SuperButtonLink href="/api/auth/login">Login</SuperButtonLink>
         </p>
       )}
     </VStack>

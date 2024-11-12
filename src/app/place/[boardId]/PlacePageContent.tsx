@@ -1,7 +1,6 @@
 "use client";
 
 import { CheckCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Checkin } from "@/components/checkin/Checkin";
@@ -12,6 +11,7 @@ import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { PlaceDescription } from "@/components/place/PlaceDescription";
 import { H2 } from "@/components/style/Hn";
+import { SuperButton, SuperButtonLink } from "@/components/style/SuperButton";
 import { CheckinItem } from "@/components/timeline/CheckinItem";
 import { CheckinList } from "@/components/timeline/CheckinList";
 
@@ -68,36 +68,19 @@ export function PlacePageContent({
         <div className="mx-auto text-green-500">{successMessage}</div>
       )}
       <ErrorBlock error={error} />
-      <div className="mx-auto flex gap-1">
-        <button
-          className="
-            mx-auto grid size-32 place-items-center border border-gray-400 bg-gray-50 text-sm text-black
-            hover:bg-gray-100
-            active:bg-gray-200
-            disabled:bg-gray-300 disabled:text-gray-500
-          "
-          disabled={working}
-          onClick={onCheckInClick}
-        >
+      <div className="mx-auto flex gap-4">
+        <SuperButton disabled={working} onClick={onCheckInClick}>
           <div className="text-center">
-            <CheckCircleIcon className="mx-auto size-12" />
+            <CheckCircleIcon className="mx-auto size-8" />
             Check in
           </div>
-        </button>
-        <Link
-          className="
-            mx-auto grid size-32 place-items-center border border-gray-400 bg-gray-50 text-sm text-black
-            hover:bg-gray-100
-            active:bg-gray-200
-            disabled:bg-gray-300 disabled:text-gray-500
-          "
-          href={`/place/${place.boardId}/checkIn`}
-        >
+        </SuperButton>
+        <SuperButtonLink href={`/place/${place.boardId}/checkIn`}>
           <div className="text-center">
-            <PencilSquareIcon className="mx-auto size-12" />
+            <PencilSquareIcon className="mx-auto size-8" />
             Tell something
           </div>
-        </Link>
+        </SuperButtonLink>
       </div>
       <H2>Checkins</H2>
       <CheckinList>

@@ -14,7 +14,7 @@ export const buttonThemeClassNames = `
   active:bg-gray-200
   disabled:bg-gray-300 disabled:text-gray-500
 
-  dark:bg-gray-900 dark:text-white
+  dark:border-gray-700 dark:bg-gray-900 dark:text-white
   active:dark:bg-gray-800
   disabled:dark:bg-gray-800 disabled:dark:text-gray-500
 `;
@@ -24,6 +24,6 @@ export const inputThemeClassNames = `
   hover:border-gray-500
   disabled:bg-gray-300 disabled:text-gray-500
 
-  dark:bg-gray-900 dark:text-white
+  dark:border-gray-700 dark:bg-gray-900 dark:text-white
   disabled:dark:bg-gray-800 disabled:dark:text-gray-500
 `;
