@@ -1,9 +1,11 @@
 "use client";
 
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/outline";
-import { ProfileSection } from "./ProfileSection";
+import { useState } from "react";
+import { ProfileForm } from "./ProfileForm";
+import { PostProfilePayload } from "@/app/api/profile/route";
 import { VStack } from "@/components/layout/VStack";
-import { H1 } from "@/components/style/Hn";
+import { H1, H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
 import { Profile } from "@/components/user/Profile";
 
@@ -14,9 +16,24 @@ export interface MyProfilePageContentProps {
 export function MyProfilePageContent({
   profile,
 }: MyProfilePageContentProps): JSX.Element {
-  const onProfileUpdated = () => {
-    // Reload the page to update the profile
-    window.location.reload();
+  const [editingProfile, setEditingProfile] = useState(profile);
+  const [working, setWorking] = useState(false);
+
+  const onProfileChange = (profile: Profile) => {
+    setEditingProfile(profile);
+  };
+
+  const onProfileSubmit = async (profile: Profile) => {
+    try {
+      setWorking(true);
+      await postProfile(profile);
+
+      // Reload the page to update the profile
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      setWorking(false);
+    }
   };
 
   return (
@@ -30,7 +47,27 @@ export function MyProfilePageContent({
           </Link>
         </nav>
       </VStack>
-      <ProfileSection profile={profile} onUpdated={onProfileUpdated} />
+      <H2>Edit profile</H2>
+      <ProfileForm
+        disabled={working}
+        onChange={onProfileChange}
+        onSubmit={onProfileSubmit}
+        profile={editingProfile}
+      />
     </VStack>
   );
+}
+
+function postProfile(profile: Profile) {
+  const endpoint = "/api/profile";
+
+  const init: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ profile } satisfies PostProfilePayload),
+  };
+
+  return fetch(endpoint, init);
 }
