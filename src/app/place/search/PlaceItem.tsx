@@ -2,6 +2,7 @@ import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
 import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Place } from "@/components/place/Place";
+import { hoverBlockThemeClassNames } from "@/components/style/controlClassNames";
 
 export interface PlaceItemProps {
   onShowClick: (place: Place) => void;
@@ -19,14 +20,17 @@ export function PlaceItem({
       <button
         className={`
           grid w-12 items-center justify-center
-          ${selected ? "bg-gray-200" : "hover:bg-gray-50 active:bg-gray-200"}
+          ${selected ? "bg-gray-200 dark:bg-gray-800" : hoverBlockThemeClassNames}
         `}
         onClick={() => onShowClick(place)}
       >
         <MapIcon className="size-6 text-gray-500 " />
       </button>
       <Link
-        className="flex w-full items-center justify-between gap-4 p-2 text-start hover:bg-gray-50 active:bg-gray-200"
+        className={`
+          flex w-full items-center justify-between gap-4 p-2 text-start
+          ${hoverBlockThemeClassNames}
+        `}
         href={`/place/${place.boardId}`}
       >
         <div className="flex flex-col">
