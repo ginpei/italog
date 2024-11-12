@@ -27,3 +27,8 @@ export const inputThemeClassNames = `
   dark:border-gray-700 dark:bg-gray-900 dark:text-white
   disabled:dark:bg-gray-800 disabled:dark:text-gray-500
 `;
+
+export const hoverBlockThemeClassNames = `
+  hover:bg-gray-50 active:bg-gray-100
+  hover:dark:bg-gray-800 active:dark:bg-gray-900
+`;

@@ -2,6 +2,7 @@ import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
 import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Checkin } from "../checkin/Checkin";
+import { hoverBlockThemeClassNames } from "../style/controlClassNames";
 import { CheckinProfileLink } from "./CheckinProfileLink";
 import { RateIcon } from "./RateIcon";
 
@@ -21,7 +22,7 @@ export function TimelineItem({
       <button
         className={`
           grid size-12 items-center justify-center
-          ${selected ? "bg-gray-200" : "hover:bg-gray-50 active:bg-gray-200"}
+          ${selected ? "bg-gray-200 dark:bg-gray-800" : hoverBlockThemeClassNames}
         `}
         onClick={() => onShowClick(checkin)}
       >
@@ -30,7 +31,10 @@ export function TimelineItem({
       {/* TODO */}
       <CheckinProfileLink profile={checkin.profile} />
       <Link
-        className="flex w-full items-center justify-between gap-4 p-2 text-start hover:bg-gray-50 active:bg-gray-200"
+        className={`
+          flex w-full items-center justify-between gap-4 p-2 text-start
+          ${hoverBlockThemeClassNames}
+        `}
         href={`/place/${checkin.boardId}`}
       >
         <div className="flex flex-col">

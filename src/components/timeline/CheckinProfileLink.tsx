@@ -1,5 +1,6 @@
 import { UserIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { hoverBlockThemeClassNames } from "../style/controlClassNames";
 import { Profile } from "../user/Profile";
 
 export interface CheckinProfileLinkProps {
@@ -13,7 +14,7 @@ export function CheckinProfileLink({
     <Link
       className={`
       grid size-12 shrink-0 items-center justify-center
-      hover:bg-gray-50 active:bg-gray-200
+      ${hoverBlockThemeClassNames}
     `}
       href={`/user/${profile.id}`}
     >
