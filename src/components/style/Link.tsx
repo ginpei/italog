@@ -17,7 +17,12 @@ export function Link({
     <Tag
       className={`
         ${className} Link text-blue-700 underline
-        hover:text-red-700 focus:text-red-700
+        hover:text-red-700
+        active:text-red-900
+
+        dark:text-cyan-400
+        hover:dark:text-orange-400
+        active:dark:text-orange-700
       `}
       {...props}
     />
