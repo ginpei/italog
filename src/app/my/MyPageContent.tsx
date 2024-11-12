@@ -6,7 +6,7 @@ import { ProfileSection } from "./ProfileSection";
 import { Checkin } from "@/components/checkin/Checkin";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
-import { Button } from "@/components/style/Button";
+import { Button, ButtonLink } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
 import { CheckinList } from "@/components/timeline/CheckinList";
@@ -129,17 +129,9 @@ export function MyPageContent({
       </VStack>
       <VStack>
         <H2>Logout</H2>
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a
-          className="
-            border border-gray-400 bg-gray-50 p-2 text-center text-black
-            hover:bg-gray-100
-            active:bg-gray-200
-          "
-          href="/api/auth/logout"
-        >
+        <ButtonLink as="a" href="/api/auth/logout">
           Log out
-        </a>
+        </ButtonLink>
       </VStack>
     </VStack>
   );

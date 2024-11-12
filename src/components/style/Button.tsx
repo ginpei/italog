@@ -44,7 +44,10 @@ export function ButtonLink({
 
   return (
     <Tag
-      className={`${className} ButtonLink ${controlShapeClassNames} ${buttonThemeClassNames}`}
+      className={`${className} ButtonLink
+        inline-grid place-items-center
+        ${controlShapeClassNames} ${buttonThemeClassNames}
+      `}
       {...props}
     />
   );
