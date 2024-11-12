@@ -62,11 +62,15 @@ function PlaceInfoLink({
 }): JSX.Element {
   return (
     <Link
-      className="flex items-center gap-2 py-2 hover:bg-gray-50 active:bg-gray-100"
+      className="
+        flex items-center gap-2 py-2
+        hover:bg-gray-50 active:bg-gray-100
+        hover:dark:bg-gray-800 active:dark:bg-gray-900
+      "
       href={href}
       target="_blank"
     >
-      <Icon className="size-8 shrink-0 text-blue-700" />
+      <Icon className="size-8 shrink-0 text-blue-700 dark:text-cyan-400" />
       <span>
         {children}
         <ArrowTopRightOnSquareIcon className="inline size-4" />
