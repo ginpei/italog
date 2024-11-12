@@ -52,3 +52,18 @@ export function ButtonLink({
     />
   );
 }
+
+export function ButtonLabel({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"label">): React.JSX.Element {
+  return (
+    <label
+      className={`${className} ButtonLabel
+        inline-flex cursor-pointer items-center gap-2
+        ${controlShapeClassNames} ${buttonThemeClassNames}
+      `}
+      {...props}
+    />
+  );
+}
