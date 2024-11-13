@@ -1,6 +1,9 @@
 "use client";
 
-import { ChevronDoubleLeftIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDoubleLeftIcon,
+  LockClosedIcon,
+} from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { PictureSection } from "./PictureSection";
@@ -78,7 +81,11 @@ export function MyProfilePageContent({
       </VStack>
       <PictureSection authProfile={authProfile} />
       <VStack>
-        <H2>Authentication</H2>
+        <H2 className="flex items-center gap-1">
+          <LockClosedIcon className="size-6" />
+          Authentication
+        </H2>
+        <p>This information is not public to the others</p>
         <label className="flex flex-col">
           Provider:
           <TextInput readOnly value={providerName} />
