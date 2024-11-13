@@ -16,7 +16,7 @@ export async function detectBarcode(
       () => reject(new Error("Barcode detection timeout")),
       5000,
     );
-    return;
+
     const config = {
       inputStream: {
         size: 800,
