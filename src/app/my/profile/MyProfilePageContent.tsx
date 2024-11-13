@@ -3,18 +3,23 @@
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { PictureSection } from "./PictureSection";
 import { ProfileForm } from "./ProfileForm";
 import { PostProfilePayload } from "@/app/api/profile/route";
+import { AuthProfile } from "@/components/auth/AuthProfile";
 import { VStack } from "@/components/layout/VStack";
 import { H1, H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
+import { TextInput } from "@/components/style/TextInput";
 import { Profile } from "@/components/user/Profile";
 
 export interface MyProfilePageContentProps {
+  authProfile: AuthProfile;
   profile: Profile;
 }
 
 export function MyProfilePageContent({
+  authProfile,
   profile,
 }: MyProfilePageContentProps): JSX.Element {
   const [editingProfile, setEditingProfile] = useState(profile);
@@ -55,6 +60,14 @@ export function MyProfilePageContent({
         onSubmit={onProfileSubmit}
         profile={editingProfile}
       />
+      <PictureSection authProfile={authProfile} />
+      <VStack>
+        <H2>Authentication</H2>
+        <label className="flex flex-col">
+          Login email:
+          <TextInput readOnly value={authProfile.email} />
+        </label>
+      </VStack>
     </VStack>
   );
 }

@@ -5,7 +5,23 @@ export async function getAuthProfileRecord(
   authId: string,
 ): Promise<AuthProfile | null> {
   const authResult = await sql`
-    SELECT user_id FROM auth_profile WHERE auth_id = ${authId}
+    SELECT * FROM auth_profile WHERE auth_id = ${authId}
+  `;
+
+  const row = authResult.rows[0];
+  if (!row) {
+    return null;
+  }
+
+  const authProfile = rowToAuthProfile(row);
+  return authProfile;
+}
+
+export async function getAuthProfileRecordByUserId(
+  userId: string,
+): Promise<AuthProfile | null> {
+  const authResult = await sql`
+    SELECT * FROM auth_profile WHERE user_id = ${userId}
   `;
 
   const row = authResult.rows[0];

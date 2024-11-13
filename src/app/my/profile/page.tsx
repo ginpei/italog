@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { MyProfilePageContent } from "./MyProfilePageContent";
+import { getAuthProfileRecordByUserId } from "@/components/auth/authProfileDb";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
 import { getSessionProfile } from "@/components/user/profileSession";
 
@@ -14,9 +15,16 @@ export default async function Home() {
     throw new Error("Need login");
   }
 
+  const [authProfile] = await Promise.all([
+    getAuthProfileRecordByUserId(profile.id),
+  ]);
+  if (!authProfile) {
+    throw new Error("Auth profile not found");
+  }
+
   return (
     <StraightPageLayout profile={profile}>
-      <MyProfilePageContent profile={profile} />
+      <MyProfilePageContent authProfile={authProfile} profile={profile} />
     </StraightPageLayout>
   );
 }
