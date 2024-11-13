@@ -6,7 +6,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- profile
 CREATE TABLE profile (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  display_name VARCHAR(255) NOT NULL
+  display_name VARCHAR(255) NOT NULL,
+  image_url VARCHAR(255)
 );
 
 INSERT INTO profile (id, display_name)
@@ -17,6 +18,8 @@ CREATE TABLE auth_profile (
   auth_type VARCHAR(255) NOT NULL,
   auth_id VARCHAR(255) NOT NULL,
   user_id UUID NOT NULL,
+  email VARCHAR(255),
+  picture VARCHAR(255),
   PRIMARY KEY (auth_type, auth_id),
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );

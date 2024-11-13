@@ -7,18 +7,25 @@ import {
 } from "@auth0/nextjs-auth0";
 import { NextRequest } from "next/server";
 import {
-  createProfileRecordSet,
-  getProfileRecordByAuth,
-} from "@/components/user/profileDb";
+  getAuthProfileRecord,
+  updateAuthProfileRecord,
+} from "@/components/auth/authProfileDb";
+import { createProfileRecordSet } from "@/components/user/profileDb";
 
 const afterCallback: AfterCallbackAppRoute = async (req, session) => {
   const userId = session.user.sub;
-  const profile = await getProfileRecordByAuth("auth0", userId);
-  if (!profile) {
+
+  const authProfile = await getAuthProfileRecord(userId);
+  if (!authProfile) {
     await createProfileRecordSet("auth0", userId, {
       displayName: session.user.nickname,
     });
+
+    // TODO
+    // redirect("/tos");
   }
+
+  await updateAuthProfileRecord(userId, session.user);
 
   return session;
 };
