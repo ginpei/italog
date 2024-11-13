@@ -5,7 +5,10 @@ import { Content } from "./Content";
 export function Footer(): JSX.Element {
   return (
     <div
-      className={`Footer border-t border-dotted pb-16 pt-4 ${controlBorderThemeClassNames}`}
+      className={`Footer
+        mt-32 border-t border-dotted pb-16 pt-4
+        ${controlBorderThemeClassNames}
+      `}
     >
       <Content>
         <div>
