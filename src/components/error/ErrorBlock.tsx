@@ -11,5 +11,7 @@ export interface ErrorBlockProps {
 export function ErrorBlock({ error }: ErrorBlockProps): JSX.Element | null {
   const message = useMemo(() => toError(error).message, [error]);
 
-  return error !== null ? <p className="text-rose-800">⚠️ {message}</p> : null;
+  return error !== null ? (
+    <p className="text-red-800 dark:text-orange-500">⚠️ {message}</p>
+  ) : null;
 }
