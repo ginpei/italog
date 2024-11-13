@@ -10,17 +10,12 @@ export interface QuaggaResult {
 export async function detectBarcode(
   file: File,
   type: "ean",
-  callback: (result: QuaggaResult | undefined) => void,
 ): Promise<string | null> {
-  const onProgress = callback;
-
-  return new Promise<string | null>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     window.setTimeout(
       () => reject(new Error("Barcode detection timeout")),
       3000,
     );
-
-    Quagga.onProcessed(onProgress);
 
     const config = {
       inputStream: {
@@ -49,7 +44,5 @@ export async function detectBarcode(
       const detectedBarcode = result?.codeResult.code || null;
       resolve(detectedBarcode);
     });
-  }).finally(() => {
-    Quagga.offProcessed(onProgress);
   });
 }

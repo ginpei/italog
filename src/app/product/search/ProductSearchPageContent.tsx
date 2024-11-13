@@ -15,7 +15,6 @@ export interface ProductSearchPageContentProps {
 }
 
 export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX.Element {
-  const [progressMessage, setProgressMessage] = useState("");
   const [error, setError] = useState<Error | null>(null);
   const [barcode, setBarcode] = useState("");
 
@@ -46,9 +45,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
         return;
       }
 
-      const detectedBarcode = await detectBarcode(file, "ean", (result) => {
-        setProgressMessage(JSON.stringify(result));
-      });
+      const detectedBarcode = await detectBarcode(file, "ean");
       if (!detectedBarcode) {
         window.alert("No barcode detected");
         return;
@@ -89,7 +86,6 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
           <form onSubmit={onBarcodeFormSubmit}>
             <VStack>
               <ErrorBlock error={error} />
-              <p className="border">{progressMessage || "..."}</p>
               <fieldset className="flex items-stretch gap-2">
                 <TextInput
                   className="w-full"
