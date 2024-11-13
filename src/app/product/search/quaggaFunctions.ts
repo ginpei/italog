@@ -15,10 +15,10 @@ export async function detectBarcode(
   const onProgress = callback;
 
   return new Promise<string | null>((resolve, reject) => {
-    // window.setTimeout(
-    //   () => reject(new Error("Barcode detection timeout")),
-    //   3000,
-    // );
+    window.setTimeout(
+      () => reject(new Error("Barcode detection timeout")),
+      3000,
+    );
 
     Quagga.onProcessed(onProgress);
 
