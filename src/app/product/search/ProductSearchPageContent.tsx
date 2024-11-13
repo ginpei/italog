@@ -47,7 +47,9 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
       }
 
       const detectedBarcode = await detectBarcode(file, "ean", (result) => {
-        setProgressMessage(JSON.stringify(result));
+        setProgressMessage(
+          `${new Date().toTimeString()} - ${JSON.stringify(result)}`,
+        );
       });
       if (!detectedBarcode) {
         window.alert("No barcode detected");
