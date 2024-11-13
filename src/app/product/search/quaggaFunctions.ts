@@ -33,9 +33,7 @@ export async function detectBarcode(
       src: URL.createObjectURL(file),
     };
 
-    alert("Detecting barcode...");
     Quagga.decodeSingle(config, (result: QuaggaResult | undefined) => {
-      alert("Barcode detected");
       const detectedBarcode = result?.codeResult.code || null;
       resolve(detectedBarcode);
     });

@@ -37,7 +37,6 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
     const [file] = event.target.files || [];
     event.target.value = "";
     if (!file) {
-      alert("No file selected");
       return;
     }
 
