@@ -11,7 +11,12 @@ export async function detectBarcode(
   file: File,
   type: "ean",
 ): Promise<string | null> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    window.setTimeout(
+      () => reject(new Error("Barcode detection timeout")),
+      5000,
+    );
+    return;
     const config = {
       inputStream: {
         size: 800,

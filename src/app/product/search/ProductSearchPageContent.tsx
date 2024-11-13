@@ -3,6 +3,7 @@
 import { CameraIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { detectBarcode } from "./quaggaFunctions";
+import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { VStack } from "@/components/layout/VStack";
 import { Button, ButtonLabel } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
@@ -13,6 +14,8 @@ export interface ProductSearchPageContentProps {
 }
 
 export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX.Element {
+  const [error, setError] = useState<Error | null>(null);
+  const [detectingBarcode, setDetectingBarcode] = useState(false);
   const [barcode, setBarcode] = useState("");
 
   const special = new URL(location.href).searchParams.get("special") === "1";
@@ -34,26 +37,36 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   const onBarcodeFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const [file] = event.target.files || [];
-    event.target.value = "";
-    if (!file) {
-      return;
-    }
+    setError(null);
+    setDetectingBarcode(true);
 
-    const detectedBarcode = await detectBarcode(file, "ean");
-    if (!detectedBarcode) {
-      window.alert("No barcode detected");
-      return;
-    }
+    try {
+      const [file] = event.target.files || [];
+      event.target.value = "";
+      if (!file) {
+        return;
+      }
 
-    const ok = window.confirm(
-      `Do you want to use this barcode?\n${detectedBarcode}`,
-    );
-    if (!ok) {
-      return;
-    }
+      const detectedBarcode = await detectBarcode(file, "ean");
+      if (!detectedBarcode) {
+        window.alert("No barcode detected");
+        return;
+      }
 
-    setBarcode(detectedBarcode);
+      const ok = window.confirm(
+        `Do you want to use this barcode?\n${detectedBarcode}`,
+      );
+      if (!ok) {
+        return;
+      }
+
+      setBarcode(detectedBarcode);
+    } catch (error) {
+      console.error(error);
+      setError(new Error("Failed to detect barcode"));
+    } finally {
+      setDetectingBarcode(false);
+    }
   };
 
   return (
@@ -76,6 +89,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
           </p>
           <form onSubmit={onBarcodeFormSubmit}>
             <VStack>
+              <ErrorBlock error={error} />
               <fieldset className="flex items-stretch gap-2">
                 <TextInput
                   className="w-full"
@@ -90,7 +104,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
                   <MagnifyingGlassIcon className="size-5" />
                 </Button>
               </fieldset>
-              <div>
+              <fieldset disabled={detectingBarcode}>
                 <ButtonLabel>
                   <input
                     accept="image/*"
@@ -102,7 +116,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
                   <CameraIcon className="inline-block size-5" /> Capture barcode
                   (beta)
                 </ButtonLabel>
-              </div>
+              </fieldset>
             </VStack>
           </form>
         </VStack>
