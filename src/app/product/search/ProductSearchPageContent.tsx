@@ -3,8 +3,6 @@
 import { CameraIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { detectBarcode } from "./quaggaFunctions";
-import { ErrorBlock } from "@/components/error/ErrorBlock";
-import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Button, ButtonLabel } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
@@ -15,7 +13,6 @@ export interface ProductSearchPageContentProps {
 }
 
 export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX.Element {
-  const [error, setError] = useState<Error | null>(null);
   const [barcode, setBarcode] = useState("");
 
   const special = new URL(location.href).searchParams.get("special") === "1";
@@ -37,32 +34,27 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   const onBarcodeFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    try {
-      const [file] = event.target.files || [];
-      event.target.value = "";
-      if (!file) {
-        alert("No file selected");
-        return;
-      }
-
-      const detectedBarcode = await detectBarcode(file, "ean");
-      if (!detectedBarcode) {
-        window.alert("No barcode detected");
-        return;
-      }
-
-      const ok = window.confirm(
-        `Do you want to use this barcode?\n${detectedBarcode}`,
-      );
-      if (!ok) {
-        return;
-      }
-
-      setBarcode(detectedBarcode);
-    } catch (error) {
-      console.error(error);
-      setError(toError(error));
+    const [file] = event.target.files || [];
+    event.target.value = "";
+    if (!file) {
+      alert("No file selected");
+      return;
     }
+
+    const detectedBarcode = await detectBarcode(file, "ean");
+    if (!detectedBarcode) {
+      window.alert("No barcode detected");
+      return;
+    }
+
+    const ok = window.confirm(
+      `Do you want to use this barcode?\n${detectedBarcode}`,
+    );
+    if (!ok) {
+      return;
+    }
+
+    setBarcode(detectedBarcode);
   };
 
   return (
@@ -85,7 +77,6 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
           </p>
           <form onSubmit={onBarcodeFormSubmit}>
             <VStack>
-              <ErrorBlock error={error} />
               <fieldset className="flex items-stretch gap-2">
                 <TextInput
                   className="w-full"
