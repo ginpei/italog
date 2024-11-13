@@ -67,13 +67,15 @@ export function MyProfilePageContent({
           </Link>
         </nav>
       </VStack>
-      <H2>Edit profile</H2>
-      <ProfileForm
-        disabled={working}
-        onChange={onProfileChange}
-        onSubmit={onProfileSubmit}
-        profile={editingProfile}
-      />
+      <VStack>
+        <H2>Profile</H2>
+        <ProfileForm
+          disabled={working}
+          onChange={onProfileChange}
+          onSubmit={onProfileSubmit}
+          profile={editingProfile}
+        />
+      </VStack>
       <PictureSection authProfile={authProfile} />
       <VStack>
         <H2>Authentication</H2>
