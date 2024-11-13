@@ -2,7 +2,7 @@
 
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PictureSection } from "./PictureSection";
 import { ProfileForm } from "./ProfileForm";
 import { PostProfilePayload } from "@/app/api/profile/route";
@@ -25,6 +25,20 @@ export function MyProfilePageContent({
   const [editingProfile, setEditingProfile] = useState(profile);
   const [working, setWorking] = useState(false);
   const router = useRouter();
+
+  const providerName = useMemo(() => {
+    const prefix = authProfile.authId.split("|")[0]!;
+
+    if (prefix.startsWith("auth0")) {
+      return "Auth0";
+    }
+
+    if (prefix.startsWith("google-oauth2")) {
+      return "Google";
+    }
+
+    return prefix;
+  }, [authProfile.authId]);
 
   const onProfileChange = (profile: Profile) => {
     setEditingProfile(profile);
@@ -63,6 +77,10 @@ export function MyProfilePageContent({
       <PictureSection authProfile={authProfile} />
       <VStack>
         <H2>Authentication</H2>
+        <label className="flex flex-col">
+          Provider:
+          <TextInput readOnly value={providerName} />
+        </label>
         <label className="flex flex-col">
           Login email:
           <TextInput readOnly value={authProfile.email} />
