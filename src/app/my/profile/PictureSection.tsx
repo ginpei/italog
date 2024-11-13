@@ -61,10 +61,12 @@ export function PictureSection({
           src={authProfile.picture!}
         />
       </Link>
-      <fieldset className="flex gap-4" disabled={working}>
-        <Button onClick={onUploadClick}>Upload</Button>
-        <Button onClick={onResetClick}>Reset</Button>
-      </fieldset>
+      <Button disabled={working} onClick={onUploadClick}>
+        Upload
+      </Button>
+      <Button disabled={working} onClick={onResetClick}>
+        Reset
+      </Button>
     </VStack>
   );
 }
