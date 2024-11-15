@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { AuthProfile } from "@/components/auth/AuthProfile";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
-import { Button } from "@/components/style/Button";
+import { Button, ButtonLabel } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
 
@@ -17,12 +17,19 @@ export function PictureSection({
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const onUploadClick = () => {
+  const onFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setWorking(true);
     setError(null);
 
     try {
+      const file = event.target.files?.[0];
+      event.target.value = "";
+      if (!file) {
+        return;
+      }
+
       // TODO
+      await new Promise((f) => setTimeout(f, 1000));
       alert("Upload picture");
     } catch (error) {
       console.error(error);
@@ -57,13 +64,17 @@ export function PictureSection({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           alt="[Your profile picture]"
-          className="size-32"
+          className={`size-32 ${working ? "opacity-50" : ""}`}
+          style={{ filter: working ? "grayscale(1)" : undefined }}
           src={authProfile.picture!}
         />
       </Link>
-      <Button disabled={working} onClick={onUploadClick}>
-        Upload
-      </Button>
+      <fieldset className="contents" disabled={working}>
+        <ButtonLabel>
+          <input className="hidden" onChange={onFileChange} type="file" />
+          Upload
+        </ButtonLabel>
+      </fieldset>
       <Button disabled={working} onClick={onResetClick}>
         Reset
       </Button>

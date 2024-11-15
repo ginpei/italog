@@ -113,8 +113,10 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
                     onChange={onBarcodeFileChange}
                     type="file"
                   />
-                  <CameraIcon className="inline-block size-5" /> Capture barcode
-                  (beta)
+                  <span className="flex items-center gap-2">
+                    <CameraIcon className="inline-block size-5" /> Capture
+                    barcode (beta)
+                  </span>
                 </ButtonLabel>
               </fieldset>
             </VStack>

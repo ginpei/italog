@@ -60,7 +60,7 @@ export function ButtonLabel({
   return (
     <label
       className={`${className} ButtonLabel
-        inline-flex cursor-pointer items-center gap-2
+        inline-grid cursor-pointer place-items-center
         ${controlShapeClassNames} ${buttonThemeClassNames}
       `}
       {...props}
