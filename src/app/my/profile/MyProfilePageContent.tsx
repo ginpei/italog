@@ -29,6 +29,8 @@ export function MyProfilePageContent({
   const [working, setWorking] = useState(false);
   const router = useRouter();
 
+  const special = new URL(location.href).searchParams.get("special") === "1";
+
   const providerName = useMemo(() => {
     const prefix = authProfile.authId.split("|")[0]!;
 
@@ -79,7 +81,7 @@ export function MyProfilePageContent({
           profile={editingProfile}
         />
       </VStack>
-      <PictureSection authProfile={authProfile} />
+      {special && <PictureSection authProfile={authProfile} />}
       <VStack>
         <H2 className="flex items-center gap-1">
           <LockClosedIcon className="size-6" />
