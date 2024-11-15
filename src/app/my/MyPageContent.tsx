@@ -71,7 +71,7 @@ export function MyPageContent({
     <VStack gap="gap-8">
       <H1>My page</H1>
       <p>
-        <Link href={`/user/${profile.id}`}>Public profile</Link> |{" "}
+        <Link href={`/user/${profile.id}`}>View profile</Link> |{" "}
         <Link href={`/my/profile`}>Edit profile</Link>
       </p>
       <VStack>
