@@ -55,15 +55,20 @@ export function ButtonLink({
 
 export function ButtonLabel({
   className,
+  disabled,
   ...props
-}: ComponentPropsWithoutRef<"label">): React.JSX.Element {
+}: ComponentPropsWithoutRef<"label"> & {
+  disabled?: boolean;
+}): React.JSX.Element {
   return (
-    <label
-      className={`${className} ButtonLabel
-        inline-grid cursor-pointer place-items-center
-        ${controlShapeClassNames} ${buttonThemeClassNames}
-      `}
-      {...props}
-    />
+    <fieldset className="contents" disabled={disabled}>
+      <label
+        className={`${className} ButtonLabel
+          inline-grid cursor-pointer place-items-center
+          ${controlShapeClassNames} ${buttonThemeClassNames}
+        `}
+        {...props}
+      />
+    </fieldset>
   );
 }

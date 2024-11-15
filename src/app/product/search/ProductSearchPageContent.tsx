@@ -104,21 +104,19 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
                   <MagnifyingGlassIcon className="size-5" />
                 </Button>
               </fieldset>
-              <fieldset disabled={detectingBarcode}>
-                <ButtonLabel>
-                  <input
-                    accept="image/*"
-                    capture
-                    className="hidden"
-                    onChange={onBarcodeFileChange}
-                    type="file"
-                  />
-                  <span className="flex items-center gap-2">
-                    <CameraIcon className="inline-block size-5" /> Capture
-                    barcode (beta)
-                  </span>
-                </ButtonLabel>
-              </fieldset>
+              <ButtonLabel disabled={detectingBarcode}>
+                <input
+                  accept="image/*"
+                  capture
+                  className="hidden"
+                  onChange={onBarcodeFileChange}
+                  type="file"
+                />
+                <span className="flex items-center gap-2">
+                  <CameraIcon className="inline-block size-5" /> Capture barcode
+                  (beta)
+                </span>
+              </ButtonLabel>
             </VStack>
           </form>
         </VStack>

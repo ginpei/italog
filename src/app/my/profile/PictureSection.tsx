@@ -69,12 +69,10 @@ export function PictureSection({
           src={authProfile.picture!}
         />
       </Link>
-      <fieldset className="contents" disabled={working}>
-        <ButtonLabel>
-          <input className="hidden" onChange={onFileChange} type="file" />
-          Upload
-        </ButtonLabel>
-      </fieldset>
+      <ButtonLabel disabled={working}>
+        <input className="hidden" onChange={onFileChange} type="file" />
+        Upload
+      </ButtonLabel>
       <Button disabled={working} onClick={onResetClick}>
         Reset
       </Button>
