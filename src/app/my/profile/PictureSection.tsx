@@ -3,7 +3,7 @@ import { AuthProfile } from "@/components/auth/AuthProfile";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
-import { Button, ButtonLabel } from "@/components/style/Button";
+import { Button, FileButton } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
 
@@ -69,10 +69,9 @@ export function PictureSection({
           src={authProfile.picture!}
         />
       </Link>
-      <ButtonLabel disabled={working}>
-        <input className="hidden" onChange={onFileChange} type="file" />
+      <FileButton accept="image/*" disabled={working} onChange={onFileChange}>
         Upload
-      </ButtonLabel>
+      </FileButton>
       <Button disabled={working} onClick={onResetClick}>
         Reset
       </Button>

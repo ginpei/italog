@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import { ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef, ReactNode } from "react";
 import { LinkProps } from "./Link";
 import {
   buttonThemeClassNames,
@@ -70,5 +70,21 @@ export function ButtonLabel({
         {...props}
       />
     </fieldset>
+  );
+}
+
+export function FileButton({
+  className = "",
+  children,
+  disabled,
+  ...props
+}: Omit<ComponentPropsWithoutRef<"input">, "type"> & {
+  children: ReactNode;
+}): React.JSX.Element {
+  return (
+    <ButtonLabel className={`${className} FileButton`} disabled={disabled}>
+      <input className="hidden" type="file" {...props} />
+      {children}
+    </ButtonLabel>
   );
 }

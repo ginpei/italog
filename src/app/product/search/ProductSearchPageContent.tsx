@@ -5,7 +5,7 @@ import { useState } from "react";
 import { detectBarcode } from "./quaggaFunctions";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { VStack } from "@/components/layout/VStack";
-import { Button, ButtonLabel } from "@/components/style/Button";
+import { Button, FileButton } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
 import { TextInput } from "@/components/style/TextInput";
 
@@ -104,19 +104,17 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
                   <MagnifyingGlassIcon className="size-5" />
                 </Button>
               </fieldset>
-              <ButtonLabel disabled={detectingBarcode}>
-                <input
-                  accept="image/*"
-                  capture
-                  className="hidden"
-                  onChange={onBarcodeFileChange}
-                  type="file"
-                />
+              <FileButton
+                accept="image/*"
+                capture
+                disabled={detectingBarcode}
+                onChange={onBarcodeFileChange}
+              >
                 <span className="flex items-center gap-2">
                   <CameraIcon className="inline-block size-5" /> Capture barcode
                   (beta)
                 </span>
-              </ButtonLabel>
+              </FileButton>
             </VStack>
           </form>
         </VStack>
