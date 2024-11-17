@@ -1,4 +1,4 @@
-import { QueryResultRow, sql } from "@vercel/postgres";
+import { QueryResultRow, sql, VercelPoolClient } from "@vercel/postgres";
 import { runTransaction } from "../db/transaction";
 import { Profile } from "./Profile";
 
@@ -86,10 +86,22 @@ export async function createProfileRecordSet(
   });
 }
 
-export async function updateProfileRecord(profile: Profile): Promise<void> {
+export async function updateProfileRecord(
+  profile: Pick<Profile, "id" | "displayName">,
+): Promise<void> {
   await sql`
     UPDATE profile SET display_name = ${profile.displayName} WHERE id = ${profile.id}
   `;
+}
+
+export async function updateProfilePictureRecord(
+  db: VercelPoolClient,
+  profile: Pick<Profile, "id" | "imageUrl">,
+): Promise<void> {
+  await db.query("UPDATE profile SET image_url = $1 WHERE id = $2", [
+    profile.imageUrl,
+    profile.id,
+  ]);
 }
 
 function rowToProfile(row: QueryResultRow): Profile {

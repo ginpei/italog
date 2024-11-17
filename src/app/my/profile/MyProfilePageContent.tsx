@@ -9,6 +9,7 @@ import { useMemo, useState } from "react";
 import { PictureSection } from "./PictureSection";
 import { ProfileForm } from "./ProfileForm";
 import { PostProfilePayload } from "@/app/api/profile/route";
+import { useSpecialFlag } from "@/components/api/dev/devHooks";
 import { AuthProfile } from "@/components/auth/AuthProfile";
 import { VStack } from "@/components/layout/VStack";
 import { H1, H2 } from "@/components/style/Hn";
@@ -28,8 +29,7 @@ export function MyProfilePageContent({
   const [editingProfile, setEditingProfile] = useState(profile);
   const [working, setWorking] = useState(false);
   const router = useRouter();
-
-  const special = new URL(location.href).searchParams.get("special") === "1";
+  const special = useSpecialFlag();
 
   const providerName = useMemo(() => {
     const prefix = authProfile.authId.split("|")[0]!;
@@ -81,7 +81,9 @@ export function MyProfilePageContent({
           profile={editingProfile}
         />
       </VStack>
-      {special && <PictureSection authProfile={authProfile} />}
+      {special && (
+        <PictureSection authProfile={authProfile} profile={profile} />
+      )}
       <VStack>
         <H2 className="flex items-center gap-1">
           <LockClosedIcon className="size-6" />
