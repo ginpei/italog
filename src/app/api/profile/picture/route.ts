@@ -1,3 +1,4 @@
+import { del } from "@vercel/blob";
 import { handleUpload, HandleUploadBody } from "@vercel/blob/client";
 import { UnwrapPromise } from "next/dist/lib/coalesced-function";
 import { NextResponse } from "next/server";
@@ -18,6 +19,7 @@ export type PostProfilePictureResult =
     };
 
 interface TokenPayload {
+  oldUrl: string | undefined;
   pathname: string;
   userId: string;
 }
@@ -47,22 +49,28 @@ export async function POST(
 
           return {
             allowedContentTypes: ["image/jpeg", "image/png", "image/gif"],
-            addRandomSuffix: false, // TODO remove
             maximumSizeInBytes: 1024 * 1024 * 2, // 2MB
             tokenPayload: JSON.stringify({
+              oldUrl: profile.imageUrl,
               pathname,
               userId,
             } satisfies TokenPayload),
           };
         },
         onUploadCompleted: async ({ blob, tokenPayload }) => {
-          const payload: TokenPayload = JSON.parse(tokenPayload!);
+          if (!tokenPayload) {
+            throw new Error("No token payload");
+          }
+          const payload: TokenPayload = JSON.parse(tokenPayload);
+
+          if (payload.oldUrl) {
+            await del(payload.oldUrl);
+          }
+
           await updateProfilePictureRecord(db, {
             id: payload.userId,
             imageUrl: blob.url,
           });
-
-          // TODO delete old image
         },
       });
 
