@@ -1,11 +1,9 @@
 "use client";
 
-import {
-  ChevronDoubleLeftIcon,
-  LockClosedIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronDoubleLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { AuthenticationSection } from "./AuthenticationSection";
 import { PictureSection } from "./PictureSection";
 import { ProfileForm } from "./ProfileForm";
 import { PostProfilePayload } from "@/app/api/profile/route";
@@ -14,7 +12,6 @@ import { AuthProfile } from "@/components/auth/AuthProfile";
 import { VStack } from "@/components/layout/VStack";
 import { H1, H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
-import { TextInput } from "@/components/style/TextInput";
 import { Profile } from "@/components/user/Profile";
 
 export interface MyProfilePageContentProps {
@@ -30,20 +27,6 @@ export function MyProfilePageContent({
   const [working, setWorking] = useState(false);
   const router = useRouter();
   const special = useSpecialFlag();
-
-  const providerName = useMemo(() => {
-    const prefix = authProfile.authId.split("|")[0]!;
-
-    if (prefix.startsWith("auth0")) {
-      return "Auth0";
-    }
-
-    if (prefix.startsWith("google-oauth2")) {
-      return "Google";
-    }
-
-    return prefix;
-  }, [authProfile.authId]);
 
   const onProfileChange = (profile: Profile) => {
     setEditingProfile(profile);
@@ -84,21 +67,7 @@ export function MyProfilePageContent({
       {special && (
         <PictureSection authProfile={authProfile} profile={profile} />
       )}
-      <VStack>
-        <H2 className="flex items-center gap-1">
-          <LockClosedIcon className="size-6" />
-          Authentication
-        </H2>
-        <p>This information is not public to the others</p>
-        <label className="flex flex-col">
-          Provider:
-          <TextInput readOnly value={providerName} />
-        </label>
-        <label className="flex flex-col">
-          Login email:
-          <TextInput readOnly value={authProfile.email} />
-        </label>
-      </VStack>
+      <AuthenticationSection authProfile={authProfile} />
     </VStack>
   );
 }
