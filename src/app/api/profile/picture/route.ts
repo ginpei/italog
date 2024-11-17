@@ -1,53 +1,75 @@
-import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+import { handleUpload, HandleUploadBody } from "@vercel/blob/client";
+import { UnwrapPromise } from "next/dist/lib/coalesced-function";
 import { NextResponse } from "next/server";
+import { runTransaction } from "@/components/db/transaction";
+import { toError } from "@/components/error/errorUtil";
+import { getUserIdFromPicturePath } from "@/components/user/Profile";
+import { updateProfilePictureRecord } from "@/components/user/profileDb";
+import { getSessionProfile } from "@/components/user/profileSession";
 
-export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
+// export interface PostProfilePicturePayload {
+// }
+
+export type PostProfilePictureResult =
+  | UnwrapPromise<ReturnType<typeof handleUpload>>
+  | {
+      error: string;
+      ok: false;
+    };
+
+interface TokenPayload {
+  pathname: string;
+}
+
+export async function POST(
+  req: Request,
+): Promise<NextResponse<PostProfilePictureResult>> {
+  // https://vercel.com/docs/storage/vercel-blob/client-upload
 
   try {
-    const jsonResponse = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async (
-        pathname,
-        /* clientPayload */
-      ) => {
-        // Generate a client token for the browser to upload the file
-        // ⚠️ Authenticate and authorize users before generating the token.
-        // Otherwise, you're allowing anonymous uploads.
+    const body: HandleUploadBody = await req.json();
 
-        console.log("# pathname", pathname);
+    const profile = await getSessionProfile();
+    if (!profile) {
+      console.log(`# ??`, "Unauthorized");
+      return NextResponse.json(
+        { error: "Unauthorized", ok: false },
+        { status: 401 },
+      );
+    }
 
-        return {
-          allowedContentTypes: ["image/jpeg", "image/png", "image/gif"],
-          tokenPayload: JSON.stringify({
-            // optional, sent to your server on upload completion
-            // you could pass a user id from auth, or a value from clientPayload
-          }),
-        };
-      },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
-        // Get notified of client upload completion
-        // ⚠️ This will not work on `localhost` websites,
-        // Use ngrok or similar to get the full upload flow
+    return runTransaction(async (db) => {
+      const jsonResponse = await handleUpload({
+        body,
+        request: req,
+        onBeforeGenerateToken: async (pathname) => {
+          const userId = getUserIdFromPicturePath(pathname);
+          if (userId !== profile.id) {
+            throw new Error("Invalid userId");
+          }
 
-        console.log("blob upload completed", blob, tokenPayload);
+          return {
+            allowedContentTypes: ["image/jpeg", "image/png", "image/gif"],
+            addRandomSuffix: false,
+            tokenPayload: JSON.stringify({ pathname } satisfies TokenPayload),
+          };
+        },
+        onUploadCompleted: async ({ blob, tokenPayload }) => {
+          const payload: TokenPayload = JSON.parse(tokenPayload!);
+          console.log(`# ok`, payload.pathname, blob.url);
+          await updateProfilePictureRecord(db, {
+            id: profile.id,
+            imageUrl: blob.url,
+          });
+        },
+      });
 
-        try {
-          // Run any logic after the file upload completed
-          // const { userId } = JSON.parse(tokenPayload);
-          // await db.update({ avatar: blob.url, userId });
-        } catch (error) {
-          console.error("Could not update user", error);
-          throw new Error("Could not update user");
-        }
-      },
+      return NextResponse.json(jsonResponse);
     });
-
-    return NextResponse.json(jsonResponse);
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: toError(error).message, ok: false },
       { status: 400 }, // The webhook will retry 5 times waiting for a 200
     );
   }
