@@ -1,5 +1,6 @@
 import { SunIcon } from "@heroicons/react/24/outline";
 import { ChangeEvent, useState } from "react";
+import { deleteProfilePicture } from "@/app/api/profile/picture/profilePictureApi";
 import { uploadProfilePicture } from "@/app/api/profile/picture/upload/profilePictureUploadApi";
 import { AuthProfile } from "@/components/auth/AuthProfile";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
@@ -19,8 +20,9 @@ export function PictureSection({
   authProfile,
   profile,
 }: PictureSectionProps): JSX.Element {
-  // TODO fallback image
-  const [imageUrl, setImageUrl] = useState<string>(profile.imageUrl ?? "");
+  const [imageUrl, setImageUrl] = useState<string | undefined>(
+    profile.imageUrl,
+  );
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -49,23 +51,34 @@ export function PictureSection({
     }
   };
 
-  const onResetClick = () => {
+  const onResetClick = async () => {
     const ok = window.confirm(
       "Are you sure you want to reset your picture to the one from your Auth provider?",
     );
     if (!ok) {
       return;
     }
+    setWorking(true);
+    setError(null);
 
-    // TODO
-    alert("Reset picture to Auth provider");
+    try {
+      await deleteProfilePicture();
+      setImageUrl(undefined);
+    } catch (error) {
+      console.error(error);
+      setError(toError(error));
+    } finally {
+      setWorking(false);
+    }
   };
 
   return (
     <VStack as="section" className="PictureSection">
       <H2>Picture</H2>
       <ErrorBlock error={error} />
-      {imageUrl === "reloading" ? (
+      {!imageUrl ? (
+        <p>{/* TODO fallback image */}?</p>
+      ) : imageUrl === "reloading" ? (
         <p className="mx-auto grid size-32 animate-spin items-center justify-center">
           <SunIcon className="size-8 text-gray-300" />
         </p>
@@ -84,8 +97,8 @@ export function PictureSection({
       <FileButton accept="image/*" disabled={working} onChange={onFileChange}>
         Upload
       </FileButton>
-      <Button disabled={working} onClick={onResetClick}>
-        Reset
+      <Button disabled={working || !imageUrl} onClick={onResetClick}>
+        Remove
       </Button>
     </VStack>
   );
