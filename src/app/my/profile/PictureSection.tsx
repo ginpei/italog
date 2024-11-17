@@ -1,3 +1,4 @@
+import { SunIcon } from "@heroicons/react/24/outline";
 import { ChangeEvent, useState } from "react";
 import { uploadProfilePicture } from "@/app/api/profile/picture/profilePictureApi";
 import { AuthProfile } from "@/components/auth/AuthProfile";
@@ -18,6 +19,8 @@ export function PictureSection({
   authProfile,
   profile,
 }: PictureSectionProps): JSX.Element {
+  // TODO fallback image
+  const [imageUrl, setImageUrl] = useState<string>(profile.imageUrl ?? "");
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -33,8 +36,11 @@ export function PictureSection({
       }
 
       const res = await uploadProfilePicture(authProfile.userId, file);
-      console.log("# res", res);
-      alert("Upload picture");
+
+      setImageUrl("reloading");
+      const image = new Image();
+      image.onload = () => setImageUrl(res.url);
+      image.src = res.url;
     } catch (error) {
       console.error(error);
       setError(toError(error));
@@ -59,21 +65,22 @@ export function PictureSection({
     <VStack as="section" className="PictureSection">
       <H2>Picture</H2>
       <ErrorBlock error={error} />
-      <Link
-        as="a"
-        className="mx-auto block"
-        href={profile.imageUrl!}
-        target="_blank"
-      >
-        {/* TODO fallback image */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          alt="[Your profile picture]"
-          className={`size-32 border ${working ? "opacity-50" : ""}`}
-          style={{ filter: working ? "grayscale(1)" : undefined }}
-          src={profile.imageUrl!}
-        />
-      </Link>
+      {imageUrl === "reloading" ? (
+        <p className="mx-auto grid size-32 animate-spin items-center justify-center">
+          <SunIcon className="size-8 text-gray-300" />
+        </p>
+      ) : (
+        <Link as="a" className="mx-auto block" href={imageUrl} target="_blank">
+          {/* TODO allow blog url for next Image */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            alt="[Your profile picture]"
+            className={`size-32 ${working ? "opacity-50" : ""}`}
+            style={{ filter: working ? "grayscale(1)" : undefined }}
+            src={imageUrl}
+          />
+        </Link>
+      )}
       <FileButton accept="image/*" disabled={working} onChange={onFileChange}>
         Upload
       </FileButton>
