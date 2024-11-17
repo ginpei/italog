@@ -22,9 +22,6 @@ export async function uploadProfilePicture(
   const res = await upload(pathname, file, {
     access: "public",
     handleUploadUrl: endpoint,
-    onUploadProgress: (progress) => {
-      console.log("upload progress", progress);
-    },
   });
   return res;
 }
