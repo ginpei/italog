@@ -7,6 +7,11 @@ export async function uploadProfilePicture(
 ): Promise<unknown> {
   const endpoint = `/api/profile/picture`;
 
+  // TODO extract
+  if (file.size > 1024 * 1024 * 2) {
+    throw new Error("2MB limit");
+  }
+
   const ext = ".jpg";
   const pathname = `user/${userId}/profile${ext}`;
   if (!getUserIdFromPicturePath(pathname)) {

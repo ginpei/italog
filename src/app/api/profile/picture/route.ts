@@ -19,6 +19,7 @@ export type PostProfilePictureResult =
 
 interface TokenPayload {
   pathname: string;
+  userId: string;
 }
 
 export async function POST(
@@ -29,39 +30,39 @@ export async function POST(
   try {
     const body: HandleUploadBody = await req.json();
 
-    const profile = await getSessionProfile();
-    if (!profile) {
-      console.log(`# ??`, "Unauthorized");
-      return NextResponse.json(
-        { error: "Unauthorized", ok: false },
-        { status: 401 },
-      );
-    }
-
     return runTransaction(async (db) => {
       const jsonResponse = await handleUpload({
         body,
         request: req,
         onBeforeGenerateToken: async (pathname) => {
+          const profile = await getSessionProfile();
+          if (!profile) {
+            throw new Error("No login");
+          }
+
           const userId = getUserIdFromPicturePath(pathname);
-          if (userId !== profile.id) {
-            throw new Error("Invalid userId");
+          if (userId !== profile?.id) {
+            throw new Error("Wrong user");
           }
 
           return {
             allowedContentTypes: ["image/jpeg", "image/png", "image/gif"],
-            addRandomSuffix: false,
-            tokenPayload: JSON.stringify({ pathname } satisfies TokenPayload),
+            addRandomSuffix: false, // TODO remove
+            maximumSizeInBytes: 1024 * 1024 * 2, // 2MB
+            tokenPayload: JSON.stringify({
+              pathname,
+              userId,
+            } satisfies TokenPayload),
           };
         },
         onUploadCompleted: async ({ blob, tokenPayload }) => {
-          console.log(`# onUploadCompleted`);
           const payload: TokenPayload = JSON.parse(tokenPayload!);
-          console.log(`# ok`, payload.pathname, blob.url);
           await updateProfilePictureRecord(db, {
-            id: profile.id,
+            id: payload.userId,
             imageUrl: blob.url,
           });
+
+          // TODO delete old image
         },
       });
 

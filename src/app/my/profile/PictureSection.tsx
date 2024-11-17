@@ -65,6 +65,7 @@ export function PictureSection({
         href={profile.imageUrl!}
         target="_blank"
       >
+        {/* TODO fallback image */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           alt="[Your profile picture]"
