@@ -18,7 +18,9 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   const [detectingBarcode, setDetectingBarcode] = useState(false);
   const [barcode, setBarcode] = useState("");
 
-  const special = new URL(location.href).searchParams.get("special") === "1";
+  const special =
+    typeof location !== "undefined" &&
+    new URL(location.href).searchParams.get("special") === "1";
 
   const onBarcodeFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
