@@ -55,6 +55,7 @@ export async function POST(
           };
         },
         onUploadCompleted: async ({ blob, tokenPayload }) => {
+          console.log(`# onUploadCompleted`);
           const payload: TokenPayload = JSON.parse(tokenPayload!);
           console.log(`# ok`, payload.pathname, blob.url);
           await updateProfilePictureRecord(db, {
