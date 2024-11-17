@@ -12,10 +12,7 @@ export async function getProfileRecord(id: string): Promise<Profile | null> {
     return null;
   }
 
-  const profile: Profile = {
-    displayName: row.display_name,
-    id: row.id,
-  };
+  const profile = rowToProfile(row);
   return profile;
 }
 
@@ -55,10 +52,7 @@ export async function getProfileRecordByAuth(
     return null;
   }
 
-  const profile: Profile = {
-    displayName: row.display_name,
-    id: row.id,
-  };
+  const profile = rowToProfile(row);
   return profile;
 }
 
@@ -108,5 +102,6 @@ function rowToProfile(row: QueryResultRow): Profile {
   return {
     displayName: row.display_name,
     id: row.id,
+    imageUrl: row.image_url,
   };
 }
