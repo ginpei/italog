@@ -6,7 +6,7 @@ export async function uploadProfilePicture(
   userId: string,
   file: File,
 ): Promise<PutBlobResult> {
-  const endpoint = `/api/profile/picture`;
+  const endpoint = `/api/profile/picture/upload`;
 
   // TODO extract
   if (file.size > 1024 * 1024 * 2) {

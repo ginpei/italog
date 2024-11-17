@@ -8,10 +8,10 @@ import { getUserIdFromPicturePath } from "@/components/user/Profile";
 import { updateProfilePictureRecord } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
 
-// export interface PostProfilePicturePayload {
+// export interface PostProfilePictureUploadPayload {
 // }
 
-export type PostProfilePictureResult =
+export type PostProfilePictureUploadResult =
   | UnwrapPromise<ReturnType<typeof handleUpload>>
   | {
       error: string;
@@ -26,7 +26,7 @@ interface TokenPayload {
 
 export async function POST(
   req: Request,
-): Promise<NextResponse<PostProfilePictureResult>> {
+): Promise<NextResponse<PostProfilePictureUploadResult>> {
   // https://vercel.com/docs/storage/vercel-blob/client-upload
 
   try {

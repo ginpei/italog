@@ -1,6 +1,6 @@
 import { SunIcon } from "@heroicons/react/24/outline";
 import { ChangeEvent, useState } from "react";
-import { uploadProfilePicture } from "@/app/api/profile/picture/profilePictureApi";
+import { uploadProfilePicture } from "@/app/api/profile/picture/upload/profilePictureUploadApi";
 import { AuthProfile } from "@/components/auth/AuthProfile";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
