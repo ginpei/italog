@@ -1,10 +1,11 @@
+import { PutBlobResult } from "@vercel/blob";
 import { upload } from "@vercel/blob/client";
 import { getUserIdFromPicturePath } from "@/components/user/Profile";
 
 export async function uploadProfilePicture(
   userId: string,
   file: File,
-): Promise<unknown> {
+): Promise<PutBlobResult> {
   const endpoint = `/api/profile/picture`;
 
   // TODO extract
