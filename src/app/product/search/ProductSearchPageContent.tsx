@@ -3,6 +3,7 @@
 import { CameraIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { detectBarcode } from "./quaggaFunctions";
+import { useSpecialFlag } from "@/components/api/dev/devHooks";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { VStack } from "@/components/layout/VStack";
 import { Button, FileButton } from "@/components/style/Button";
@@ -17,10 +18,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   const [error, setError] = useState<Error | null>(null);
   const [detectingBarcode, setDetectingBarcode] = useState(false);
   const [barcode, setBarcode] = useState("");
-
-  const special =
-    typeof location !== "undefined" &&
-    new URL(location.href).searchParams.get("special") === "1";
+  const special = useSpecialFlag();
 
   const onBarcodeFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
