@@ -1,8 +1,9 @@
 import { handleUpload, HandleUploadBody } from "@vercel/blob/client";
 import { UnwrapPromise } from "next/dist/lib/coalesced-function";
 import { NextResponse } from "next/server";
-import { isUUID, runTransaction } from "@/components/db/transaction";
+import { runTransaction } from "@/components/db/transaction";
 import { toError } from "@/components/error/errorUtil";
+import { getUserIdFromPicturePath } from "@/components/user/Profile";
 import { updateProfilePictureRecord } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
 
@@ -72,14 +73,4 @@ export async function POST(
       { status: 400 }, // The webhook will retry 5 times waiting for a 200
     );
   }
-}
-
-export function getUserIdFromPicturePath(path: string): string {
-  const rxPicturePath = /^user\/([^/]+)\/profile\.\w+$/;
-  const id = path.match(rxPicturePath)?.[1];
-  if (!id || !isUUID(id)) {
-    return "";
-  }
-
-  return id;
 }

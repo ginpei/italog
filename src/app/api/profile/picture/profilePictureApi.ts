@@ -1,5 +1,5 @@
 import { upload } from "@vercel/blob/client";
-import { getUserIdFromPicturePath } from "./route";
+import { getUserIdFromPicturePath } from "@/components/user/Profile";
 
 export async function uploadProfilePicture(
   userId: string,
