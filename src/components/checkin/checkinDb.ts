@@ -63,7 +63,7 @@ export async function getTimelineCheckinRecords(
   const offset = 0;
 
   const result = await sql`
-    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, pl.latitude, pl.longitude, pl.address, pl.map_url, pl.type_display_name, pl.web_url
+    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url AS profile_image_url, pl.latitude, pl.longitude, pl.address, pl.map_url, pl.type_display_name, pl.web_url
     FROM checkin c
     JOIN board b ON c.board_id = b.board_id
     JOIN profile p ON c.user_id = p.id
@@ -74,33 +74,7 @@ export async function getTimelineCheckinRecords(
     LIMIT ${limit} OFFSET ${offset}
   `;
 
-  const placeCheckin = result.rows.map(
-    (row): Checkin<Place> => ({
-      id: row.id,
-      comment: row.comment,
-      createdAt: Number(row.created_at),
-      userDate: row.user_date,
-      boardId: row.board_id,
-      rate: row.rate,
-      userId: row.user_id,
-      board: {
-        address: row.address,
-        boardId: row.board_id,
-        boardType: row.board_type,
-        displayName: row.board_display_name,
-        latitude: row.latitude,
-        longitude: row.longitude,
-        mapId: row.map_id,
-        mapUrl: row.map_url,
-        typeDisplayName: row.type_display_name,
-        webUrl: row.web_url,
-      },
-      profile: {
-        id: row.user_id,
-        displayName: row.profile_display_name,
-      },
-    }),
-  );
+  const placeCheckin = result.rows.map((v) => rowToPlaceCheckin(v));
   return placeCheckin;
 }
 
@@ -169,6 +143,25 @@ function rowToCheckin(row: QueryResultRow): Checkin {
       displayName: row.profile_display_name,
       id: row.user_id,
       imageUrl: row.profile_image_url,
+    },
+  };
+}
+
+function rowToPlaceCheckin(row: QueryResultRow): Checkin<Place> {
+  const checkin = rowToCheckin(row);
+  return {
+    ...checkin,
+    board: {
+      address: row.address,
+      boardId: row.board_id,
+      boardType: row.board_type,
+      displayName: row.board_display_name,
+      latitude: row.latitude,
+      longitude: row.longitude,
+      mapId: row.map_id,
+      mapUrl: row.map_url,
+      typeDisplayName: row.type_display_name,
+      webUrl: row.web_url,
     },
   };
 }

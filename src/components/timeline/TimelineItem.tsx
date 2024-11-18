@@ -33,7 +33,6 @@ export function TimelineItem({
       >
         <MapIcon className="size-6 text-gray-500 " />
       </button>
-      {/* TODO */}
       <CheckinProfileLink profile={checkin.profile} />
       <Link
         className={`
