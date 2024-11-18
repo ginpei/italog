@@ -1,33 +1,26 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GetQrCodeResult } from "../api/qrCode/route";
-import { Checkin } from "@/components/checkin/Checkin";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Button, ButtonLink } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
-import { CheckinList } from "@/components/timeline/CheckinList";
-import { TimelineItem } from "@/components/timeline/TimelineItem";
 import { Profile } from "@/components/user/Profile";
 
 export interface MyPageContentProps {
-  checkins: Checkin[];
   friends: Profile[];
   profile: Profile;
 }
 
 export function MyPageContent({
-  checkins,
   friends,
   profile,
 }: MyPageContentProps): JSX.Element {
   const [pageUrl, setPageUrl] = useState<string | null>(null);
-  const [primaryPlaceId, setPrimaryPlaceId] = useState("");
   const [qrCodeWorking, setQrCodeWorking] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const placeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const myPageUrl = useMemo(() => {
     if (!pageUrl) {
@@ -42,10 +35,6 @@ export function MyPageContent({
   useEffect(() => {
     setPageUrl(location.href);
   }, []);
-
-  const onShowCheckinClick = (checkin: Checkin) => {
-    setPrimaryPlaceId(checkin.boardId);
-  };
 
   const onShowQrCodeClick = async () => {
     if (!myPageUrl) {
@@ -75,27 +64,6 @@ export function MyPageContent({
         <Link href={`/my/profile`}>Edit profile</Link>
       </p>
       <VStack>
-        <H2>Checkins</H2>
-        <div>TODO: map</div>
-        <CheckinList>
-          {checkins.map((checkin) => (
-            <div
-              key={checkin.id}
-              ref={(el) => {
-                if (el) placeRefs.current.set(checkin.id, el);
-                else placeRefs.current.delete(checkin.id);
-              }}
-            >
-              <TimelineItem
-                checkin={checkin}
-                onShowClick={onShowCheckinClick}
-                selected={checkin.boardId === primaryPlaceId}
-              />
-            </div>
-          ))}
-        </CheckinList>
-      </VStack>
-      <VStack>
         <H2>Friends</H2>
         <ul className="ms-8 list-disc">
           {friends.map((friend) => (
@@ -107,19 +75,23 @@ export function MyPageContent({
         </ul>
       </VStack>
       <VStack>
-        <H2>QR code</H2>
-        <div className="grid justify-center">
-          {myPageUrl && qrCodeUrl ? (
-            <Link href={myPageUrl}>
+        <H2>Share your account</H2>
+        {myPageUrl && qrCodeUrl ? (
+          <>
+            <Link className="mx-auto" href={myPageUrl}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img alt="" src={qrCodeUrl} />
             </Link>
-          ) : (
-            <Button disabled={qrCodeWorking} onClick={onShowQrCodeClick}>
-              Show
-            </Button>
-          )}
-        </div>
+            <p>
+              The code is a link to{" "}
+              <Link href={myPageUrl ?? "#"}>your user page</Link>.
+            </p>
+          </>
+        ) : (
+          <Button disabled={qrCodeWorking} onClick={onShowQrCodeClick}>
+            Generate QR code
+          </Button>
+        )}
       </VStack>
       <VStack>
         <H2>Logout</H2>
