@@ -1,4 +1,4 @@
-import { QueryResultRow, sql } from "@vercel/postgres";
+import { db, QueryResultRow } from "@vercel/postgres";
 import { createBoardRecord } from "../board/boardDb";
 import { runTransaction } from "../db/transaction";
 import { Place } from "./Place";
@@ -34,20 +34,26 @@ export async function createPlaceRecordSet(
 export async function getPlaceRecord(
   boardId: string,
 ): Promise<Place | undefined> {
-  const countResult = await sql`
-    SELECT COUNT(*) FROM place WHERE board_id = ${boardId}
-  `;
+  const countResult = await db.query(
+    /*sql*/ `
+      SELECT COUNT(*) FROM place WHERE board_id = $1
+    `,
+    [boardId],
+  );
   console.log(
     "countResult",
     countResult,
     `SELECT COUNT(*) FROM place WHERE board_id = ${boardId}`,
   );
 
-  const result = await sql`
-    SELECT p.*, b.display_name FROM place p
-    JOIN board b ON p.board_id = b.board_id
-    WHERE p.board_id = ${boardId}
-  `;
+  const result = await db.query(
+    /*sql*/ `
+      SELECT p.*, b.display_name FROM place p
+      JOIN board b ON p.board_id = b.board_id
+      WHERE p.board_id = $1
+    `,
+    [boardId],
+  );
   const row = result.rows[0];
   if (!row) {
     console.log(

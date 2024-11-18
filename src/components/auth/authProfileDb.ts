@@ -1,12 +1,13 @@
-import { QueryResultRow, sql } from "@vercel/postgres";
+import { db, QueryResultRow } from "@vercel/postgres";
 import { AuthProfile } from "./AuthProfile";
 
 export async function getAuthProfileRecord(
   authId: string,
 ): Promise<AuthProfile | null> {
-  const authResult = await sql`
-    SELECT * FROM auth_profile WHERE auth_id = ${authId}
-  `;
+  const authResult = await db.query(
+    /*sql*/ `SELECT * FROM auth_profile WHERE auth_id = $1`,
+    [authId],
+  );
 
   const row = authResult.rows[0];
   if (!row) {
@@ -20,9 +21,10 @@ export async function getAuthProfileRecord(
 export async function getAuthProfileRecordByUserId(
   userId: string,
 ): Promise<AuthProfile | null> {
-  const authResult = await sql`
-    SELECT * FROM auth_profile WHERE user_id = ${userId}
-  `;
+  const authResult = await db.query(
+    /*sql*/ `SELECT * FROM auth_profile WHERE user_id = $1`,
+    [userId],
+  );
 
   const row = authResult.rows[0];
   if (!row) {
@@ -37,13 +39,16 @@ export async function updateAuthProfileRecord(
   authId: string,
   profile: Pick<AuthProfile, "email" | "picture">,
 ): Promise<void> {
-  await sql`
-    UPDATE auth_profile
-    SET
-      email = COALESCE(${profile.email}, email),
-      picture = COALESCE(${profile.picture}, picture)
-    WHERE auth_id = ${authId}
-  `;
+  await db.query(
+    /*sql*/ `
+      UPDATE auth_profile
+      SET
+        email = COALESCE($1, email),
+        picture = COALESCE($2, picture)
+      WHERE auth_id = $3
+    `,
+    [profile.email, profile.picture, authId],
+  );
 }
 
 function rowToAuthProfile(row: QueryResultRow): AuthProfile {

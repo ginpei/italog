@@ -1,14 +1,17 @@
-import { sql } from "@vercel/postgres";
+import { db } from "@vercel/postgres";
 import { runTransaction } from "../db/transaction";
 
 export async function hasFriendshipRecord(
   userId1: string,
   userId2: string,
 ): Promise<boolean> {
-  const result = await sql`
-    SELECT COUNT(*) FROM user_user
-    WHERE user_id = ${userId1} AND friend_id = ${userId2}
-  `;
+  const result = await db.query(
+    /*sql*/ `
+      SELECT COUNT(*) FROM user_user
+      WHERE user_id = $1 AND friend_id = $2
+    `,
+    [userId1, userId2],
+  );
   return result.rows[0]!.count > 0;
 }
 
