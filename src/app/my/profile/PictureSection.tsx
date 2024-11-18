@@ -10,6 +10,7 @@ import { Button, FileButton } from "@/components/style/Button";
 import { H2 } from "@/components/style/Hn";
 import { Link } from "@/components/style/Link";
 import { Profile } from "@/components/user/Profile";
+import { ProfilePicture } from "@/components/user/ProfilePicture";
 
 export interface PictureSectionProps {
   authProfile: AuthProfile;
@@ -77,21 +78,16 @@ export function PictureSection({
       <H2>Picture</H2>
       <ErrorBlock error={error} />
       {!imageUrl ? (
-        <p>{/* TODO fallback image */}?</p>
+        <div className="mx-auto">
+          <ProfilePicture imageUrl={imageUrl} size="size-24" />
+        </div>
       ) : imageUrl === "reloading" ? (
-        <p className="mx-auto grid size-32 animate-spin items-center justify-center">
+        <p className="mx-auto grid size-24 animate-spin items-center justify-center">
           <SunIcon className="size-8 text-gray-300" />
         </p>
       ) : (
         <Link as="a" className="mx-auto block" href={imageUrl} target="_blank">
-          {/* TODO allow blog url for next Image */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            alt="[Your profile picture]"
-            className={`size-32 ${working ? "opacity-50" : ""}`}
-            style={{ filter: working ? "grayscale(1)" : undefined }}
-            src={imageUrl}
-          />
+          <ProfilePicture imageUrl={imageUrl} size="size-24" />
         </Link>
       )}
       <FileButton accept="image/*" disabled={working} onChange={onFileChange}>
