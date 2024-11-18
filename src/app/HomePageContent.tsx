@@ -44,7 +44,9 @@ export function HomePageContent({
         </>
       ) : (
         <p className="mx-auto my-16">
-          <SuperButtonLink href="/api/auth/login">Login</SuperButtonLink>
+          <SuperButtonLink as="a" href="/api/auth/login">
+            Login
+          </SuperButtonLink>
         </p>
       )}
     </VStack>
