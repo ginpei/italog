@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { QueryResultRow, sql } from "@vercel/postgres";
 import { Place } from "../place/Place";
 import { Checkin, CheckinRow } from "./Checkin";
 
@@ -120,26 +120,7 @@ export async function getPlaceCheckinRecords(
     LIMIT ${options.limit || 10} OFFSET ${options.offset || 0}
   `;
 
-  const checkins = result.rows.map(
-    (row): Checkin => ({
-      id: row.id,
-      comment: row.comment,
-      createdAt: Number(row.created_at),
-      userDate: row.user_date,
-      boardId: row.board_id,
-      rate: row.rate,
-      userId: row.user_id,
-      board: {
-        boardId: row.board_id,
-        boardType: row.board_type,
-        displayName: row.board_display_name,
-      },
-      profile: {
-        id: row.user_id,
-        displayName: row.profile_display_name,
-      },
-    }),
-  );
+  const checkins = result.rows.map((v) => rowToCheckin(v));
   return checkins;
 }
 
@@ -159,26 +140,7 @@ export async function getUserCheckinRecords(
     LIMIT ${limit} OFFSET ${offset}
   `;
 
-  const checkins = result.rows.map(
-    (row): Checkin => ({
-      id: row.id,
-      comment: row.comment,
-      createdAt: Number(row.created_at),
-      userDate: row.user_date,
-      boardId: row.board_id,
-      rate: row.rate,
-      userId: row.user_id,
-      board: {
-        boardId: row.board_id,
-        boardType: row.board_type,
-        displayName: row.board_display_name,
-      },
-      profile: {
-        id: row.user_id,
-        displayName: row.profile_display_name,
-      },
-    }),
-  );
+  const checkins = result.rows.map((v) => rowToCheckin(v));
   return checkins;
 }
 
@@ -187,4 +149,25 @@ export async function deleteCheckinRecord(id: string): Promise<void> {
     DELETE FROM checkin
     WHERE id = ${id}
   `;
+}
+
+function rowToCheckin(row: QueryResultRow): Checkin {
+  return {
+    id: row.id,
+    comment: row.comment,
+    createdAt: Number(row.created_at),
+    userDate: row.user_date,
+    boardId: row.board_id,
+    rate: row.rate,
+    userId: row.user_id,
+    board: {
+      boardId: row.board_id,
+      boardType: row.board_type,
+      displayName: row.board_display_name,
+    },
+    profile: {
+      id: row.user_id,
+      displayName: row.profile_display_name,
+    },
+  };
 }
