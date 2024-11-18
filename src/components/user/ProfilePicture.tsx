@@ -13,6 +13,7 @@ export function ProfilePicture({
   if (!imageUrl) {
     return <UserIcon className={`ProfilePicture ${size} text-gray-500`} />;
   }
+
   return (
     <Image
       alt=""
