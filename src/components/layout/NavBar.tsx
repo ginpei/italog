@@ -28,7 +28,9 @@ export function NavBar({
       titleLink={titleLink}
     >
       {profile ? (
-        <NavBarLink href="/my">{profile.displayName}</NavBarLink>
+        <NavBarLink href={`/user/${profile.id}`}>
+          {profile.displayName}
+        </NavBarLink>
       ) : (
         <NavBarLink as="a" href="/api/auth/login">
           Login
