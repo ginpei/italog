@@ -25,24 +25,8 @@ export async function getCheckinRecord(id: string): Promise<Checkin | null> {
     return null;
   }
 
-  return {
-    id: row.id,
-    comment: row.comment,
-    createdAt: Number(row.created_at),
-    userDate: row.user_date,
-    boardId: row.board_id,
-    rate: row.rate,
-    userId: row.user_id,
-    board: {
-      boardId: row.board_id,
-      boardType: row.board_type,
-      displayName: row.board_display_name,
-    },
-    profile: {
-      id: row.user_id,
-      displayName: row.profile_display_name,
-    },
-  };
+  const checkin = rowToCheckin(row);
+  return checkin;
 }
 
 export async function updateCheckinRecord(
@@ -63,7 +47,7 @@ export async function getTimelineCheckinRecords(
   const offset = 0;
 
   const result = await sql`
-    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url AS profile_image_url, pl.latitude, pl.longitude, pl.address, pl.map_url, pl.type_display_name, pl.web_url
+    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url, pl.latitude, pl.longitude, pl.address, pl.map_url, pl.type_display_name, pl.web_url
     FROM checkin c
     JOIN board b ON c.board_id = b.board_id
     JOIN profile p ON c.user_id = p.id
@@ -84,7 +68,7 @@ export async function getPlaceCheckinRecords(
   options: { limit?: number; offset?: number } = {},
 ): Promise<Checkin[]> {
   const result = await sql`
-    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url AS profile_image_url
+    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url
     FROM checkin c
     JOIN board b ON c.board_id = b.board_id
     JOIN profile p ON c.user_id = p.id
@@ -105,7 +89,7 @@ export async function getUserCheckinRecords(
   const offset = 0;
 
   const result = await sql`
-    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url AS profile_image_url
+    SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url
     FROM checkin c
     JOIN board b ON c.board_id = b.board_id
     JOIN profile p ON c.user_id = p.id
@@ -142,7 +126,7 @@ function rowToCheckin(row: QueryResultRow): Checkin {
     profile: {
       displayName: row.profile_display_name,
       id: row.user_id,
-      imageUrl: row.profile_image_url,
+      imageUrl: row.image_url,
     },
   };
 }
