@@ -19,7 +19,6 @@ CREATE TABLE auth_profile (
   auth_id VARCHAR(255) NOT NULL,
   user_id UUID NOT NULL,
   email VARCHAR(255),
-  picture VARCHAR(255),
   PRIMARY KEY (auth_type, auth_id),
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );

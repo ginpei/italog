@@ -37,17 +37,15 @@ export async function getAuthProfileRecordByUserId(
 
 export async function updateAuthProfileRecord(
   authId: string,
-  profile: Pick<AuthProfile, "email" | "picture">,
+  profile: Pick<AuthProfile, "email">,
 ): Promise<void> {
   await db.query(
     /*sql*/ `
       UPDATE auth_profile
-      SET
-        email = COALESCE($1, email),
-        picture = COALESCE($2, picture)
-      WHERE auth_id = $3
+      SET email = COALESCE($1, email)
+      WHERE auth_id = $2
     `,
-    [profile.email, profile.picture, authId],
+    [profile.email, authId],
   );
 }
 
@@ -56,7 +54,6 @@ function rowToAuthProfile(row: QueryResultRow): AuthProfile {
     authId: row.auth_id,
     authType: row.auth_type,
     email: row.email,
-    picture: row.picture,
     userId: row.user_id,
   };
   return profile;
