@@ -8,6 +8,7 @@ import { H1, H2 } from "@/components/style/Hn";
 import { CheckinList } from "@/components/timeline/CheckinList";
 import { TimelineItem } from "@/components/timeline/TimelineItem";
 import { Profile } from "@/components/user/Profile";
+import { ProfilePicture } from "@/components/user/ProfilePicture";
 
 export interface UserPageContentProps {
   currentUser: Profile;
@@ -31,12 +32,15 @@ export function UserPageContent({
 
   return (
     <VStack gap="gap-8">
+      <div className="flex flex-row-reverse place-content-between">
+        <FriendshipSection
+          currentUser={currentUser}
+          isFriend={isFriend}
+          profile={profile}
+        />
+        <ProfilePicture imageUrl={profile.imageUrl} size="size-24" />
+      </div>
       <H1>{profile.displayName}</H1>
-      <FriendshipSection
-        currentUser={currentUser}
-        isFriend={isFriend}
-        profile={profile}
-      />
       {(isFriend || currentUser.id === profile.id) && (
         <>
           <hr />

@@ -53,7 +53,7 @@ export function FriendshipSection({
   };
 
   return (
-    <section className="FriendshipSection text-end">
+    <section className="FriendshipSection">
       {isOwner ? (
         <ButtonLink href="/my">My page</ButtonLink>
       ) : isFriend ? (
