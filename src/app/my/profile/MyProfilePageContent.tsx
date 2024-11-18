@@ -7,7 +7,6 @@ import { AuthenticationSection } from "./AuthenticationSection";
 import { PictureSection } from "./PictureSection";
 import { ProfileForm } from "./ProfileForm";
 import { PostProfilePayload } from "@/app/api/profile/route";
-import { useSpecialFlag } from "@/components/api/dev/devHooks";
 import { AuthProfile } from "@/components/auth/AuthProfile";
 import { VStack } from "@/components/layout/VStack";
 import { H1, H2 } from "@/components/style/Hn";
@@ -26,7 +25,6 @@ export function MyProfilePageContent({
   const [editingProfile, setEditingProfile] = useState(profile);
   const [working, setWorking] = useState(false);
   const router = useRouter();
-  const special = useSpecialFlag();
 
   const onProfileChange = (profile: Profile) => {
     setEditingProfile(profile);
@@ -64,9 +62,7 @@ export function MyProfilePageContent({
           profile={editingProfile}
         />
       </VStack>
-      {special && (
-        <PictureSection authProfile={authProfile} profile={profile} />
-      )}
+      <PictureSection authProfile={authProfile} profile={profile} />
       <AuthenticationSection authProfile={authProfile} />
     </VStack>
   );
