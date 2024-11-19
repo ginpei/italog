@@ -4,6 +4,7 @@ import {
   popularPlaceTypes,
 } from "@/components/place/placeTypes";
 import { Button } from "@/components/style/Button";
+import { InputLabel } from "@/components/style/InputLabel";
 import { Select } from "@/components/style/Select";
 import { TextInput } from "@/components/style/TextInput";
 
@@ -44,7 +45,7 @@ export function SearchNearbyForm({
   return (
     <form className="SearchNearbyForm" onSubmit={onFormSubmit}>
       <fieldset className="flex flex-col gap-4" disabled={disabled}>
-        <label className="flex flex-col">
+        <InputLabel>
           Category:
           <Select
             className="border p-2"
@@ -59,8 +60,8 @@ export function SearchNearbyForm({
               </option>
             ))}
           </Select>
-        </label>
-        <label className="flex flex-col">
+        </InputLabel>
+        <InputLabel>
           Text:
           <TextInput
             name="q"
@@ -69,7 +70,7 @@ export function SearchNearbyForm({
             type="search"
             value={params.textQuery}
           />
-        </label>
+        </InputLabel>
         <Button>Search</Button>
       </fieldset>
     </form>

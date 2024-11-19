@@ -1,4 +1,5 @@
 import { Button } from "@/components/style/Button";
+import { InputLabel } from "@/components/style/InputLabel";
 import { TextInput } from "@/components/style/TextInput";
 import { Profile } from "@/components/user/Profile";
 
@@ -30,7 +31,7 @@ export function ProfileForm({
   return (
     <form className="ProfileForm" onSubmit={onFormSubmit}>
       <fieldset className="flex flex-col gap-4" disabled={disabled}>
-        <label className="flex flex-col">
+        <InputLabel>
           Display name:
           <TextInput
             className="w-full"
@@ -38,7 +39,7 @@ export function ProfileForm({
             onChange={onInputChange}
             value={profile.displayName}
           />
-        </label>
+        </InputLabel>
         <Button>Update</Button>
       </fieldset>
     </form>

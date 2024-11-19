@@ -5,6 +5,7 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import { ChangeEventHandler } from "react";
+import { InputLabel } from "../style/InputLabel";
 import { CheckinRate, CheckinRow } from "@/components/checkin/Checkin";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { Button } from "@/components/style/Button";
@@ -57,7 +58,7 @@ export function CheckinForm({
             </RateRadio>
           </span>
         </div>
-        <label className="flex flex-col">
+        <InputLabel>
           Comment{editingCheckin.rate === "0" ? " (optional)" : ""}:
           <textarea
             className="h-32 border bg-white text-black"
@@ -66,7 +67,7 @@ export function CheckinForm({
             required={editingCheckin.rate !== "0"}
             value={editingCheckin.comment}
           />
-        </label>
+        </InputLabel>
         <Button>Check in</Button>
       </fieldset>
     </form>

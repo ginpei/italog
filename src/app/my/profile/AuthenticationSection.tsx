@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { AuthProfile } from "@/components/auth/AuthProfile";
 import { VStack } from "@/components/layout/VStack";
 import { H2 } from "@/components/style/Hn";
+import { InputLabel } from "@/components/style/InputLabel";
 import { TextInput } from "@/components/style/TextInput";
 
 export interface AuthenticationAuthenticationSectionProps {
@@ -33,14 +34,14 @@ export function AuthenticationSection({
         Authentication
       </H2>
       <p>This information is not public to the others</p>
-      <label className="flex flex-col">
+      <InputLabel>
         Provider:
         <TextInput readOnly value={providerName} />
-      </label>
-      <label className="flex flex-col">
+      </InputLabel>
+      <InputLabel>
         Login email:
         <TextInput readOnly value={authProfile.email} />
-      </label>
+      </InputLabel>
     </VStack>
   );
 }
