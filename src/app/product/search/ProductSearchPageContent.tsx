@@ -10,6 +10,7 @@ import { VStack } from "@/components/layout/VStack";
 import { Product } from "@/components/product/Product";
 import { Button, FileButton } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
+import { Link } from "@/components/style/Link";
 import { superButtonShapeClassNames } from "@/components/style/SuperButton";
 import { TextInput } from "@/components/style/TextInput";
 import { buttonThemeClassNames } from "@/components/style/controlClassNames";
@@ -151,6 +152,11 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
                 ))}
                 {products.length === 0 && <li>No products found</li>}
               </ul>
+              <p>
+                <Link href={`/product/register?barcode=${barcode}`}>
+                  Register new product...
+                </Link>
+              </p>
             </VStack>
           )}
         </VStack>

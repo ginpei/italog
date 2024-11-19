@@ -29,7 +29,7 @@ export function CheckinForm({
     <form className="CheckInForm" onSubmit={onFormSubmit} ref={formRef}>
       <fieldset className="flex flex-col gap-4" disabled={working}>
         <ErrorBlock error={error} />
-        <div className="flex flex-col">
+        <InputLabel as="div">
           Check in with feeling of:
           <span className="flex gap-1">
             <RateRadio
@@ -57,7 +57,7 @@ export function CheckinForm({
               Horrible
             </RateRadio>
           </span>
-        </div>
+        </InputLabel>
         <InputLabel>
           Comment{editingCheckin.rate === "0" ? " (optional)" : ""}:
           <textarea
