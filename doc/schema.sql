@@ -73,17 +73,27 @@ VALUES (
 CREATE TABLE product (
   board_id UUID PRIMARY KEY,
   barcode VARCHAR(255),
+  brands VARCHAR(255),
+  categories VARCHAR(255),
+  image_url VARCHAR(255),
   FOREIGN KEY (board_id) REFERENCES board(board_id)
 );
 
 CREATE INDEX idx_barcode ON product (barcode);
 
 INSERT INTO board (board_id, board_type, display_name )
-VALUES ('135ed8c0-37cc-4ec9-a03c-a4ab5026582a', 'product', 'excel white');
-INSERT INTO product (board_id, barcode)
 VALUES (
   '135ed8c0-37cc-4ec9-a03c-a4ab5026582a',
-  '0064900409554'
+  'product',
+  'Bubblemint Excel White'
+);
+INSERT INTO product (board_id, barcode, brands, categories, image_url)
+VALUES (
+  '135ed8c0-37cc-4ec9-a03c-a4ab5026582a',
+  '0064900409554',
+  'Excel',
+  'Snacks, Sweet snacks, Confectioneries, Chewing gum, Sugar-free chewing gum',
+  'https://images.openfoodfacts.org/images/products/006/490/040/9554/front_en.23.400.jpg'
 );
 
 -- checkin
