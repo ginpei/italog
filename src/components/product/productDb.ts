@@ -1,5 +1,32 @@
 import { db, QueryResultRow } from "@vercel/postgres";
+import { createBoardRecord } from "../board/boardDb";
+import { runTransaction } from "../db/transaction";
 import { Product } from "./Product";
+
+export async function createProductRecordSet(
+  product: Omit<Product, "boardId">,
+): Promise<Product> {
+  return runTransaction(async (db) => {
+    const boardId = await createBoardRecord(db, product);
+    await db.query(
+      /*sql*/ `
+        INSERT INTO product (
+          board_id, barcode, brands, categories, image_url
+        ) VALUES ($1, $2, $3, $4, $5)
+      `,
+      [
+        boardId,
+        product.barcode,
+        product.brands,
+        product.categories,
+        product.imageUrl,
+      ],
+    );
+
+    const placeWithBoardId = { ...product, boardId };
+    return placeWithBoardId;
+  });
+}
 
 export async function getProductRecordsByBarcode(
   barcode: string,
@@ -22,6 +49,9 @@ function rowToProduct(row: QueryResultRow): Product {
     barcode: row.barcode,
     boardId: row.board_id,
     boardType: "product",
+    brands: row.brands,
+    categories: row.categories,
     displayName: row.display_name,
+    imageUrl: row.image_url,
   };
 }

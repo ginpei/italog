@@ -5,8 +5,11 @@ import {
   PencilSquareIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { postProductApi } from "@/app/api/product/productApis";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
+import { toError } from "@/components/error/errorUtil";
 import { SpinnerBlock } from "@/components/layout/SpinnerBlock";
 import { VStack } from "@/components/layout/VStack";
 import { Product } from "@/components/product/Product";
@@ -30,9 +33,10 @@ export function ProductRegisterPageContent({
     undefined,
   );
   const [foodLookedUp, setFoodLookedUp] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Partial<Product>>({
+  const [editingProduct, setEditingProduct] = useState<Product>({
     barcode: initial.barcode ?? "",
     boardId: "",
+    boardType: "product",
     brands: "",
     categories: "",
     displayName: "",
@@ -40,6 +44,7 @@ export function ProductRegisterPageContent({
   });
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const router = useRouter();
 
   const onInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -57,10 +62,22 @@ export function ProductRegisterPageContent({
 
   const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // setWorking(true);
-    // setError(null);
+    setWorking(true);
+    setError(null);
 
-    console.log("# editingProduct", editingProduct);
+    try {
+      const result = await postProductApi(editingProduct);
+      if (!result.ok) {
+        throw new Error("Failed to register product");
+      }
+
+      const productPageUrl = `/product/${result.productBoardId}`;
+      router.push(productPageUrl);
+    } catch (error) {
+      console.error(error);
+      setError(toError(error));
+      setWorking(false);
+    }
   };
 
   useEffect(() => {
@@ -180,14 +197,7 @@ export function ProductRegisterPageContent({
           <InputLabel>
             Image:
             <br />
-            {working ? (
-              <span className="mx-auto grid size-64 place-items-center border text-center">
-                {/* <span>
-                  <PhotoIcon className="mx-auto size-32 text-gray-500" />
-                  (No image)
-                </span> */}
-              </span>
-            ) : editingProduct.imageUrl ? (
+            {editingProduct.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 alt=""

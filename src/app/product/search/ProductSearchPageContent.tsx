@@ -146,9 +146,13 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
           {products && (
             <VStack>
               <H2>Search result</H2>
-              <ul>
+              <ul className="ms-8 list-disc">
                 {products.map((product) => (
-                  <li key={product.barcode}>{product.displayName}</li>
+                  <li key={product.barcode}>
+                    <Link href={`/product/${product.boardId}`}>
+                      {product.displayName}
+                    </Link>
+                  </li>
                 ))}
                 {products.length === 0 && <li>No products found</li>}
               </ul>
