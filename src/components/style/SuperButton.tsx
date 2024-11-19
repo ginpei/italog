@@ -3,7 +3,7 @@ import { ComponentPropsWithoutRef } from "react";
 import { LinkProps } from "./Link";
 import { buttonThemeClassNames } from "./controlClassNames";
 
-const superButtonShapeClassNames = `
+export const superButtonShapeClassNames = `
   grid size-32 items-center justify-center border text-sm
 `;
 

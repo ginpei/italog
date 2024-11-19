@@ -8,7 +8,9 @@ import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { VStack } from "@/components/layout/VStack";
 import { Button, FileButton } from "@/components/style/Button";
 import { H1, H2 } from "@/components/style/Hn";
+import { superButtonShapeClassNames } from "@/components/style/SuperButton";
 import { TextInput } from "@/components/style/TextInput";
+import { buttonThemeClassNames } from "@/components/style/controlClassNames";
 
 export interface ProductSearchPageContentProps {
   recentCheckins: never[];
@@ -24,7 +26,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
     event.preventDefault();
 
     // TODO
-    console.log("Barcode form submitted");
+    console.log("Barcode form submitted", barcode);
   };
 
   const onBarcodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,38 +85,40 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
       {special ? (
         <VStack>
           <H2>By barcode</H2>
-          <p className="text-sm text-gray-500">
-            Hint: you might want to use speech recognition on your device to
-            enter the barcode by reading it out loud.
+          <p className="mx-auto flex gap-4">
+            <FileButton
+              accept="image/*"
+              capture
+              className={`${superButtonShapeClassNames} ${buttonThemeClassNames}`}
+              disabled={detectingBarcode}
+              onChange={onBarcodeFileChange}
+            >
+              <span>
+                <CameraIcon className="mx-auto size-8" />
+                Capture
+              </span>
+            </FileButton>
           </p>
           <form onSubmit={onBarcodeFormSubmit}>
             <VStack>
               <ErrorBlock error={error} />
-              <fieldset className="flex items-stretch gap-2">
-                <TextInput
-                  className="w-full"
-                  inputMode="numeric"
-                  onChange={onBarcodeChange}
-                  name="barcode"
-                  pattern="(\d|\s)*"
-                  placeholder="0 00000 00000 0"
-                  value={barcode}
-                />
-                <Button>
+              <fieldset className="flex items-end gap-1">
+                <label className="flex w-full flex-col">
+                  Barcode:
+                  <TextInput
+                    className="w-full"
+                    inputMode="numeric"
+                    onChange={onBarcodeChange}
+                    name="barcode"
+                    pattern="(\d|\s)*"
+                    placeholder="0 00000 00000 0"
+                    value={barcode}
+                  />
+                </label>
+                <Button className="inline-grid w-16 place-items-center">
                   <MagnifyingGlassIcon className="size-5" />
                 </Button>
               </fieldset>
-              <FileButton
-                accept="image/*"
-                capture
-                disabled={detectingBarcode}
-                onChange={onBarcodeFileChange}
-              >
-                <span className="flex items-center gap-2">
-                  <CameraIcon className="inline-block size-5" /> Capture barcode
-                  (beta)
-                </span>
-              </FileButton>
             </VStack>
           </form>
         </VStack>
