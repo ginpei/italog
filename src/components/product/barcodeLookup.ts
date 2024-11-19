@@ -15,7 +15,7 @@ interface OpenFoodFactsApiResult {
  */
 interface OpenFoodFactsProduct {
   brands?: string;
-  categories: string;
+  categories?: string;
   code: string;
   id: string;
   lang: "en" | "fr";
@@ -51,10 +51,11 @@ export async function fetchBarcodeLookup(
         ?.split(",")
         .map((v) => v.trim())
         .join("\n") ?? "",
-    categories: offProduct.categories
-      .split(",")
-      .map((v) => v.trim())
-      .join("\n"),
+    categories:
+      offProduct.categories
+        ?.split(",")
+        .map((v) => v.trim())
+        .join("\n") ?? "",
     displayName: offProduct.product_name,
     imageUrl: offProduct.image_url,
   };
