@@ -45,7 +45,12 @@ export function ProductRegisterPageContent({
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.target;
-    if (name === "barcode") {
+    if (
+      name === "barcode" ||
+      name === "displayName" ||
+      name === "brands" ||
+      name === "categories"
+    ) {
       setEditingProduct({ ...editingProduct, [name]: value });
     }
   };
@@ -94,6 +99,7 @@ export function ProductRegisterPageContent({
               onChange={onInputChange}
               pattern="(\d|\s)*"
               placeholder="0 00000 00000 0"
+              required
               value={editingProduct.barcode}
             />
           </InputLabel>
@@ -142,6 +148,7 @@ export function ProductRegisterPageContent({
               onChange={onInputChange}
               pattern="(\d|\s)*"
               placeholder="0 00000 00000 0"
+              required
               value={editingProduct.barcode}
             />
           </InputLabel>
