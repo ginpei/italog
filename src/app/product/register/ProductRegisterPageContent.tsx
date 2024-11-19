@@ -1,6 +1,10 @@
 "use client";
 
-import { PhotoIcon } from "@heroicons/react/24/outline";
+import {
+  MagnifyingGlassIcon,
+  PencilSquareIcon,
+  PhotoIcon,
+} from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { SpinnerBlock } from "@/components/layout/SpinnerBlock";
@@ -10,6 +14,8 @@ import { fetchBarcodeLookup } from "@/components/product/barcodeLookup";
 import { Button } from "@/components/style/Button";
 import { H1 } from "@/components/style/Hn";
 import { InputLabel } from "@/components/style/InputLabel";
+import { SuperButton } from "@/components/style/SuperButton";
+import { SuperButtonBlock } from "@/components/style/SuperButtonBlock";
 import { TextInput } from "@/components/style/TextInput";
 
 export interface ProductRegisterPageContentProps {
@@ -19,7 +25,10 @@ export interface ProductRegisterPageContentProps {
 export function ProductRegisterPageContent({
   initial,
 }: ProductRegisterPageContentProps): JSX.Element {
-  const [initialized, setInitialized] = useState(false);
+  const [productType, setProductType] = useState<"food" | "other" | undefined>(
+    undefined,
+  );
+  const [foodLookedUp, setFoodLookedUp] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Partial<Product>>({
     barcode: initial.barcode ?? "",
     boardId: "",
@@ -48,7 +57,11 @@ export function ProductRegisterPageContent({
 
   useEffect(() => {
     if (!initial.barcode) {
-      setInitialized(true);
+      setFoodLookedUp(true);
+      return;
+    }
+
+    if (productType !== "food" || foodLookedUp) {
       return;
     }
 
@@ -60,11 +73,49 @@ export function ProductRegisterPageContent({
       .catch((error) => setError(error))
       .finally(() => {
         setWorking(false);
-        setInitialized(true);
+        setFoodLookedUp(true);
       });
-  }, [initial.barcode]);
+  }, [foodLookedUp, initial.barcode, productType]);
 
-  if (!initialized) {
+  if (!productType) {
+    return (
+      <VStack className="ProductRegisterPageContent">
+        <H1>Register new product</H1>
+        <fieldset disabled={working} className="flex flex-col gap-4">
+          {error && <ErrorBlock error={error} />}
+          <InputLabel>
+            Barcode:
+            <TextInput
+              inputMode="numeric"
+              name="barcode"
+              onChange={onInputChange}
+              pattern="(\d|\s)*"
+              placeholder="0 00000 00000 0"
+              value={editingProduct.barcode}
+            />
+          </InputLabel>
+          <SuperButtonBlock>
+            <SuperButton onClick={() => setProductType("food")}>
+              <span>
+                <MagnifyingGlassIcon className="mx-auto size-8" />
+                Search by
+                <br />
+                Open Food Facts API
+              </span>
+            </SuperButton>
+            <SuperButton onClick={() => setProductType("other")}>
+              <span>
+                <PencilSquareIcon className="mx-auto size-8" />
+                Manual input
+              </span>
+            </SuperButton>
+          </SuperButtonBlock>
+        </fieldset>
+      </VStack>
+    );
+  }
+
+  if (productType === "food" && !foodLookedUp) {
     return (
       <VStack className="ProductRegisterPageContent">
         <H1>Register new product</H1>
