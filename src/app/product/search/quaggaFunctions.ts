@@ -2,7 +2,7 @@
 import Quagga from "quagga";
 
 export interface QuaggaResult {
-  codeResult: {
+  codeResult?: {
     code: string;
   };
 }
@@ -39,7 +39,7 @@ export async function detectBarcode(
     };
 
     Quagga.decodeSingle(config, (result: QuaggaResult | undefined) => {
-      const detectedBarcode = result?.codeResult.code || null;
+      const detectedBarcode = result?.codeResult?.code || null;
       resolve(detectedBarcode);
     });
   });
