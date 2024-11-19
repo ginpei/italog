@@ -12,6 +12,7 @@ import { Place } from "@/components/place/Place";
 import { PlaceDescription } from "@/components/place/PlaceDescription";
 import { H2 } from "@/components/style/Hn";
 import { SuperButton, SuperButtonLink } from "@/components/style/SuperButton";
+import { SuperButtonBlock } from "@/components/style/SuperButtonBlock";
 import { CheckinItem } from "@/components/timeline/CheckinItem";
 import { CheckinList } from "@/components/timeline/CheckinList";
 
@@ -68,7 +69,7 @@ export function PlacePageContent({
         <div className="mx-auto text-green-500">{successMessage}</div>
       )}
       <ErrorBlock error={error} />
-      <div className="mx-auto flex gap-4">
+      <SuperButtonBlock>
         <SuperButton disabled={working} onClick={onCheckInClick}>
           <div className="text-center">
             <CheckCircleIcon className="mx-auto size-8" />
@@ -81,7 +82,7 @@ export function PlacePageContent({
             Tell something
           </div>
         </SuperButtonLink>
-      </div>
+      </SuperButtonBlock>
       <H2>Checkins</H2>
       <CheckinList>
         {checkins.map((checkin) => (

@@ -7,6 +7,7 @@ import { VStack } from "@/components/layout/VStack";
 import { Place } from "@/components/place/Place";
 import { H1, H2 } from "@/components/style/Hn";
 import { SuperButtonLink } from "@/components/style/SuperButton";
+import { SuperButtonBlock } from "@/components/style/SuperButtonBlock";
 import { Profile } from "@/components/user/Profile";
 
 export interface HomePageContentProps {
@@ -25,7 +26,7 @@ export function HomePageContent({
         <>
           <VStack>
             <H2>Search</H2>
-            <p className="mx-auto flex gap-4">
+            <SuperButtonBlock>
               <SuperButtonLink href="/place/search">
                 <span>
                   <MapPinIcon className="mx-auto size-8" />
@@ -38,7 +39,7 @@ export function HomePageContent({
                   Product
                 </span>
               </SuperButtonLink>
-            </p>
+            </SuperButtonBlock>
           </VStack>
           <TimelineSection checkins={checkins} />
         </>
