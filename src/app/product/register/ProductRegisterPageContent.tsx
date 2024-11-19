@@ -14,6 +14,7 @@ import { fetchBarcodeLookup } from "@/components/product/barcodeLookup";
 import { Button } from "@/components/style/Button";
 import { H1 } from "@/components/style/Hn";
 import { InputLabel } from "@/components/style/InputLabel";
+import { LongTextInput } from "@/components/style/LongTextInput";
 import { SuperButton } from "@/components/style/SuperButton";
 import { SuperButtonBlock } from "@/components/style/SuperButtonBlock";
 import { TextInput } from "@/components/style/TextInput";
@@ -40,7 +41,9 @@ export function ProductRegisterPageContent({
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = event.target;
     if (name === "barcode") {
       setEditingProduct({ ...editingProduct, [name]: value });
@@ -152,16 +155,16 @@ export function ProductRegisterPageContent({
             />
           </InputLabel>
           <InputLabel>
-            Brands (comma separated) (optional):
-            <TextInput
+            Brands (each line) (optional):
+            <LongTextInput
               name="brands"
               onChange={onInputChange}
               value={editingProduct.brands}
             />
           </InputLabel>
           <InputLabel>
-            Categories (comma separated) (optional):
-            <TextInput
+            Categories (each line) (optional):
+            <LongTextInput
               name="categories"
               onChange={onInputChange}
               value={editingProduct.categories}

@@ -46,8 +46,15 @@ export async function fetchBarcodeLookup(
   const product: Omit<Product, "boardId"> = {
     barcode: offProduct.code,
     boardType: "product",
-    brands: offProduct.brands ?? "",
-    categories: offProduct.categories,
+    brands:
+      offProduct.brands
+        ?.split(",")
+        .map((v) => v.trim())
+        .join("\n") ?? "",
+    categories: offProduct.categories
+      .split(",")
+      .map((v) => v.trim())
+      .join("\n"),
     displayName: offProduct.product_name,
     imageUrl: offProduct.image_url,
   };
