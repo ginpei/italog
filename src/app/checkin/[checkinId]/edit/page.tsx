@@ -45,6 +45,10 @@ export default async function Page({
     notFound();
   }
 
+  if (profile.id !== checkin.userId) {
+    throw new Error("Not authorized");
+  }
+
   return (
     <StraightPageLayout profile={profile}>
       <CheckinEditPageContent checkin={checkin} />
