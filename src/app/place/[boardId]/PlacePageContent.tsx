@@ -76,7 +76,7 @@ export function PlacePageContent({
             Check in
           </div>
         </SuperButton>
-        <SuperButtonLink href={`/place/${place.boardId}/checkIn`}>
+        <SuperButtonLink href={`/place/${place.boardId}/check-in`}>
           <div className="text-center">
             <PencilSquareIcon className="mx-auto size-8" />
             Tell something
