@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useMemo, useRef, useState } from "react";
 import { Checkin, CheckinRate } from "@/components/checkin/Checkin";
 import { CheckinForm } from "@/components/checkin/CheckinForm";
 import {
@@ -30,6 +30,16 @@ export function CheckinEditPageContent({
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
+  const viewPageUrl = useMemo(() => {
+    if (checkin.board.boardType === "place") {
+      return `/place/${checkin.boardId}`;
+    } else if (checkin.board.boardType === "product") {
+      return `/product/${checkin.boardId}`;
+    } else {
+      throw new Error("unexpected board type: " + checkin.board.boardType);
+    }
+  }, [checkin.board.boardType, checkin.boardId]);
+
   const onInputChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -54,7 +64,7 @@ export function CheckinEditPageContent({
         comment: editingCheckin.comment,
         rate: editingCheckin.rate,
       });
-      router.push(`/place/${checkin.boardId}`);
+      router.push(viewPageUrl);
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -74,7 +84,7 @@ export function CheckinEditPageContent({
 
     try {
       await requestDeletePlaceCheckin(checkin.id);
-      router.push(`/place/${checkin.boardId}`);
+      router.push(viewPageUrl);
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -87,9 +97,7 @@ export function CheckinEditPageContent({
     <VStack className="CheckinEditPageContent">
       <H1>
         {titlePrefix}{" "}
-        <Link href={`/place/${checkin.boardId}`}>
-          {checkin.board.displayName}
-        </Link>
+        <Link href={viewPageUrl}>{checkin.board.displayName}</Link>
       </H1>
       <CheckinForm
         formRef={formRef}
