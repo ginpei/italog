@@ -4,7 +4,6 @@ import { CameraIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { detectBarcode } from "./quaggaFunctions";
 import { getProductSearchByBarcode } from "@/app/api/product/search/productSearchApi";
-import { useSpecialFlag } from "@/components/api/dev/devHooks";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { VStack } from "@/components/layout/VStack";
 import { Product } from "@/components/product/Product";
@@ -25,7 +24,6 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   const [detectingBarcode, setDetectingBarcode] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [products, setProducts] = useState<Product[] | null>(null);
-  const special = useSpecialFlag();
 
   const onBarcodeFormSubmit = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -93,83 +91,67 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
 
   return (
     <VStack className="ProductSearchPageContent" gap="gap-8">
-      <VStack>
-        <p>
-          <span className="rounded bg-purple-800 px-2 py-1 text-white">
-            Preview
-          </span>
-        </p>
-        <H1>Search product</H1>
-      </VStack>
-
-      {special ? (
-        <VStack gap="gap-8">
-          <H2>By barcode</H2>
-          <VStack>
-            <div className="mx-auto flex gap-4">
-              <FileButton
-                accept="image/*"
-                capture
-                className={`${superButtonShapeClassNames} ${buttonThemeClassNames}`}
-                disabled={detectingBarcode || working}
-                onChange={onBarcodeFileChange}
-              >
-                <span>
-                  <CameraIcon className="mx-auto size-8" />
-                  Capture
-                </span>
-              </FileButton>
-            </div>
-            <form onSubmit={onBarcodeFormSubmit}>
-              <VStack>
-                <ErrorBlock error={error} />
-                <fieldset disabled={working} className="flex items-end gap-1">
-                  <label className="flex w-full flex-col">
-                    Barcode:
-                    <TextInput
-                      className="w-full"
-                      inputMode="numeric"
-                      onChange={onBarcodeChange}
-                      name="barcode"
-                      pattern="(\d|\s)*"
-                      placeholder="0 00000 00000 0"
-                      value={barcode}
-                    />
-                  </label>
-                  <Button className="inline-grid w-16 place-items-center">
-                    <MagnifyingGlassIcon className="size-5" />
-                  </Button>
-                </fieldset>
-              </VStack>
-            </form>
-          </VStack>
-          {products && (
+      <H1>Search product</H1>
+      <VStack gap="gap-8">
+        <VStack>
+          <div className="mx-auto flex gap-4">
+            <FileButton
+              accept="image/*"
+              capture
+              className={`${superButtonShapeClassNames} ${buttonThemeClassNames}`}
+              disabled={detectingBarcode || working}
+              onChange={onBarcodeFileChange}
+            >
+              <span>
+                <CameraIcon className="mx-auto size-8" />
+                Capture barcode
+              </span>
+            </FileButton>
+          </div>
+          <form onSubmit={onBarcodeFormSubmit}>
             <VStack>
-              <H2>Search result</H2>
-              <ul className="ms-8 list-disc">
-                {products.map((product) => (
-                  <li key={product.barcode}>
-                    <Link href={`/product/${product.boardId}`}>
-                      {product.displayName}
-                    </Link>
-                  </li>
-                ))}
-                {products.length === 0 && <li>No products found</li>}
-              </ul>
-              <p>
-                <Link href={`/product/register?barcode=${barcode}`}>
-                  Register new product...
-                </Link>
-              </p>
+              <ErrorBlock error={error} />
+              <fieldset disabled={working} className="flex items-end gap-1">
+                <label className="flex w-full flex-col">
+                  Barcode:
+                  <TextInput
+                    className="w-full"
+                    inputMode="numeric"
+                    onChange={onBarcodeChange}
+                    name="barcode"
+                    pattern="(\d|\s)*"
+                    placeholder="0 00000 00000 0"
+                    value={barcode}
+                  />
+                </label>
+                <Button className="inline-grid w-16 place-items-center">
+                  <MagnifyingGlassIcon className="size-5" />
+                </Button>
+              </fieldset>
             </VStack>
-          )}
+          </form>
         </VStack>
-      ) : (
-        <p className="text-gray-500">
-          You will be able to check in products to share your impression as well
-          as places.
-        </p>
-      )}
+        {products && (
+          <VStack>
+            <H2>Search result</H2>
+            <ul className="ms-8 list-disc">
+              {products.map((product) => (
+                <li key={product.barcode}>
+                  <Link href={`/product/${product.boardId}`}>
+                    {product.displayName}
+                  </Link>
+                </li>
+              ))}
+              {products.length === 0 && <li>No products found</li>}
+            </ul>
+            <p>
+              <Link href={`/product/register?barcode=${barcode}`}>
+                Register new product...
+              </Link>
+            </p>
+          </VStack>
+        )}
+      </VStack>
     </VStack>
   );
 }
