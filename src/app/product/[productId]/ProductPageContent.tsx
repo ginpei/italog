@@ -9,8 +9,8 @@ import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { Product } from "@/components/product/Product";
-import { ProductImageBlock } from "@/components/product/ProductImage";
-import { H1, H2 } from "@/components/style/Hn";
+import { ProductDescription } from "@/components/product/ProductDescription";
+import { H2 } from "@/components/style/Hn";
 import { SuperButton, SuperButtonLink } from "@/components/style/SuperButton";
 import { SuperButtonBlock } from "@/components/style/SuperButtonBlock";
 import { CheckinItem } from "@/components/timeline/CheckinItem";
@@ -57,17 +57,7 @@ export function ProductPageContent({
 
   return (
     <VStack className="ProductPageContent" gap="gap-8">
-      <VStack>
-        <H1>{product.displayName}</H1>
-        <ProductImageBlock imageUrl={product.imageUrl} />
-        <div>Brands: {product.brands.split("\n").join(", ") || "(N/A)"}</div>
-        <div>
-          Categories: {product.categories.split("\n").join(", ") || "(N/A)"}
-        </div>
-        <div>
-          Barcode: <code>{product.barcode}</code>
-        </div>
-      </VStack>
+      <ProductDescription product={product} />
       <VStack>
         {successMessage && (
           <div className="mx-auto text-green-500">{successMessage}</div>
@@ -80,7 +70,7 @@ export function ProductPageContent({
               Check in
             </div>
           </SuperButton>
-          <SuperButtonLink href={`/product/${product.boardId}/checkIn`}>
+          <SuperButtonLink href={`/product/${product.boardId}/check-in`}>
             <div className="text-center">
               <PencilSquareIcon className="mx-auto size-8" />
               Tell something
