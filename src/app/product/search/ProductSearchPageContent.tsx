@@ -1,10 +1,12 @@
 "use client";
 
 import { CameraIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
 import { detectBarcode } from "./quaggaFunctions";
 import { getProductSearchByBarcode } from "@/app/api/product/search/productSearchApi";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
+import { SpinnerBlock } from "@/components/layout/SpinnerBlock";
 import { VStack } from "@/components/layout/VStack";
 import { Product } from "@/components/product/Product";
 import { Button, FileButton } from "@/components/style/Button";
@@ -21,26 +23,48 @@ export interface ProductSearchPageContentProps {
 export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX.Element {
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [detectingBarcode, setDetectingBarcode] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [products, setProducts] = useState<Product[] | null>(null);
+  const router = useRouter();
+
+  /**
+   * @returns `true` if the product is found and navigated to the product page
+   */
+  const search = useCallback(
+    async (barcode: string) => {
+      const result = await getProductSearchByBarcode(barcode);
+      if (!result.ok) {
+        throw new Error(result.error);
+      }
+
+      setProducts(result.products);
+      if (result.products.length === 1) {
+        router.push(`/product/${result.products[0]!.boardId}`);
+        return true;
+      }
+      return false;
+    },
+    [router],
+  );
 
   const onBarcodeFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    setWorking(true);
     setError(null);
-    setDetectingBarcode(true);
 
     try {
       const [file] = event.target.files || [];
       event.target.value = "";
       if (!file) {
+        setWorking(false);
         return;
       }
 
       const detectedBarcode = await detectBarcode(file, "ean");
       if (!detectedBarcode) {
         window.alert("No barcode detected");
+        setWorking(false);
         return;
       }
 
@@ -48,15 +72,19 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
         `Do you want to use this barcode?\n${detectedBarcode}`,
       );
       if (!ok) {
+        setWorking(false);
         return;
       }
 
       setBarcode(detectedBarcode);
+      const found = await search(detectedBarcode);
+      if (!found) {
+        setWorking(false);
+      }
     } catch (error) {
+      setWorking(false);
       console.error(error);
       setError(new Error("Failed to detect barcode"));
-    } finally {
-      setDetectingBarcode(false);
     }
   };
 
@@ -69,16 +97,14 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
     setProducts(null);
 
     try {
-      const result = await getProductSearchByBarcode(barcode);
-      if (!result.ok) {
-        throw new Error(result.error);
+      const found = await search(barcode);
+      if (!found) {
+        setWorking(false);
       }
-      setProducts(result.products);
     } catch (error) {
+      setWorking(false);
       console.error(error);
       setError(new Error("Failed to search product (server error)"));
-    } finally {
-      setWorking(false);
     }
   };
 
@@ -99,7 +125,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
               accept="image/*"
               capture
               className={`${superButtonShapeClassNames} ${buttonThemeClassNames}`}
-              disabled={detectingBarcode || working}
+              disabled={working}
               onChange={onBarcodeFileChange}
             >
               <span>
@@ -131,7 +157,8 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
             </VStack>
           </form>
         </VStack>
-        {products && (
+        {working && <SpinnerBlock />}
+        {!working && products && (
           <VStack>
             <H2>Search result</H2>
             <ul className="ms-8 list-disc">
