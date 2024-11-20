@@ -118,67 +118,65 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   return (
     <VStack className="ProductSearchPageContent" gap="gap-8">
       <H1>Search product</H1>
-      <VStack gap="gap-8">
-        <VStack>
-          <div className="mx-auto flex gap-4">
-            <FileButton
-              accept="image/*"
-              capture
-              className={`${superButtonShapeClassNames} ${buttonThemeClassNames}`}
-              disabled={working}
-              onChange={onBarcodeFileChange}
-            >
-              <span>
-                <CameraIcon className="mx-auto size-8" />
-                Capture barcode
-              </span>
-            </FileButton>
-          </div>
-          <form onSubmit={onBarcodeFormSubmit}>
-            <VStack>
-              <ErrorBlock error={error} />
-              <fieldset disabled={working} className="flex items-end gap-1">
-                <label className="flex w-full flex-col">
-                  Barcode:
-                  <TextInput
-                    className="w-full"
-                    inputMode="numeric"
-                    onChange={onBarcodeChange}
-                    name="barcode"
-                    pattern="(\d|\s)*"
-                    placeholder="0 00000 00000 0"
-                    value={barcode}
-                  />
-                </label>
-                <Button className="inline-grid w-16 place-items-center">
-                  <MagnifyingGlassIcon className="size-5" />
-                </Button>
-              </fieldset>
-            </VStack>
-          </form>
-        </VStack>
-        {working && <SpinnerBlock />}
-        {!working && products && (
+      <VStack>
+        <div className="mx-auto flex gap-4">
+          <FileButton
+            accept="image/*"
+            capture
+            className={`${superButtonShapeClassNames} ${buttonThemeClassNames}`}
+            disabled={working}
+            onChange={onBarcodeFileChange}
+          >
+            <span>
+              <CameraIcon className="mx-auto size-8" />
+              Capture barcode
+            </span>
+          </FileButton>
+        </div>
+        <form onSubmit={onBarcodeFormSubmit}>
           <VStack>
-            <H2>Search result</H2>
-            <ul className="ms-8 list-disc">
-              {products.map((product) => (
-                <li key={product.barcode}>
-                  <Link href={`/product/${product.boardId}`}>
-                    {product.displayName}
-                  </Link>
-                </li>
-              ))}
-              {products.length === 0 && <li>No products found</li>}
-            </ul>
-            <p>
-              <Link href={`/product/register?barcode=${barcode}`}>
-                Register new product...
-              </Link>
-            </p>
+            <ErrorBlock error={error} />
+            <fieldset disabled={working} className="flex items-end gap-1">
+              <label className="flex w-full flex-col">
+                Barcode:
+                <TextInput
+                  className="w-full"
+                  inputMode="numeric"
+                  onChange={onBarcodeChange}
+                  name="barcode"
+                  pattern="(\d|\s)*"
+                  placeholder="0 00000 00000 0"
+                  value={barcode}
+                />
+              </label>
+              <Button className="inline-grid w-16 place-items-center">
+                <MagnifyingGlassIcon className="size-5" />
+              </Button>
+            </fieldset>
           </VStack>
-        )}
+        </form>
       </VStack>
+      {working && <SpinnerBlock />}
+      {!working && products && (
+        <VStack>
+          <H2>Search result</H2>
+          <ul className="ms-8 list-disc">
+            {products.map((product) => (
+              <li key={product.barcode}>
+                <Link href={`/product/${product.boardId}`}>
+                  {product.displayName}
+                </Link>
+              </li>
+            ))}
+            {products.length === 0 && <li>No products found</li>}
+          </ul>
+          <p>
+            <Link href={`/product/register?barcode=${barcode}`}>
+              Register new product...
+            </Link>
+          </p>
+        </VStack>
+      )}
     </VStack>
   );
 }
