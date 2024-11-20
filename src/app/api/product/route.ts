@@ -33,7 +33,7 @@ export async function POST(
       boardType: "product",
     };
 
-    const resultProduct = await createProductRecordSet(product);
+    const resultProduct = await createProductRecordSet(profile, product);
 
     return NextResponse.json({
       ok: true,

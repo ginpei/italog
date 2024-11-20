@@ -1,9 +1,12 @@
 import { db, QueryResultRow } from "@vercel/postgres";
 import { createBoardRecord } from "../board/boardDb";
 import { runTransaction } from "../db/transaction";
+import { Profile } from "../user/Profile";
+import { createUserActionRecord } from "../userAction/userActionDb";
 import { Product } from "./Product";
 
 export async function createProductRecordSet(
+  profile: Profile,
   product: Omit<Product, "boardId">,
 ): Promise<Product> {
   return runTransaction(async (db) => {
@@ -24,6 +27,12 @@ export async function createProductRecordSet(
     );
 
     const placeWithBoardId = { ...product, boardId };
+
+    await createUserActionRecord(profile, {
+      detail: placeWithBoardId,
+      title: "product/create",
+    });
+
     return placeWithBoardId;
   });
 }
