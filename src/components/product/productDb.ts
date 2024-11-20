@@ -28,6 +28,27 @@ export async function createProductRecordSet(
   });
 }
 
+export async function getProductRecord(
+  boardId: string,
+): Promise<Product | null> {
+  const result = await db.query(
+    /*sql*/ `
+      SELECT p.*, b.display_name FROM product p
+      JOIN board b ON p.board_id = b.board_id
+      WHERE p.board_id = $1
+    `,
+    [boardId],
+  );
+
+  const row = result.rows[0];
+  if (!row) {
+    return null;
+  }
+
+  const product = rowToProduct(row);
+  return product;
+}
+
 export async function getProductRecordsByBarcode(
   barcode: string,
 ): Promise<Product[]> {
