@@ -56,15 +56,6 @@ export function PlacePageContent({
   return (
     <VStack>
       <PlaceDescription place={place} />
-      {/* <hr />
-      <RegisterCheckinForm
-        disabled={formWorking}
-        onChange={onRegisterCheckinChange}
-        onSubmit={onRegisterCheckinSubmit}
-        checkin={editingCheckin}
-        checkedIn={checkedIn}
-      /> */}
-      {/* <hr /> */}
       {successMessage && (
         <div className="mx-auto text-green-500">{successMessage}</div>
       )}
