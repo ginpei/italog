@@ -3,6 +3,8 @@
 -- Enable the uuid-ossp extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+--------------------------------------------------------------------------------
+
 -- profile
 CREATE TABLE profile (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -32,6 +34,8 @@ CREATE TABLE user_user (
   FOREIGN KEY (user_id) REFERENCES profile(id),
   FOREIGN KEY (friend_id) REFERENCES profile(id)
 );
+
+--------------------------------------------------------------------------------
 
 -- board = checkin target
 CREATE TABLE board (
@@ -95,6 +99,8 @@ VALUES (
   'Snacks, Sweet snacks, Confectioneries, Chewing gum, Sugar-free chewing gum',
   'https://images.openfoodfacts.org/images/products/006/490/040/9554/front_en.23.400.jpg'
 );
+
+--------------------------------------------------------------------------------
 
 -- checkin
 CREATE TABLE checkin (
