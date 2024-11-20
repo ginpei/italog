@@ -35,6 +35,19 @@ CREATE TABLE user_user (
   FOREIGN KEY (friend_id) REFERENCES profile(id)
 );
 
+-- user action
+CREATE TABLE user_action (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title VARCHAR(255) NOT NULL,
+  created_at BIGINT NOT NULL,
+  user_id UUID NOT NULL,
+  user_display_name VARCHAR(255) NOT NULL,
+  detail_json TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES profile(id)
+);
+
+CREATE INDEX idx_user_action_created_at ON user_action (created_at);
+
 --------------------------------------------------------------------------------
 
 -- board = checkin target
