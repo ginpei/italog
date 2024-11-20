@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { getDateInUserTimeZone } from "@/components/time/time";
 import { ResultOrError } from "@/components/api/apiTypes";
 import { CheckinRow } from "@/components/checkin/Checkin";
 import { createCheckinRecord } from "@/components/checkin/checkinDb";
 import { UserError } from "@/components/error/UserError";
+import { getDateInUserTimeZone } from "@/components/time/time";
 import { getSessionProfile } from "@/components/user/profileSession";
 
 export interface PostCheckinPayload {
