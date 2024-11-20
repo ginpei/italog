@@ -1,7 +1,9 @@
 "use client";
 
 import { CheckCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { postCheckin } from "@/app/api/checkin/checkinApis";
 import { Checkin } from "@/components/checkin/Checkin";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
@@ -27,14 +29,24 @@ export function ProductPageContent({
 }: ProductPageContentProps): JSX.Element {
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const router = useRouter();
 
   const onCheckInClick = async () => {
     setWorking(true);
     setError(null);
+    setSuccessMessage("");
 
     try {
-      // TODO
-      alert("TODO");
+      await postCheckin({
+        checkin: {
+          boardId: product.boardId,
+          comment: "",
+          rate: "0",
+        },
+      });
+      router.refresh();
+      setSuccessMessage("Checked in!");
     } catch (error) {
       console.error(error);
       setError(toError(error));
@@ -57,6 +69,9 @@ export function ProductPageContent({
         </div>
       </VStack>
       <VStack>
+        {successMessage && (
+          <div className="mx-auto text-green-500">{successMessage}</div>
+        )}
         <ErrorBlock error={error} />
         <SuperButtonBlock>
           <SuperButton disabled={working} onClick={onCheckInClick}>

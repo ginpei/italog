@@ -1,14 +1,16 @@
 import { db, QueryResultRow } from "@vercel/postgres";
 import { Place } from "../place/Place";
+import { Product } from "../product/Product";
 import { Checkin, CheckinRow } from "./Checkin";
 
 export async function createCheckinRecord(
   checkin: Omit<CheckinRow, "id">,
-): Promise<void> {
-  await db.query(
+): Promise<string> {
+  const result = await db.query(
     /*sql*/ `
       INSERT INTO checkin (comment, created_at, user_date, board_id, rate, user_id)
       VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id
     `,
     [
       checkin.comment,
@@ -19,6 +21,8 @@ export async function createCheckinRecord(
       checkin.userId,
     ],
   );
+  const id: string = result.rows[0].id;
+  return id;
 }
 
 export async function getCheckinRecord(id: string): Promise<Checkin | null> {
@@ -104,6 +108,36 @@ export async function getPlaceCheckinRecords(
   return checkins;
 }
 
+export async function getProductCheckinRecords(
+  userId: string,
+  productId: string,
+  options: { limit?: number; offset?: number } = {},
+): Promise<Checkin<Product>[]> {
+  const result = await db.query(
+    /*sql*/ `
+      SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url
+      FROM checkin c
+      JOIN board b ON c.board_id = b.board_id
+      JOIN profile p ON c.user_id = p.id
+      LEFT JOIN user_user uu ON c.user_id = uu.friend_id AND uu.user_id = $1
+      WHERE c.board_id = $2 AND (uu.user_id = $3 OR c.user_id = $4)
+      ORDER BY c.created_at DESC
+      LIMIT $5 OFFSET $6
+    `,
+    [
+      userId,
+      productId,
+      userId,
+      userId,
+      options.limit || 10,
+      options.offset || 0,
+    ],
+  );
+
+  const checkins = result.rows.map((v) => rowToProductCheckin(v));
+  return checkins;
+}
+
 export async function getUserCheckinRecords(
   userId: string,
 ): Promise<Checkin[]> {
@@ -174,6 +208,22 @@ function rowToPlaceCheckin(row: QueryResultRow): Checkin<Place> {
       mapUrl: row.map_url,
       typeDisplayName: row.type_display_name,
       webUrl: row.web_url,
+    },
+  };
+}
+
+function rowToProductCheckin(row: QueryResultRow): Checkin<Product> {
+  const checkin = rowToCheckin(row);
+  return {
+    ...checkin,
+    board: {
+      barcode: row.barcode,
+      boardId: row.board_id,
+      boardType: row.board_type,
+      brands: row.brands,
+      categories: row.categories,
+      displayName: row.board_display_name,
+      imageUrl: row.image_url,
     },
   };
 }
