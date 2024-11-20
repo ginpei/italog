@@ -3,7 +3,7 @@
 import { CheckCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { postCheckin } from "@/app/api/checkin/checkinApis";
+import { requestPostCheckin } from "@/app/api/checkin/checkinApis";
 import { Checkin } from "@/components/checkin/Checkin";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
@@ -38,7 +38,7 @@ export function ProductPageContent({
     setSuccessMessage("");
 
     try {
-      await postCheckin({
+      await requestPostCheckin({
         checkin: {
           boardId: product.boardId,
           comment: "",

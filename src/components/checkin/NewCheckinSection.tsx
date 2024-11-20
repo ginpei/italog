@@ -7,7 +7,7 @@ import { H2 } from "../style/Hn";
 import { CheckinRate, CheckinRow } from "./Checkin";
 import { CheckinForm } from "./CheckinForm";
 import { getBoardViewPageUrl } from "./checkinUrl";
-import { postCheckin } from "@/app/api/checkin/checkinApis";
+import { requestPostCheckin } from "@/app/api/checkin/checkinApis";
 
 export interface NewCheckinSectionProps {
   board: Pick<Board, "boardType" | "boardId">;
@@ -50,7 +50,7 @@ export function NewCheckinSection({
     setError(null);
 
     try {
-      await postCheckin({
+      await requestPostCheckin({
         checkin: {
           boardId: editingCheckin.boardId,
           comment: editingCheckin.comment,

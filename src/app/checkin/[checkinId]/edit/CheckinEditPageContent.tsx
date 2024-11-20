@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useMemo, useRef, useState } from "react";
+import {
+  requestPatchCheckin,
+  requestDeleteCheckin,
+} from "@/app/api/checkin/[checkinId]/checkinItemApis";
 import { Checkin, CheckinRate } from "@/components/checkin/Checkin";
 import { CheckinForm } from "@/components/checkin/CheckinForm";
-import {
-  requestUpdatePlaceCheckin,
-  requestDeletePlaceCheckin,
-} from "@/components/checkin/checkinApis";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
 import { DangerButton } from "@/components/style/Button";
@@ -60,7 +60,7 @@ export function CheckinEditPageContent({
     setError(null);
 
     try {
-      await requestUpdatePlaceCheckin(checkin.id, {
+      await requestPatchCheckin(checkin.id, {
         comment: editingCheckin.comment,
         rate: editingCheckin.rate,
       });
@@ -83,7 +83,7 @@ export function CheckinEditPageContent({
     setError(null);
 
     try {
-      await requestDeletePlaceCheckin(checkin.id);
+      await requestDeleteCheckin(checkin.id);
       router.push(viewPageUrl);
       router.refresh();
     } catch (error) {

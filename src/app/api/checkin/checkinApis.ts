@@ -3,7 +3,7 @@ import { PostCheckinPayload, PostCheckinResult } from "./route";
 /**
  * @returns The ID of the created checkin.
  */
-export async function postCheckin(
+export async function requestPostCheckin(
   payload: Omit<PostCheckinPayload, "timezoneOffset">,
 ): Promise<PostCheckinResult> {
   const endpoint = "/api/checkin";

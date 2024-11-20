@@ -3,8 +3,8 @@
 import { CheckCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { requestPostCheckin } from "@/app/api/checkin/checkinApis";
 import { Checkin } from "@/components/checkin/Checkin";
-import { requestCreatePlaceCheckin } from "@/components/checkin/checkinApis";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
@@ -39,9 +39,12 @@ export function PlacePageContent({
     setSuccessMessage(null);
 
     try {
-      await requestCreatePlaceCheckin(place.boardId, {
-        comment: "",
-        rate: "0",
+      await requestPostCheckin({
+        checkin: {
+          boardId: place.boardId,
+          comment: "",
+          rate: "0",
+        },
       });
       router.refresh();
       setSuccessMessage("Checked in!");
