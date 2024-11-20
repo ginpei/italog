@@ -15,10 +15,7 @@ export function PlaceCheckinPageContent({
   return (
     <VStack className="PlaceCheckinPageContent" gap="gap-8">
       <PlaceDescription place={place} />
-      <NewCheckinSection
-        boardId={place.boardId}
-        nextUrl={`/place/${place.boardId}`}
-      />
+      <NewCheckinSection board={place} />
     </VStack>
   );
 }

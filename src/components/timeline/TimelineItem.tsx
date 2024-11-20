@@ -2,6 +2,7 @@ import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
 import { MapIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Checkin } from "../checkin/Checkin";
+import { getBoardViewPageUrl } from "../checkin/checkinUrl";
 import {
   controlBorderThemeClassNames,
   hoverBlockThemeClassNames,
@@ -11,7 +12,7 @@ import { RateIcon } from "./RateIcon";
 
 export interface TimelineItemProps {
   checkin: Checkin;
-  onShowClick: (place: Checkin) => void;
+  onShowClick: (checkin: Checkin) => void;
   selected: boolean;
 }
 
@@ -39,7 +40,7 @@ export function TimelineItem({
           flex w-full items-center justify-between gap-4 p-2 text-start
           ${hoverBlockThemeClassNames}
         `}
-        href={`/place/${checkin.boardId}`}
+        href={getBoardViewPageUrl(checkin.board)}
       >
         <div className="flex flex-col">
           <span className="text-sm">

@@ -1,25 +1,25 @@
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Board } from "../board/Board";
 import { toError } from "../error/errorUtil";
 import { VStack } from "../layout/VStack";
 import { H2 } from "../style/Hn";
 import { CheckinRate, CheckinRow } from "./Checkin";
 import { CheckinForm } from "./CheckinForm";
+import { getBoardViewPageUrl } from "./checkinUrl";
 import { postCheckin } from "@/app/api/checkin/checkinApis";
 
 export interface NewCheckinSectionProps {
-  boardId: string;
-  nextUrl: string;
+  board: Pick<Board, "boardType" | "boardId">;
 }
 
 export function NewCheckinSection({
-  boardId,
-  nextUrl,
+  board,
 }: NewCheckinSectionProps): JSX.Element {
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [editingCheckin, setEditingCheckin] = useState<CheckinRow>({
-    boardId: boardId,
+    boardId: board.boardId,
     comment: "",
     createdAt: 0,
     id: "",
@@ -57,7 +57,7 @@ export function NewCheckinSection({
           rate: editingCheckin.rate,
         },
       });
-      router.push(nextUrl);
+      router.push(getBoardViewPageUrl(board));
       router.refresh();
     } catch (error) {
       console.error(error);

@@ -15,10 +15,7 @@ export function ProductCheckinPageContent({
   return (
     <VStack className="ProductCheckinPageContent" gap="gap-8">
       <ProductDescription product={product} />
-      <NewCheckinSection
-        boardId={product.boardId}
-        nextUrl={`/product/${product.boardId}`}
-      />
+      <NewCheckinSection board={product} />
     </VStack>
   );
 }
