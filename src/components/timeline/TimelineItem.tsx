@@ -1,5 +1,5 @@
 import { ChevronDoubleRightIcon } from "@heroicons/react/16/solid";
-import { MapIcon } from "@heroicons/react/24/outline";
+import { MapIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Checkin } from "../checkin/Checkin";
 import { getBoardViewPageUrl } from "../checkin/checkinUrl";
@@ -27,12 +27,16 @@ export function TimelineItem({
     >
       <button
         className={`
-          grid size-12 items-center justify-center
-          ${selected ? "bg-gray-200 dark:bg-gray-800" : hoverBlockThemeClassNames}
-        `}
+        grid size-12 items-center justify-center
+        ${selected ? "bg-gray-200 dark:bg-gray-800" : hoverBlockThemeClassNames}
+      `}
         onClick={() => onShowClick(checkin)}
       >
-        <MapIcon className="size-6 text-gray-500 " />
+        {checkin.board.boardType === "place" ? (
+          <MapIcon className="size-6 text-gray-500 " />
+        ) : (
+          <ShoppingBagIcon className="size-6 text-gray-500 " />
+        )}
       </button>
       <CheckinProfileLink profile={checkin.profile} />
       <Link
