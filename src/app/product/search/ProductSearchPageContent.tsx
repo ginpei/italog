@@ -119,6 +119,7 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
     <VStack className="ProductSearchPageContent" gap="gap-8">
       <H1>Search product</H1>
       <VStack>
+        <ErrorBlock error={error} />
         <div className="mx-auto flex gap-4">
           <FileButton
             accept="image/*"
@@ -135,7 +136,6 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
         </div>
         <form onSubmit={onBarcodeFormSubmit}>
           <VStack>
-            <ErrorBlock error={error} />
             <fieldset disabled={working} className="flex items-end gap-1">
               <label className="flex w-full flex-col">
                 Barcode:
