@@ -25,35 +25,6 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
   const [barcode, setBarcode] = useState("");
   const [products, setProducts] = useState<Product[] | null>(null);
 
-  const onBarcodeFormSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
-  ) => {
-    event.preventDefault();
-    setWorking(true);
-    setError(null);
-    setProducts(null);
-
-    try {
-      const result = await getProductSearchByBarcode(barcode);
-      if (!result.ok) {
-        throw new Error(result.error);
-      }
-      setProducts(result.products);
-    } catch (error) {
-      console.error(error);
-      setError(new Error("Failed to search product (server error)"));
-    } finally {
-      setWorking(false);
-    }
-  };
-
-  const onBarcodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name === "barcode") {
-      setBarcode(value);
-    }
-  };
-
   const onBarcodeFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -86,6 +57,35 @@ export function ProductSearchPageContent({}: ProductSearchPageContentProps): JSX
       setError(new Error("Failed to detect barcode"));
     } finally {
       setDetectingBarcode(false);
+    }
+  };
+
+  const onBarcodeFormSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    setWorking(true);
+    setError(null);
+    setProducts(null);
+
+    try {
+      const result = await getProductSearchByBarcode(barcode);
+      if (!result.ok) {
+        throw new Error(result.error);
+      }
+      setProducts(result.products);
+    } catch (error) {
+      console.error(error);
+      setError(new Error("Failed to search product (server error)"));
+    } finally {
+      setWorking(false);
+    }
+  };
+
+  const onBarcodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name === "barcode") {
+      setBarcode(value);
     }
   };
 
