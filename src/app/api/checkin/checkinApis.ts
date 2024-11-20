@@ -4,12 +4,12 @@ import { PostCheckinPayload, PostCheckinResult } from "./route";
  * @returns The ID of the created checkin.
  */
 export async function postCheckin(
-  checkin: Omit<PostCheckinPayload, "timezoneOffset">,
+  payload: Omit<PostCheckinPayload, "timezoneOffset">,
 ): Promise<PostCheckinResult> {
   const endpoint = "/api/checkin";
 
   const body: PostCheckinPayload = {
-    ...checkin,
+    ...payload,
     timezoneOffset: new Date().getTimezoneOffset(),
   };
 
