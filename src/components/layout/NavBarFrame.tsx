@@ -19,11 +19,13 @@ export function NavBarFrame({
   return (
     <section className={`${className} NavBarFrame bg-ginpei text-white`}>
       <Content>
-        <div className="flex h-[1lh] flex-row items-stretch justify-between leading-10">
-          <h1 className="ms-[-1em] flex items-stretch">
-            <NavBarLink href={titleLink}>{title}</NavBarLink>
+        <div className="flex h-[1lh] flex-row items-stretch justify-between gap-8 leading-10">
+          <div className="ms-[-1em] flex">
+            <h1 className="contents">
+              <NavBarLink href={titleLink}>{title}</NavBarLink>
+            </h1>
             {extraContent}
-          </h1>
+          </div>
           {children && (
             <div className="me-[-1em] flex items-stretch">{children}</div>
           )}
