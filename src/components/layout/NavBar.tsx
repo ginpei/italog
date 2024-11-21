@@ -1,4 +1,4 @@
-import { MapPinIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { Profile } from "../user/Profile";
 import { NavBarFrame } from "./NavBarFrame";
 import { NavBarLink } from "./NavBarLink";
@@ -19,9 +19,14 @@ export function NavBar({
       className="NavBar"
       extraContent={
         profile && (
-          <NavBarLink href="/place/search">
-            <MapPinIcon className="inline-block size-5" />
-          </NavBarLink>
+          <>
+            <NavBarLink href="/place/search">
+              <MapPinIcon className="inline-block size-5" />
+            </NavBarLink>
+            <NavBarLink href="/product/search">
+              <ShoppingBagIcon className="inline-block size-5" />
+            </NavBarLink>
+          </>
         )
       }
       title={title}
