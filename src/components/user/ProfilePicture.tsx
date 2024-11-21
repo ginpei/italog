@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export interface ProfilePictureProps {
   imageUrl: string | undefined;
-  size?: "size-12" | "size-24";
+  size?: "size-12" | "size-24" | "size-full";
 }
 
 export function ProfilePicture({

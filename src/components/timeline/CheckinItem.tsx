@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { controlBorderThemeClassNames } from "../style/controlClassNames";
-import { CheckinProfileLink } from "./CheckinProfileLink";
+import { ProfilePicture } from "../user/ProfilePicture";
 import { RateIcon } from "./RateIcon";
 import { Checkin } from "@/components/checkin/Checkin";
 
@@ -12,11 +12,24 @@ export interface CheckinItemProps {
 export function CheckinItem({ checkin, own }: CheckinItemProps): JSX.Element {
   return (
     <div
-      className={`CheckinItem flex flex-col border p-2 ${controlBorderThemeClassNames}`}
+      className={`
+        CheckinItem flex flex-col border ${controlBorderThemeClassNames}
+      `}
     >
-      <div className="flex gap-2">
-        <CheckinProfileLink profile={checkin.profile} />
-        <span className="flex flex-col">
+      <div className="flex">
+        <Link
+          className={`
+            box-border grid size-16 shrink-0 items-center justify-center p-1
+            hover:bg-gray-200 hover:dark:bg-gray-600
+          `}
+          href={`/user/${checkin.profile.id}`}
+        >
+          <ProfilePicture
+            imageUrl={checkin.profile.imageUrl}
+            size="size-full"
+          />
+        </Link>
+        <div className="flex flex-col p-2">
           <span className="text-sm">
             <Link
               className="hover:underline active:underline"
@@ -38,10 +51,10 @@ export function CheckinItem({ checkin, own }: CheckinItemProps): JSX.Element {
           <span className="text-sm text-gray-400">
             {checkin.board.displayName}
           </span>
-        </span>
+        </div>
       </div>
       {checkin.comment && (
-        <div className="whitespace-pre-wrap">
+        <div className="whitespace-pre-wrap p-2">
           <RateIcon rate={checkin.rate} />
           {checkin.comment.trim()}
         </div>
