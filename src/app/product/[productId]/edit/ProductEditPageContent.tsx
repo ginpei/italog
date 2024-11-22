@@ -25,6 +25,13 @@ export function ProductEditPageContent({
   const router = useRouter();
 
   const onFormSubmit = async () => {
+    if (editingProduct.barcode !== product.barcode) {
+      const ok = window.confirm("Are you going to change barcode?");
+      if (!ok) {
+        return;
+      }
+    }
+
     setWorking(true);
     setError(null);
 
