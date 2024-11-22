@@ -1,6 +1,10 @@
 "use client";
 
-import { CheckCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import {
+  CheckCircleIcon,
+  ChevronDoubleRightIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { requestPostCheckin } from "@/app/api/checkin/checkinApis";
@@ -11,6 +15,7 @@ import { VStack } from "@/components/layout/VStack";
 import { Product } from "@/components/product/Product";
 import { ProductDescription } from "@/components/product/ProductDescription";
 import { H2 } from "@/components/style/Hn";
+import { Link } from "@/components/style/Link";
 import { SuperButton, SuperButtonLink } from "@/components/style/SuperButton";
 import { SuperButtonBlock } from "@/components/style/SuperButtonBlock";
 import { CheckinItem } from "@/components/timeline/CheckinItem";
@@ -57,7 +62,15 @@ export function ProductPageContent({
 
   return (
     <VStack className="ProductPageContent" gap="gap-8">
-      <ProductDescription product={product} />
+      <VStack>
+        <ProductDescription product={product} />
+        <div className="text-end">
+          <Link href={`/product/${product.boardId}/edit`}>
+            Edit this product information
+            <ChevronDoubleRightIcon className="ms-1 inline-block size-4" />
+          </Link>
+        </div>
+      </VStack>
       <VStack>
         {successMessage && (
           <div className="mx-auto text-green-500">{successMessage}</div>

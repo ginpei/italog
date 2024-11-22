@@ -37,6 +37,46 @@ export async function createProductRecordSet(
   });
 }
 
+export async function updateProductRecordSet(
+  profile: Profile,
+  product: Product,
+): Promise<void> {
+  return runTransaction(async (db) => {
+    await Promise.all([
+      db.query(
+        /*sql*/ `
+          UPDATE board
+          SET display_name = COALESCE($2, display_name)
+          WHERE board_id = $1
+        `,
+        [product.boardId, product.displayName],
+      ),
+      db.query(
+        /*sql*/ `
+          UPDATE product
+          SET barcode = COALESCE($2, barcode),
+            brands = COALESCE($3, brands),
+            categories = COALESCE($4, categories),
+            image_url = COALESCE($5, image_url)
+          WHERE board_id = $1
+        `,
+        [
+          product.boardId,
+          product.barcode,
+          product.brands,
+          product.categories,
+          product.imageUrl,
+        ],
+      ),
+    ]);
+
+    await createUserActionRecord(profile, {
+      detail: { ...product },
+      title: "product/update",
+    });
+  });
+}
+
 export async function getProductRecord(
   boardId: string,
 ): Promise<Product | null> {
