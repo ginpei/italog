@@ -60,7 +60,6 @@ export async function queryNearbySearch(
       },
     },
   };
-  console.log("# queryNearbySearch", body.includedTypes);
 
   const res = await fetch(url, {
     body: JSON.stringify(body),
@@ -114,7 +113,6 @@ export async function queryTextSearch(
       },
     },
   };
-  console.log("# queryTextSearch()", body.textQuery);
 
   const res = await fetch(url, {
     body: JSON.stringify(body),

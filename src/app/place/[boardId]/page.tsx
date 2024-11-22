@@ -47,13 +47,6 @@ export default async function PlacePage({
     : false;
 
   if (!place) {
-    console.log(`No place found (2)`);
-    // TODO find how to return specific 404 page for this route
-    // return (
-    //   <StraightPageLayout session={session}>
-    //     <H1>Place not found</H1>
-    //   </StraightPageLayout>
-    // );
     notFound();
   }
 

@@ -10,7 +10,6 @@ export default async function PlacePage({
 }: {
   params: { productId: string };
 }): Promise<JSX.Element> {
-  console.log("# params", params);
   if (!isUUID(params.productId)) {
     notFound();
   }

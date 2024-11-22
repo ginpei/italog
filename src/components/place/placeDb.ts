@@ -34,18 +34,6 @@ export async function createPlaceRecordSet(
 export async function getPlaceRecord(
   boardId: string,
 ): Promise<Place | undefined> {
-  const countResult = await db.query(
-    /*sql*/ `
-      SELECT COUNT(*) FROM place WHERE board_id = $1
-    `,
-    [boardId],
-  );
-  console.log(
-    "countResult",
-    countResult,
-    `SELECT COUNT(*) FROM place WHERE board_id = ${boardId}`,
-  );
-
   const result = await db.query(
     /*sql*/ `
       SELECT p.*, b.display_name FROM place p
@@ -56,12 +44,6 @@ export async function getPlaceRecord(
   );
   const row = result.rows[0];
   if (!row) {
-    console.log(
-      "No place found",
-      boardId,
-      `SELECT * FROM place WHERE board_id = ${boardId}`,
-      result,
-    );
     return undefined;
   }
 
