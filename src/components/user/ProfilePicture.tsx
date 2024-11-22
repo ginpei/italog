@@ -11,7 +11,11 @@ export function ProfilePicture({
   size = "size-12",
 }: ProfilePictureProps): JSX.Element {
   if (!imageUrl) {
-    return <UserIcon className={`ProfilePicture ${size} text-gray-500`} />;
+    return (
+      <UserIcon
+        className={`ProfilePicture ${size} text-gray-300 dark:text-gray-700`}
+      />
+    );
   }
 
   return (
