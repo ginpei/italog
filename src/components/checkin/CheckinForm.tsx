@@ -6,6 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { ChangeEventHandler } from "react";
 import { InputLabel } from "../style/InputLabel";
+import { LongTextInput } from "../style/LongTextInput";
 import { CheckinRate, CheckinRow } from "@/components/checkin/Checkin";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { Button } from "@/components/style/Button";
@@ -60,8 +61,7 @@ export function CheckinForm({
         </InputLabel>
         <InputLabel>
           Comment{editingCheckin.rate === "0" ? " (optional)" : ""}:
-          <textarea
-            className="h-32 border bg-white text-black"
+          <LongTextInput
             name="comment"
             onChange={onInputChange}
             required={editingCheckin.rate !== "0"}
