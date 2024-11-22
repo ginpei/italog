@@ -19,7 +19,7 @@ export function CheckinItem({ checkin, own }: CheckinItemProps): JSX.Element {
       <div className="flex">
         <Link
           className={`
-            box-border grid size-16 shrink-0 items-center justify-center p-1
+            box-border size-16 shrink-0 p-1
             hover:bg-gray-200 hover:dark:bg-gray-600
           `}
           href={`/user/${checkin.profile.id}`}
