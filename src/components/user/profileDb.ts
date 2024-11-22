@@ -73,8 +73,8 @@ export async function createProfileRecordSet(
   authId: string,
   profile: Omit<Profile, "id">,
 ): Promise<void> {
-  return runTransaction(async (client) => {
-    const profileResult = await client.query(
+  return runTransaction(async (db) => {
+    const profileResult = await db.query(
       /*sql*/ `
         INSERT INTO profile (display_name) VALUES ($1)
         RETURNING id
@@ -83,7 +83,7 @@ export async function createProfileRecordSet(
     );
     const userId = profileResult.rows[0].id;
 
-    await client.query(
+    await db.query(
       /*sql*/ `
         INSERT INTO auth_profile (auth_type, auth_id, user_id) VALUES ($1, $2, $3)
       `,

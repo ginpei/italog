@@ -1,23 +1,23 @@
 import { db, VercelPoolClient } from "@vercel/postgres";
 
 export async function runTransaction<T>(
-  callback: (client: VercelPoolClient) => Promise<T>,
+  callback: (db: VercelPoolClient) => Promise<T>,
 ): Promise<T> {
-  let client: VercelPoolClient | null = null;
+  let dbClient: VercelPoolClient | null = null;
   try {
-    client = await db.connect();
-    await client.query("BEGIN");
+    dbClient = await db.connect();
+    await dbClient.query("BEGIN");
 
-    const result = await callback(client);
+    const result = await callback(dbClient);
 
-    await client.query("COMMIT");
+    await dbClient.query("COMMIT");
 
     return result;
   } catch (error) {
-    await client?.query("ROLLBACK");
+    await dbClient?.query("ROLLBACK");
     throw error;
   } finally {
-    client?.release();
+    dbClient?.release();
   }
 }
 

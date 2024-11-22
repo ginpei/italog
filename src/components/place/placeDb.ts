@@ -6,9 +6,9 @@ import { Place } from "./Place";
 export async function createPlaceRecordSet(
   place: Omit<Place, "boardId">,
 ): Promise<Place> {
-  return runTransaction(async (client) => {
-    const boardId = await createBoardRecord(client, place);
-    await client.query(
+  return runTransaction(async (db) => {
+    const boardId = await createBoardRecord(db, place);
+    await db.query(
       /*sql*/ `
         INSERT INTO place (
           board_id, map_id, address, latitude, longitude, map_url, type_display_name, web_url
@@ -52,8 +52,8 @@ export async function getPlaceRecord(
 }
 
 export async function getPlaceRecords(mapIds: string[]): Promise<Place[]> {
-  return runTransaction(async (client) => {
-    const result = await client.query(
+  return runTransaction(async (db) => {
+    const result = await db.query(
       /*sql*/ `
         SELECT p.*, b.display_name FROM place p
         JOIN board b ON p.board_id = b.board_id
