@@ -51,7 +51,12 @@ export async function getPlaceRecord(
   return place;
 }
 
-export async function getPlaceRecords(mapIds: string[]): Promise<Place[]> {
+/**
+ * @param mapIds IDs of Google Map Place IDs
+ */
+export async function getPlaceRecordsByMapIds(
+  mapIds: string[],
+): Promise<Place[]> {
   return runTransaction(async (db) => {
     const result = await db.query(
       /*sql*/ `

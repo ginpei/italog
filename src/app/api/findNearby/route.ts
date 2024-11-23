@@ -7,7 +7,7 @@ import { ToSearchParams } from "@/components/api/apiTypes";
 import { toError } from "@/components/error/errorUtil";
 import { Place } from "@/components/place/Place";
 import {
-  getPlaceRecords,
+  getPlaceRecordsByMapIds,
   createPlaceRecordSet,
 } from "@/components/place/placeDb";
 import {
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
     const mapIds = textQuery
       ? await queryTextSearch(textQuery, category, lat, long)
       : await queryNearbySearch(includedTypes, lat, long);
-    const existingPlaces = await getPlaceRecords(mapIds);
+    const existingPlaces = await getPlaceRecordsByMapIds(mapIds);
     const newPlaceIds = mapIds.filter(
       (id) => !existingPlaces.find((p) => p.mapId === id),
     );
