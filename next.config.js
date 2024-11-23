@@ -5,7 +5,10 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "*.public.blob.vercel-storage.com",
-        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "images.openfoodfacts.org",
       },
     ],
   },

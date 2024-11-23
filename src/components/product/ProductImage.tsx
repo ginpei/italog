@@ -1,4 +1,5 @@
 import { PhotoIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import { controlBorderThemeClassNames } from "../style/controlClassNames";
 
 export interface ProductImageBlockProps {
@@ -9,11 +10,13 @@ export function ProductImageBlock({
   imageUrl,
 }: ProductImageBlockProps): JSX.Element {
   return imageUrl ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <Image
       alt=""
       className="ProductImageBlock mx-auto size-64 max-h-full object-contain"
+      height={400}
+      key={imageUrl}
       src={imageUrl}
+      width={400}
     />
   ) : (
     <span
