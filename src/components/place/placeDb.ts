@@ -51,6 +51,21 @@ export async function getPlaceRecord(
   return place;
 }
 
+export async function getPlaceRecords(placeIds: string[]): Promise<Place[]> {
+  return runTransaction(async (db) => {
+    const result = await db.query(
+      /*sql*/ `
+        SELECT p.*, b.display_name FROM place p
+        JOIN board b ON p.board_id = b.board_id
+        WHERE p.board_id = ANY(ARRAY[${placeIds.map((v, i) => `$${i + 1}::uuid`).join(",")}])
+      `,
+      placeIds,
+    );
+    const places = result.rows.map((v) => rowToPlace(v));
+    return places;
+  });
+}
+
 /**
  * @param mapIds IDs of Google Map Place IDs
  */

@@ -98,6 +98,23 @@ export async function getProductRecord(
   return product;
 }
 
+export async function getProductRecords(
+  productIds: string[],
+): Promise<Product[]> {
+  return runTransaction(async (db) => {
+    const result = await db.query(
+      /*sql*/ `
+        SELECT p.*, b.display_name FROM product p
+        JOIN board b ON p.board_id = b.board_id
+        WHERE p.board_id = ANY(ARRAY[${productIds.map((v, i) => `$${i + 1}::uuid`).join(",")}])
+      `,
+      productIds,
+    );
+    const products = result.rows.map((v) => rowToProduct(v));
+    return products;
+  });
+}
+
 export async function getProductRecordsByBarcode(
   barcode: string,
 ): Promise<Product[]> {

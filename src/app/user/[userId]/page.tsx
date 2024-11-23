@@ -4,6 +4,8 @@ import { UserPageContent } from "./UserPageContent";
 import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
 import { isUUID } from "@/components/db/transaction";
 import { StraightPageLayout } from "@/components/layout/StraightPageLayout";
+import { getPlaceRecords } from "@/components/place/placeDb";
+import { getProductRecords } from "@/components/product/productDb";
 import { hasFriendshipRecord } from "@/components/user/friendshipDb";
 import { getProfileRecord } from "@/components/user/profileDb";
 import { getSessionProfile } from "@/components/user/profileSession";
@@ -47,6 +49,19 @@ export default async function Page({
     notFound();
   }
 
+  const [places, products] = await Promise.all([
+    getPlaceRecords(
+      checkins
+        .filter((v) => v.board.boardType === "place")
+        .map((v) => v.boardId),
+    ),
+    getProductRecords(
+      checkins
+        .filter((v) => v.board.boardType === "product")
+        .map((v) => v.boardId),
+    ),
+  ]);
+
   const isFriend =
     currentUserProfile.id !== pageUserProfile.id &&
     (await hasFriendshipRecord(currentUserProfile.id, pageUserProfile.id));
@@ -57,10 +72,12 @@ export default async function Page({
   return (
     <StraightPageLayout profile={currentUserProfile}>
       <UserPageContent
+        checkins={publicCheckins}
         currentUser={currentUserProfile}
         isFriend={isFriend}
+        places={places}
+        products={products}
         profile={pageUserProfile}
-        checkins={publicCheckins}
       />
     </StraightPageLayout>
   );
