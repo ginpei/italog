@@ -67,7 +67,12 @@ export function TimelineBlock({
     <div className="TimelineBlock">
       <ErrorBlock error={error} />
       {loading ? (
-        <div>{/* TODO */}Loading...</div>
+        <VStack>
+          <TimelinePreviewBlockSkeleton />
+          <TimelineItemSkeleton />
+          <TimelineItemSkeleton />
+          <TimelineItemSkeleton />
+        </VStack>
       ) : (
         <VStack>
           <TimelinePreviewBlock
@@ -97,6 +102,24 @@ export function TimelineBlock({
           </CheckinList>
         </VStack>
       )}
+    </div>
+  );
+}
+
+function TimelinePreviewBlockSkeleton(): JSX.Element {
+  return (
+    <div className="sticky top-0 h-[30vh] animate-pulse bg-white py-1 dark:bg-black">
+      <div className="size-full bg-gray-300 dark:bg-gray-800" />
+    </div>
+  );
+}
+
+function TimelineItemSkeleton(): JSX.Element {
+  return (
+    <div className="TimelineItemSkeleton flex animate-pulse flex-col gap-2 border border-gray-300 p-2">
+      <div className="h-6 w-1/2 rounded bg-gray-300 dark:bg-gray-800"></div>
+      <div className="h-4 w-16 rounded bg-gray-300 dark:bg-gray-800"></div>
+      <div className="h-4 rounded bg-gray-300 dark:bg-gray-800"></div>
     </div>
   );
 }
