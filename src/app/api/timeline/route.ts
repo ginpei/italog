@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { ResultOrError } from "@/components/api/apiTypes";
 import { Checkin } from "@/components/checkin/Checkin";
-import { getUserCheckinRecords } from "@/components/checkin/checkinDb";
+import { getTimelineCheckinRecords } from "@/components/checkin/checkinDb";
 import { Place } from "@/components/place/Place";
 import { getPlaceRecords } from "@/components/place/placeDb";
 import { Product } from "@/components/product/Product";
@@ -25,7 +25,7 @@ export async function GET(): Promise<NextResponse<GetTimelineResult>> {
       );
     }
 
-    const checkins = await getUserCheckinRecords(profile.id);
+    const checkins = await getTimelineCheckinRecords(profile.id);
     const [places, products] = await Promise.all([
       getPlaceRecords(
         checkins

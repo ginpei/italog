@@ -62,17 +62,16 @@ export async function updateCheckinRecord(
 
 export async function getTimelineCheckinRecords(
   userId: string,
-): Promise<Checkin<Place>[]> {
+): Promise<Checkin[]> {
   const limit = 30;
   const offset = 0;
 
   const result = await db.query(
     /*sql*/ `
-      SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url, pl.latitude, pl.longitude, pl.address, pl.map_url, pl.type_display_name, pl.web_url
+      SELECT c.*, b.board_type, b.display_name AS board_display_name, p.display_name AS profile_display_name, p.image_url
       FROM checkin c
       JOIN board b ON c.board_id = b.board_id
       JOIN profile p ON c.user_id = p.id
-      LEFT JOIN place pl ON c.board_id = pl.board_id
       LEFT JOIN user_user uu ON c.user_id = uu.friend_id AND uu.user_id = $1
       WHERE (uu.user_id = $2 OR c.user_id = $3)
       ORDER BY c.created_at DESC
