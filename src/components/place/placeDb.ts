@@ -53,6 +53,10 @@ export async function getPlaceRecord(
 
 export async function getPlaceRecords(placeIds: string[]): Promise<Place[]> {
   return runTransaction(async (db) => {
+    if (placeIds.length === 0) {
+      return [];
+    }
+
     const result = await db.query(
       /*sql*/ `
         SELECT p.*, b.display_name FROM place p

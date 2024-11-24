@@ -102,6 +102,10 @@ export async function getProductRecords(
   productIds: string[],
 ): Promise<Product[]> {
   return runTransaction(async (db) => {
+    if (productIds.length === 0) {
+      return [];
+    }
+
     const result = await db.query(
       /*sql*/ `
         SELECT p.*, b.display_name FROM product p
