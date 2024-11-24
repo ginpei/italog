@@ -77,6 +77,10 @@ export async function getPlaceRecordsByMapIds(
   mapIds: string[],
 ): Promise<Place[]> {
   return runTransaction(async (db) => {
+    if (mapIds.length === 0) {
+      return [];
+    }
+
     const result = await db.query(
       /*sql*/ `
         SELECT p.*, b.display_name FROM place p
