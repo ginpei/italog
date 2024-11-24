@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BoardType } from "../board/Board";
 import { Checkin } from "../checkin/Checkin";
 import { ErrorBlock } from "../error/ErrorBlock";
@@ -29,11 +29,26 @@ export function TimelineBlock({
   );
   const placeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
-  const primaryBoardType: BoardType = places.some(
+  const primaryBoardType: BoardType | "" = places.some(
     (v) => v.boardId === primaryBoardId,
   )
     ? "place"
-    : "product";
+    : products.some((v) => v.boardId === primaryBoardId)
+      ? "product"
+      : "";
+
+  useEffect(() => {
+    if (primaryBoardId !== "") {
+      return;
+    }
+
+    const firstCheckin = checkins[0];
+    if (!firstCheckin) {
+      return;
+    }
+
+    setPrimaryBoardId(firstCheckin.board.boardId);
+  }, [checkins, primaryBoardId]);
 
   const onMapMarkerClick = (placeId: string) => {
     setPrimaryBoardId(placeId);

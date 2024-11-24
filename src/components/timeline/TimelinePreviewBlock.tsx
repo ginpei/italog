@@ -1,4 +1,5 @@
 import { APIProvider } from "@vis.gl/react-google-maps";
+import { useMemo } from "react";
 import { BoardType } from "../board/Board";
 import { Place } from "../place/Place";
 import { Product } from "../product/Product";
@@ -6,7 +7,7 @@ import { ProductImageBlock } from "../product/ProductImage";
 import { EmbeddedMap } from "./EmbeddedMap";
 
 export interface TimelinePreviewBlockProps {
-  boardType: BoardType;
+  boardType: BoardType | "";
   loading: boolean;
   onMapMarkerClick: (id: string) => void;
   places: Place[];
@@ -22,7 +23,10 @@ export function TimelinePreviewBlock({
   primaryPlaceId,
   products,
 }: TimelinePreviewBlockProps): JSX.Element {
-  const product = products.find((p) => p.boardId === primaryPlaceId);
+  const product = useMemo(
+    () => products.find((p) => p.boardId === primaryPlaceId),
+    [primaryPlaceId, products],
+  );
 
   return (
     <div className="TimelinePreviewBlock sticky top-0 h-[30vh] bg-white py-1 dark:bg-black">
@@ -36,14 +40,16 @@ export function TimelinePreviewBlock({
             primaryPlaceId={primaryPlaceId}
           />
         </APIProvider>
-      ) : (
+      ) : boardType === "product" ? (
         <div className="relative h-full">
-          <ProductImageBlock imageUrl={product!.imageUrl} />
-          <div className="absolute bottom-0 w-full bg-gray-500/80 p-2 text-white">
-            {product!.displayName}
-          </div>
+          <ProductImageBlock imageUrl={product?.imageUrl} />
+          {product && (
+            <div className="absolute bottom-0 w-full bg-gray-500/80 p-2 text-white">
+              {product!.displayName}
+            </div>
+          )}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
