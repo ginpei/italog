@@ -11,7 +11,7 @@ export default function Page({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const messaeg = useMemo(() => {
+  const message = useMemo(() => {
     if (error.message === "Need login") {
       return "You need to log in to view this page";
     }
@@ -28,7 +28,7 @@ export default function Page({
       <div className="min-h-[60vh]">
         <Content>
           <VStack>
-            <p>{messaeg}</p>
+            <p>{message}</p>
           </VStack>
         </Content>
       </div>
