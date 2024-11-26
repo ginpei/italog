@@ -3,11 +3,21 @@ import { Product } from "./Product";
 /**
  * @see https://www.postman.com/cs-demo/public-rest-apis/request/zgtahxr/barcode-lookup
  */
-interface OpenFoodFactsApiResult {
+type OpenFoodFactsApiResult =
+  | OpenFoodFactsApiSuccessResult
+  | OpenFoodFactsApiErrorResult;
+
+interface OpenFoodFactsApiSuccessResult {
   code: string;
   product: OpenFoodFactsProduct;
   status_verbose: string;
   status: 1;
+}
+
+interface OpenFoodFactsApiErrorResult {
+  code: string;
+  status_verbose: "product not found";
+  status: 0;
 }
 
 /**
@@ -38,7 +48,7 @@ export async function fetchBarcodeLookup(
 
   const res = await fetch(url);
   const result: OpenFoodFactsApiResult = await res.json();
-  if (!res.ok) {
+  if (!res.ok || result.status !== 1) {
     throw new Error(result.status_verbose);
   }
 
