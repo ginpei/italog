@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import { ComponentPropsWithoutRef, ReactNode } from "react";
+import { ChangeEvent, ComponentPropsWithoutRef, ReactNode } from "react";
 import { LinkProps } from "./Link";
 import {
   buttonThemeClassNames,
@@ -77,13 +77,27 @@ export function FileButton({
   className = "",
   children,
   disabled,
+  onChange,
   ...props
 }: Omit<ComponentPropsWithoutRef<"input">, "type"> & {
   children: ReactNode;
 }): React.JSX.Element {
+  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange(event);
+    }
+
+    event.target.value = "";
+  };
+
   return (
     <ButtonLabel className={`${className} FileButton`} disabled={disabled}>
-      <input className="hidden" type="file" {...props} />
+      <input
+        className="hidden"
+        onChange={onFileChange}
+        type="file"
+        {...props}
+      />
       {children}
     </ButtonLabel>
   );
