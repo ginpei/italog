@@ -26,7 +26,7 @@ export function CheckinEditPageContent({
 
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [editingCheckin, setEditingCheckin] = useState(checkin);
+  const [editingCheckin, setEditingCheckin] = useState<CheckinRow>(checkin);
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
@@ -39,14 +39,6 @@ export function CheckinEditPageContent({
       throw new Error("unexpected board type: " + checkin.board.boardType);
     }
   }, [checkin.board.boardType, checkin.boardId]);
-
-  const onInputChange = async (checkin: CheckinRow) => {
-    setEditingCheckin({
-      ...editingCheckin,
-      comment: checkin.comment,
-      rate: checkin.rate,
-    });
-  };
 
   const onFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -100,7 +92,7 @@ export function CheckinEditPageContent({
         working={working}
         error={error}
         editingCheckin={editingCheckin}
-        onChange={onInputChange}
+        onChange={setEditingCheckin}
         onFormSubmit={onFormSubmit}
       />
       <p>Or...</p>
