@@ -12,21 +12,21 @@ import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { Button } from "@/components/style/Button";
 
 export interface CheckinFormProps {
-  formRef: React.RefObject<HTMLFormElement>;
-  working: boolean;
-  error: Error | null;
   editingCheckin: CheckinRow;
+  error: Error | null;
+  formRef: React.RefObject<HTMLFormElement>;
   onChange: (checkin: CheckinRow) => void;
   onFormSubmit: (event: React.FormEvent) => void;
+  working: boolean;
 }
 
 export function CheckinForm({
-  formRef,
-  working,
-  error,
   editingCheckin,
+  error,
+  formRef,
   onChange,
   onFormSubmit,
+  working,
 }: CheckinFormProps) {
   const onInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
