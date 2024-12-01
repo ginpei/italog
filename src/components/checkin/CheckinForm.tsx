@@ -11,6 +11,15 @@ import { CheckinRate, CheckinRow } from "@/components/checkin/Checkin";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
 import { Button } from "@/components/style/Button";
 
+export interface CheckinFormProps {
+  formRef: React.RefObject<HTMLFormElement>;
+  working: boolean;
+  error: Error | null;
+  editingCheckin: CheckinRow;
+  onChange: (checkin: CheckinRow) => void;
+  onFormSubmit: (event: React.FormEvent) => void;
+}
+
 export function CheckinForm({
   formRef,
   working,
@@ -18,14 +27,7 @@ export function CheckinForm({
   editingCheckin,
   onChange,
   onFormSubmit,
-}: {
-  formRef: React.RefObject<HTMLFormElement>;
-  working: boolean;
-  error: Error | null;
-  editingCheckin: CheckinRow;
-  onChange: (checkin: CheckinRow) => void;
-  onFormSubmit: (event: React.FormEvent) => void;
-}) {
+}: CheckinFormProps) {
   const onInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
