@@ -3,7 +3,7 @@ import { LinkProps } from "../style/Link";
 
 export function NavBarLink({
   as = "Link",
-  className,
+  className = "",
   ...props
 }: LinkProps): React.JSX.Element {
   const Tag = as === "a" ? "a" : Link;

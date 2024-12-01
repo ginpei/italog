@@ -5,7 +5,7 @@ import {
 } from "./controlClassNames";
 
 export function Select({
-  className,
+  className = "",
   ...props
 }: ComponentPropsWithoutRef<"select">): React.JSX.Element {
   return (

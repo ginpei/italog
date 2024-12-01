@@ -7,7 +7,7 @@ import {
 export type LongTextInputProps = ComponentPropsWithoutRef<"textarea">;
 
 export function LongTextInput({
-  className,
+  className = "",
   ...props
 }: LongTextInputProps): React.JSX.Element {
   return (

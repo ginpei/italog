@@ -10,7 +10,7 @@ export interface NavBarFrameProps {
 }
 
 export function NavBarFrame({
-  className,
+  className = "",
   children,
   extraContent,
   title,

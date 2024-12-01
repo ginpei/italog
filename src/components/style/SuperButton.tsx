@@ -11,7 +11,7 @@ export const superButtonShapeClassNames = `
  * TODO rename
  */
 export function SuperButton({
-  className,
+  className = "",
   ...props
 }: ComponentPropsWithoutRef<"button">): React.JSX.Element {
   return (
@@ -25,7 +25,7 @@ export function SuperButton({
 
 export function SuperButtonLink({
   as,
-  className,
+  className = "",
   ...props
 }: LinkProps): React.JSX.Element {
   const Tag = as === "a" ? "a" : NextLink;

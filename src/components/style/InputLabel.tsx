@@ -6,7 +6,7 @@ export type InputLabelProps = ComponentPropsWithoutRef<"label"> & {
 
 export function InputLabel({
   as: TagName = "label",
-  className,
+  className = "",
   ...props
 }: InputLabelProps): React.JSX.Element {
   return (

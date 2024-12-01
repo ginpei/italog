@@ -8,7 +8,7 @@ export type LinkProps = Omit<ComponentProps<typeof NextLink>, "href"> & {
 
 export function Link({
   as,
-  className,
+  className = "",
   ...props
 }: LinkProps): React.JSX.Element {
   const Tag = as === "a" ? "a" : NextLink;

@@ -10,7 +10,7 @@ export interface TextInputProps
 }
 
 export function TextInput({
-  className,
+  className = "",
   ...props
 }: TextInputProps): React.JSX.Element {
   return (

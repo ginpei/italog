@@ -7,7 +7,7 @@ import {
 } from "./controlClassNames";
 
 export function Button({
-  className,
+  className = "",
   ...props
 }: ComponentPropsWithoutRef<"button">): React.JSX.Element {
   return (
@@ -19,7 +19,7 @@ export function Button({
 }
 
 export function DangerButton({
-  className,
+  className = "",
   ...props
 }: ComponentPropsWithoutRef<"button">): React.JSX.Element {
   return (
@@ -37,7 +37,7 @@ export function DangerButton({
 
 export function ButtonLink({
   as,
-  className,
+  className = "",
   ...props
 }: LinkProps): React.JSX.Element {
   const Tag = as === "a" ? "a" : NextLink;
@@ -54,7 +54,7 @@ export function ButtonLink({
 }
 
 export function ButtonLabel({
-  className,
+  className = "",
   disabled,
   ...props
 }: ComponentPropsWithoutRef<"label"> & {
