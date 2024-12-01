@@ -8,8 +8,8 @@ export async function createCheckinRecord(
 ): Promise<string> {
   const result = await db.query(
     /*sql*/ `
-      INSERT INTO checkin (comment, created_at, user_date, board_id, rate, user_id)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO checkin (comment, created_at, user_date, board_id, rate, user_id, image_urls)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id
     `,
     [
@@ -19,6 +19,7 @@ export async function createCheckinRecord(
       checkin.boardId,
       checkin.rate,
       checkin.userId,
+      checkin.imageUrls,
     ],
   );
   const id: string = result.rows[0].id;
@@ -53,10 +54,11 @@ export async function updateCheckinRecord(
     /*sql*/ `
       UPDATE checkin
       SET comment = $1,
-          rate = $2
-      WHERE id = $3
+          rate = $2,
+          image_urls = $3
+      WHERE id = $4
     `,
-    [checkin.comment, checkin.rate, checkin.id],
+    [checkin.comment, checkin.rate, checkin.imageUrls, checkin.id],
   );
 }
 
@@ -179,6 +181,7 @@ function rowToCheckin(row: QueryResultRow): Checkin {
     boardId: row.board_id,
     rate: row.rate,
     userId: row.user_id,
+    imageUrls: row.image_urls ?? [],
     board: {
       boardId: row.board_id,
       boardType: row.board_type,

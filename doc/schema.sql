@@ -124,18 +124,20 @@ CREATE TABLE checkin (
   created_at BIGINT NOT NULL,
   rate VARCHAR(2) NOT NULL CHECK (rate IN ('+1', '0', '-1')),
   user_date VARCHAR(255) NOT NULL,
+  image_urls TEXT[],
   FOREIGN KEY (board_id) REFERENCES board(board_id),
   FOREIGN KEY (user_id) REFERENCES profile(id)
 );
 
 CREATE INDEX idx_checkin_created_at ON checkin (created_at);
 
-INSERT INTO checkin (board_id, user_id, comment, created_at, rate, user_date)
+INSERT INTO checkin (board_id, user_id, comment, created_at, rate, user_date, image_urls)
 VALUES (
   '63fc77f7-a986-48a6-ab6a-ea544eb0ca8c',
   '4111179e-3bfa-4b8a-9588-dfe4a49f90bc',
   'Love it!',
   946684800000,
   '+1',
-  '2000-01-01'
+  '2000-01-01',
+  ARRAY[]
 );

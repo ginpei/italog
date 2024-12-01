@@ -43,6 +43,7 @@ export function PlacePageContent({
         checkin: {
           boardId: place.boardId,
           comment: "",
+          imageUrls: [],
           rate: "0",
         },
       });

@@ -6,6 +6,7 @@ export interface CheckinRow {
   comment: string;
   createdAt: number;
   id: string;
+  imageUrls: string[];
   rate: CheckinRate;
 
   /**

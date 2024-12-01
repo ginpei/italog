@@ -23,6 +23,7 @@ export function NewCheckinSection({
     comment: "",
     createdAt: 0,
     id: "",
+    imageUrls: [],
     rate: "0",
     userDate: "",
     userId: "",
@@ -54,6 +55,7 @@ export function NewCheckinSection({
         checkin: {
           boardId: editingCheckin.boardId,
           comment: editingCheckin.comment,
+          imageUrls: editingCheckin.imageUrls,
           rate: editingCheckin.rate,
         },
       });

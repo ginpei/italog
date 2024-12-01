@@ -47,6 +47,7 @@ export function ProductPageContent({
         checkin: {
           boardId: product.boardId,
           comment: "",
+          imageUrls: [],
           rate: "0",
         },
       });

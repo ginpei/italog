@@ -62,6 +62,7 @@ export function CheckinEditPageContent({
     try {
       await requestPatchCheckin(checkin.id, {
         comment: editingCheckin.comment,
+        imageUrls: editingCheckin.imageUrls,
         rate: editingCheckin.rate,
       });
       router.push(viewPageUrl);
