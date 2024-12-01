@@ -16,16 +16,29 @@ export function CheckinForm({
   working,
   error,
   editingCheckin,
-  onInputChange,
+  onChange,
   onFormSubmit,
 }: {
   formRef: React.RefObject<HTMLFormElement>;
   working: boolean;
   error: Error | null;
   editingCheckin: CheckinRow;
-  onInputChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  onChange: (checkin: CheckinRow) => void;
   onFormSubmit: (event: React.FormEvent) => void;
 }) {
+  const onInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = event.target;
+    if (name === "rate") {
+      onChange({ ...editingCheckin, rate: value as CheckinRate });
+    } else if (name === "comment") {
+      onChange({ ...editingCheckin, comment: value });
+    } else {
+      throw new Error("unexpected input name: " + name);
+    }
+  };
+
   return (
     <form className="CheckInForm" onSubmit={onFormSubmit} ref={formRef}>
       <fieldset className="flex flex-col gap-4" disabled={working}>
@@ -42,8 +55,8 @@ export function CheckinForm({
               Excellent
             </RateRadio>
             <RateRadio
-              rate={editingCheckin.rate}
               onChange={onInputChange}
+              rate={editingCheckin.rate}
               value="0"
             >
               <HandThumbUpIcon className="mx-auto h-6" />

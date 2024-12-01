@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
-  requestPatchCheckin,
   requestDeleteCheckin,
+  requestPatchCheckin,
 } from "@/app/api/checkin/[checkinId]/checkinItemApis";
-import { Checkin, CheckinRate } from "@/components/checkin/Checkin";
+import { Checkin, CheckinRow } from "@/components/checkin/Checkin";
 import { CheckinForm } from "@/components/checkin/CheckinForm";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
@@ -40,17 +40,12 @@ export function CheckinEditPageContent({
     }
   }, [checkin.board.boardType, checkin.boardId]);
 
-  const onInputChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = event.target;
-    if (name === "rate") {
-      setEditingCheckin({ ...editingCheckin, rate: value as CheckinRate });
-    } else if (name === "comment") {
-      setEditingCheckin({ ...editingCheckin, comment: value });
-    } else {
-      throw new Error("unexpected input name: " + name);
-    }
+  const onInputChange = async (checkin: CheckinRow) => {
+    setEditingCheckin({
+      ...editingCheckin,
+      comment: checkin.comment,
+      rate: checkin.rate,
+    });
   };
 
   const onFormSubmit = async (event: React.FormEvent) => {
@@ -105,7 +100,7 @@ export function CheckinEditPageContent({
         working={working}
         error={error}
         editingCheckin={editingCheckin}
-        onInputChange={onInputChange}
+        onChange={onInputChange}
         onFormSubmit={onFormSubmit}
       />
       <p>Or...</p>

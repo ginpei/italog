@@ -1,10 +1,10 @@
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Board } from "../board/Board";
 import { toError } from "../error/errorUtil";
 import { VStack } from "../layout/VStack";
 import { H2 } from "../style/Hn";
-import { CheckinRate, CheckinRow } from "./Checkin";
+import { CheckinRow } from "./Checkin";
 import { CheckinForm } from "./CheckinForm";
 import { getBoardViewPageUrl } from "./checkinUrl";
 import { requestPostCheckin } from "@/app/api/checkin/checkinApis";
@@ -30,19 +30,6 @@ export function NewCheckinSection({
   });
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
-
-  const onInputChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = event.target;
-    if (name === "rate") {
-      setEditingCheckin({ ...editingCheckin, rate: value as CheckinRate });
-    } else if (name === "comment") {
-      setEditingCheckin({ ...editingCheckin, comment: value });
-    } else {
-      throw new Error("unexpected input name: " + name);
-    }
-  };
 
   const onFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -89,7 +76,7 @@ export function NewCheckinSection({
         working={working}
         error={error}
         editingCheckin={editingCheckin}
-        onInputChange={onInputChange}
+        onChange={setEditingCheckin}
         onFormSubmit={onFormSubmit}
       />
     </VStack>
