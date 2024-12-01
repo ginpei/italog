@@ -1,15 +1,21 @@
 import { PostCheckinPayload, PostCheckinResult } from "./route";
+import { EditingCheckinRow } from "@/components/checkin/Checkin";
 
 /**
  * @returns The ID of the created checkin.
  */
 export async function requestPostCheckin(
-  payload: Omit<PostCheckinPayload, "timezoneOffset">,
+  checkin: EditingCheckinRow,
 ): Promise<PostCheckinResult> {
   const endpoint = "/api/checkin";
 
+  const imageUrls: PostCheckinPayload["checkin"]["imageUrls"] = []; // TODO
+
   const body: PostCheckinPayload = {
-    ...payload,
+    checkin: {
+      ...checkin,
+      imageUrls,
+    },
     timezoneOffset: new Date().getTimezoneOffset(),
   };
 

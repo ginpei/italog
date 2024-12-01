@@ -24,7 +24,6 @@ export function NewCheckinSection({
     id: "",
     imageUrls: [],
     rate: "0",
-    userId: "",
   });
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
@@ -34,15 +33,7 @@ export function NewCheckinSection({
     setError(null);
 
     try {
-      await requestPostCheckin({
-        checkin: {
-          boardId: editingCheckin.boardId,
-          comment: editingCheckin.comment,
-          imageUrls: [], // TODO
-          // imageUrls: editingCheckin.imageUrls,
-          rate: editingCheckin.rate,
-        },
-      });
+      await requestPostCheckin(editingCheckin);
       router.push(getBoardViewPageUrl(board));
       router.refresh();
     } catch (error) {

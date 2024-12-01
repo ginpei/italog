@@ -44,12 +44,11 @@ export function ProductPageContent({
 
     try {
       await requestPostCheckin({
-        checkin: {
-          boardId: product.boardId,
-          comment: "",
-          imageUrls: [],
-          rate: "0",
-        },
+        boardId: product.boardId,
+        comment: "",
+        id: "",
+        imageUrls: [],
+        rate: "0",
       });
       router.refresh();
       setSuccessMessage("Checked in!");

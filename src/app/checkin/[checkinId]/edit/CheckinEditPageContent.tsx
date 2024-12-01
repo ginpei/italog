@@ -46,12 +46,7 @@ export function CheckinEditPageContent({
     setError(null);
 
     try {
-      await requestPatchCheckin(checkin.id, {
-        comment: editingCheckin.comment,
-        imageUrls: [], // TODO
-        // imageUrls: editingCheckin.imageUrls,
-        rate: editingCheckin.rate,
-      });
+      await requestPatchCheckin(checkin.id, editingCheckin);
       router.push(viewPageUrl);
       router.refresh();
     } catch (error) {

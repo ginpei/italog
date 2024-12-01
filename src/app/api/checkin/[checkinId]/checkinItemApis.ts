@@ -2,15 +2,21 @@ import {
   UpdateCheckinPayload,
   UpdateCheckinResult,
 } from "@/app/api/checkin/[checkinId]/route";
+import { CheckinRow, EditingCheckinRow } from "@/components/checkin/Checkin";
 
 export async function requestPatchCheckin(
   boardId: string,
-  checkin: UpdateCheckinPayload["checkin"],
+  checkin: EditingCheckinRow,
 ): Promise<void> {
   const endpoint = `/api/checkin/${boardId}`;
 
+  const imageUrls: CheckinRow["imageUrls"] = []; // TODO
+
   const body: UpdateCheckinPayload = {
-    checkin,
+    checkin: {
+      ...checkin,
+      imageUrls,
+    },
   };
 
   const res = await fetch(endpoint, {

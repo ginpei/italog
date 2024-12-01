@@ -40,12 +40,11 @@ export function PlacePageContent({
 
     try {
       await requestPostCheckin({
-        checkin: {
-          boardId: place.boardId,
-          comment: "",
-          imageUrls: [],
-          rate: "0",
-        },
+        boardId: place.boardId,
+        comment: "",
+        id: "",
+        imageUrls: [],
+        rate: "0",
       });
       router.refresh();
       setSuccessMessage("Checked in!");

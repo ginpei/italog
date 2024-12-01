@@ -21,7 +21,7 @@ export type CheckinRate = "+1" | "0" | "-1";
 
 export type EditingCheckinRow = Omit<
   CheckinRow,
-  "createdAt" | "imageUrls" | "userDate"
+  "createdAt" | "imageUrls" | "userDate" | "userId"
 > & {
   imageUrls: (string | File)[];
 };
