@@ -29,9 +29,7 @@ export function NewCheckinSection({
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
-  const onFormSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
+  const onFormSubmit = async () => {
     setWorking(true);
     setError(null);
 
@@ -76,7 +74,7 @@ export function NewCheckinSection({
         error={error}
         editingCheckin={editingCheckin}
         onChange={setEditingCheckin}
-        onFormSubmit={onFormSubmit}
+        onSubmit={onFormSubmit}
       />
     </VStack>
   );

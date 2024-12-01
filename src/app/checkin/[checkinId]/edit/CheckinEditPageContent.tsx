@@ -41,9 +41,7 @@ export function CheckinEditPageContent({
     }
   }, [checkin.board.boardType, checkin.boardId]);
 
-  const onFormSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
+  const onFormSubmit = async () => {
     setWorking(true);
     setError(null);
 
@@ -95,7 +93,7 @@ export function CheckinEditPageContent({
         error={error}
         editingCheckin={editingCheckin}
         onChange={setEditingCheckin}
-        onFormSubmit={onFormSubmit}
+        onSubmit={onFormSubmit}
       />
       <p>Or...</p>
       <DangerButton disabled={working} onClick={onDeleteClick}>

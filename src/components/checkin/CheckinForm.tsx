@@ -19,7 +19,7 @@ export interface CheckinFormProps {
   error: Error | null;
   formRef: React.RefObject<HTMLFormElement>;
   onChange: (checkin: EditingCheckinRow) => void;
-  onFormSubmit: (event: React.FormEvent) => void;
+  onSubmit: (checkin: EditingCheckinRow) => void;
   working: boolean;
 }
 
@@ -28,7 +28,7 @@ export function CheckinForm({
   error,
   formRef,
   onChange,
-  onFormSubmit,
+  onSubmit,
   working,
 }: CheckinFormProps): JSX.Element {
   const onInputChange = (
@@ -59,6 +59,11 @@ export function CheckinForm({
       ...editingCheckin,
       imageUrls: [...editingCheckin.imageUrls, ...files],
     });
+  };
+
+  const onFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    onSubmit(editingCheckin);
   };
 
   return (
