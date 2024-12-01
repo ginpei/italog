@@ -27,7 +27,7 @@ export function CheckinForm({
   onChange,
   onFormSubmit,
   working,
-}: CheckinFormProps) {
+}: CheckinFormProps): JSX.Element {
   const onInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
