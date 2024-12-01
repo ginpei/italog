@@ -4,7 +4,7 @@ import { Board } from "../board/Board";
 import { toError } from "../error/errorUtil";
 import { VStack } from "../layout/VStack";
 import { H2 } from "../style/Hn";
-import { CheckinRow } from "./Checkin";
+import { EditingCheckinRow } from "./Checkin";
 import { CheckinForm } from "./CheckinForm";
 import { getBoardViewPageUrl } from "./checkinUrl";
 import { requestPostCheckin } from "@/app/api/checkin/checkinApis";
@@ -18,14 +18,12 @@ export function NewCheckinSection({
 }: NewCheckinSectionProps): JSX.Element {
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [editingCheckin, setEditingCheckin] = useState<CheckinRow>({
+  const [editingCheckin, setEditingCheckin] = useState<EditingCheckinRow>({
     boardId: board.boardId,
     comment: "",
-    createdAt: 0,
     id: "",
     imageUrls: [],
     rate: "0",
-    userDate: "",
     userId: "",
   });
   const formRef = useRef<HTMLFormElement>(null);
@@ -42,7 +40,8 @@ export function NewCheckinSection({
         checkin: {
           boardId: editingCheckin.boardId,
           comment: editingCheckin.comment,
-          imageUrls: editingCheckin.imageUrls,
+          imageUrls: [], // TODO
+          // imageUrls: editingCheckin.imageUrls,
           rate: editingCheckin.rate,
         },
       });

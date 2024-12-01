@@ -6,7 +6,7 @@ import {
   requestDeleteCheckin,
   requestPatchCheckin,
 } from "@/app/api/checkin/[checkinId]/checkinItemApis";
-import { Checkin, CheckinRow } from "@/components/checkin/Checkin";
+import { Checkin, EditingCheckinRow } from "@/components/checkin/Checkin";
 import { CheckinForm } from "@/components/checkin/CheckinForm";
 import { toError } from "@/components/error/errorUtil";
 import { VStack } from "@/components/layout/VStack";
@@ -26,7 +26,8 @@ export function CheckinEditPageContent({
 
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [editingCheckin, setEditingCheckin] = useState<CheckinRow>(checkin);
+  const [editingCheckin, setEditingCheckin] =
+    useState<EditingCheckinRow>(checkin);
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
@@ -49,7 +50,8 @@ export function CheckinEditPageContent({
     try {
       await requestPatchCheckin(checkin.id, {
         comment: editingCheckin.comment,
-        imageUrls: editingCheckin.imageUrls,
+        imageUrls: [], // TODO
+        // imageUrls: editingCheckin.imageUrls,
         rate: editingCheckin.rate,
       });
       router.push(viewPageUrl);

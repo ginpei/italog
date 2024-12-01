@@ -1,21 +1,24 @@
 import {
+  ArrowUpTrayIcon,
   CheckCircleIcon,
   ExclamationCircleIcon,
   HandThumbUpIcon,
   SparklesIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import { ChangeEventHandler } from "react";
 import { InputLabel } from "../style/InputLabel";
 import { LongTextInput } from "../style/LongTextInput";
-import { CheckinRate, CheckinRow } from "@/components/checkin/Checkin";
+import { CheckinRate, EditingCheckinRow } from "@/components/checkin/Checkin";
 import { ErrorBlock } from "@/components/error/ErrorBlock";
-import { Button } from "@/components/style/Button";
+import { Button, FileButton } from "@/components/style/Button";
 
 export interface CheckinFormProps {
-  editingCheckin: CheckinRow;
+  editingCheckin: EditingCheckinRow;
   error: Error | null;
   formRef: React.RefObject<HTMLFormElement>;
-  onChange: (checkin: CheckinRow) => void;
+  onChange: (checkin: EditingCheckinRow) => void;
   onFormSubmit: (event: React.FormEvent) => void;
   working: boolean;
 }
@@ -39,6 +42,23 @@ export function CheckinForm({
     } else {
       throw new Error("unexpected input name: " + name);
     }
+  };
+
+  const onImageRemoveClick = (index: number) => {
+    onChange({
+      ...editingCheckin,
+      imageUrls: editingCheckin.imageUrls.filter((_, i) => i !== index),
+    });
+  };
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files || [];
+    event.target.files = null;
+
+    onChange({
+      ...editingCheckin,
+      imageUrls: [...editingCheckin.imageUrls, ...files],
+    });
   };
 
   return (
@@ -83,6 +103,27 @@ export function CheckinForm({
             value={editingCheckin.comment}
           />
         </InputLabel>
+        <InputLabel as="div">
+          Images:
+          <div className="flex flex-col items-center gap-4">
+            {editingCheckin.imageUrls.map((image, index) => (
+              <ImageItem
+                image={image}
+                index={index}
+                key={`${index}-${typeof image === "string" ? image : URL.createObjectURL(image)}`}
+                onRemoveClick={onImageRemoveClick}
+              />
+            ))}
+            <div className="flex w-64 items-center justify-center">
+              <FileButton accept="image/*" multiple onChange={onFileChange}>
+                <span className="flex items-center gap-2">
+                  <ArrowUpTrayIcon className="size-6" />
+                  Add images
+                </span>
+              </FileButton>
+            </div>
+          </div>
+        </InputLabel>
         <Button>Check in</Button>
       </fieldset>
     </form>
@@ -122,5 +163,30 @@ function RateRadio({
       <div className="text-sm">{children}</div>
       {selected && <CheckCircleIcon className="absolute left-1 top-1 size-6" />}
     </label>
+  );
+}
+
+function ImageItem({
+  image,
+  index,
+  onRemoveClick,
+}: {
+  image: string | File;
+  index: number;
+  onRemoveClick: (index: number) => void;
+}): JSX.Element {
+  const src = typeof image === "string" ? image : URL.createObjectURL(image);
+
+  return (
+    <div className="relative flex size-64 items-center justify-center border">
+      <Image alt="" className="size-64" src={src} width={256} height={256} />
+      <Button
+        className="absolute right-1 top-1"
+        onClick={() => onRemoveClick(index)}
+        type="button"
+      >
+        <TrashIcon className="size-4" />
+      </Button>
+    </div>
   );
 }
