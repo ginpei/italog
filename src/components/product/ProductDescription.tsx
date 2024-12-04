@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { VStack } from "../layout/VStack";
 import { H1 } from "../style/Hn";
 import { Product } from "./Product";
@@ -10,11 +11,20 @@ export interface ProductDescriptionProps {
 export function ProductDescription({
   product,
 }: ProductDescriptionProps): JSX.Element {
+  const displayName = useMemo(() => {
+    const b = product.brands;
+    const n = product.displayName;
+    if (b && n) {
+      return `${b} - ${n}`;
+    }
+
+    return b || n;
+  }, [product.brands, product.displayName]);
+
   return (
     <VStack className="ProductDescription">
-      <H1>{product.displayName}</H1>
+      <H1>{displayName}</H1>
       <ProductImageBlock imageUrl={product.imageUrl} />
-      <div>Brands: {product.brands.split("\n").join(", ") || "(N/A)"}</div>
       <div>
         Categories: {product.categories.split("\n").join(", ") || "(N/A)"}
       </div>

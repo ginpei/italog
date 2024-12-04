@@ -61,20 +61,20 @@ export function ProductForm({
           />
         </InputLabel>
         <InputLabel>
-          Display name:
+          Brand name:
+          <TextInput
+            name="brands"
+            onChange={onInputChange}
+            value={product.brands}
+          />
+        </InputLabel>
+        <InputLabel>
+          Item name:
           <TextInput
             name="displayName"
             onChange={onInputChange}
             required
             value={product.displayName}
-          />
-        </InputLabel>
-        <InputLabel>
-          Brands (each line) (optional):
-          <LongTextInput
-            name="brands"
-            onChange={onInputChange}
-            value={product.brands}
           />
         </InputLabel>
         <InputLabel>
