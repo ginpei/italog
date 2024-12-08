@@ -184,7 +184,13 @@ function ImageItem({
 
   return (
     <div className="relative flex size-64 items-center justify-center border">
-      <Image alt="" className="size-64" src={src} width={256} height={256} />
+      <Image
+        alt=""
+        className="size-64 object-contain"
+        height={256}
+        src={src}
+        width={256}
+      />
       <Button
         className="absolute right-1 top-1"
         onClick={() => onRemoveClick(index)}
