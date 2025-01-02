@@ -108,7 +108,7 @@ export function CheckinForm({
             value={editingCheckin.comment}
           />
         </InputLabel>
-        <InputLabel as="div" className="hidden">
+        <InputLabel as="div">
           Images:
           <div className="overflow-auto">
             <div className="flex items-center gap-4">
