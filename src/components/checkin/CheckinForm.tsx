@@ -110,22 +110,29 @@ export function CheckinForm({
         </InputLabel>
         <InputLabel as="div">
           Images:
-          <div className="flex flex-col items-center gap-4">
-            {editingCheckin.imageUrls.map((image, index) => (
-              <ImageItem
-                image={image}
-                index={index}
-                key={`${index}-${typeof image === "string" ? image : URL.createObjectURL(image)}`}
-                onRemoveClick={onImageRemoveClick}
-              />
-            ))}
-            <div className="flex w-64 items-center justify-center">
-              <FileButton accept="image/*" multiple onChange={onFileChange}>
-                <span className="flex items-center gap-2">
-                  <ArrowUpTrayIcon className="size-6" />
-                  Add images
-                </span>
-              </FileButton>
+          <div className="overflow-auto">
+            <div className="flex items-center gap-4">
+              {editingCheckin.imageUrls.map((image, index) => (
+                <ImageItem
+                  image={image}
+                  index={index}
+                  key={`${index}-${typeof image === "string" ? image : URL.createObjectURL(image)}`}
+                  onRemoveClick={onImageRemoveClick}
+                />
+              ))}
+              <div
+                className={`
+                  flex shrink-0 items-center justify-center
+                  ${editingCheckin.imageUrls.length > 0 ? "size-64" : ""}
+                `}
+              >
+                <FileButton accept="image/*" multiple onChange={onFileChange}>
+                  <span className="flex items-center gap-2">
+                    <ArrowUpTrayIcon className="size-6" />
+                    Add images
+                  </span>
+                </FileButton>
+              </div>
             </div>
           </div>
         </InputLabel>
@@ -183,7 +190,7 @@ function ImageItem({
   const src = typeof image === "string" ? image : URL.createObjectURL(image);
 
   return (
-    <div className="relative flex size-64 items-center justify-center border">
+    <div className="relative flex size-64 shrink-0 items-center justify-center border">
       <Image
         alt=""
         className="size-64 object-contain"

@@ -20,3 +20,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   overflow-wrap: break-word;
 }
+
+/* to fix alignment in flexbox */
+/* https://codepen.io/ginpei/pen/wBwGmoO */
+fieldset {
+  min-width: 0;
+}
